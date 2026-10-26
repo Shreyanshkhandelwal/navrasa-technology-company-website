@@ -536,29 +536,26 @@ export const about = {
     { k: "Focus", v: "Digital products · AI · Scalable systems" },
     { k: "Working with", v: "Founders, startups and businesses across industries" },
   ],
-  /* Roles verified against navrasaitsolutions.com/about.
-     PHOTO: drop a background-removed portrait (PNG, transparent, ~900×1100)
-     into `public/team/` and set `photo` — e.g. "/team/shreyansh.png".
-     Leave it empty to render the monogram placeholder instead. */
+  /* Founder portraits are stored in public/images. */
   leadership: [
     {
-  name: "Shreyansh Khandelwal",
-  role: "Co-Founder & CEO",
-  focus: ["Vision", "Product", "Entrepreneurship"],
-  href: "https://www.linkedin.com/in/shreyansh-khandelwal",
-  photo: "/images/shreyansh_about.png",
-  // EDIT: add a verified short bio when available.
-  bio: "",
-},
+      name: "Shreyansh Khandelwal",
+      role: "Co-Founder & CEO",
+      focus: ["Vision", "Product", "Entrepreneurship"],
+      href: "https://www.linkedin.com/in/shreyansh-khandelwal",
+      photo: "/images/shreyansh_about.png",
+      // EDIT: add a verified short bio when available.
+      bio: "",
+    },
     {
-  name: "Sargam Yadav",
-  role: "Co-Founder & CMO",
-  focus: ["Growth", "Brand", "Partnerships"],
-  href: "https://www.linkedin.com/in/sargamyadav",
-  photo: "/images/sargam_about.png",
-  // EDIT: add a verified short bio when available.
-  bio: "",
-},
+      name: "Sargam Yadav",
+      role: "Co-Founder & CMO",
+      focus: ["Growth", "Brand", "Partnerships"],
+      href: "https://www.linkedin.com/in/sargamyadav",
+      photo: "/images/sargam_about.jpg",
+      // EDIT: add a verified short bio when available.
+      bio: "",
+    },
   ],
 };
 
