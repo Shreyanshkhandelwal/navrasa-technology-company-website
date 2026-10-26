@@ -542,23 +542,23 @@ export const about = {
      Leave it empty to render the monogram placeholder instead. */
   leadership: [
     {
-      name: "Shreyansh Khandelwal",
-      role: "Co-Founder & CEO",
-      focus: ["Vision", "Product", "Entrepreneurship"],
-      href: "https://www.linkedin.com/in/shreyansh-khandelwal",
-      photo: "",
-      // EDIT: add a verified short bio when available.
-      bio: "",
-    },
+  name: "Shreyansh Khandelwal",
+  role: "Co-Founder & CEO",
+  focus: ["Vision", "Product", "Entrepreneurship"],
+  href: "https://www.linkedin.com/in/shreyansh-khandelwal",
+  photo: "/images/shreyansh_about.png",
+  // EDIT: add a verified short bio when available.
+  bio: "",
+},
     {
-      name: "Sargam Yadav",
-      role: "Co-Founder & CMO",
-      focus: ["Growth", "Brand", "Partnerships"],
-      href: "https://www.linkedin.com/in/sargamyadav",
-      photo: "",
-      // EDIT: add a verified short bio when available.
-      bio: "",
-    },
+  name: "Sargam Yadav",
+  role: "Co-Founder & CMO",
+  focus: ["Growth", "Brand", "Partnerships"],
+  href: "https://www.linkedin.com/in/sargamyadav",
+  photo: "/images/sargam_about.png",
+  // EDIT: add a verified short bio when available.
+  bio: "",
+},
   ],
 };
 
