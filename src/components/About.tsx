@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/utils/cn";
 import { about, company, manifesto } from "@/data/site";
-import { EASE, Eyebrow, Lines, Reveal } from "./ui";
+import { EASE, Eyebrow, Lines, Logo, Reveal } from "./ui";
 
 /* --------------------------------- ABOUT ---------------------------------- */
 export function AboutBody({ headless = false, index = "13" }: { headless?: boolean; index?: string }) {
@@ -39,17 +39,33 @@ export function AboutBody({ headless = false, index = "13" }: { headless?: boole
           </Reveal>
 
           <div className="col-span-12 grid grid-cols-1 gap-px border border-ink/10 bg-ink/10 sm:grid-cols-2 lg:col-span-7 lg:col-start-6">
-            <Reveal className="flex flex-col justify-between bg-paper p-8 md:p-10">
-              <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-signal">Mission</span>
-              <p className="mt-16 font-display text-2xl font-semibold leading-tight tracking-[-0.03em] md:mt-24 md:text-3xl">
-                {about.mission}
-              </p>
+            <Reveal className="flex min-h-[430px] flex-col bg-[#F5F3EE] p-7 text-[#111111] md:p-8">
+              <div className="flex items-start justify-between gap-4">
+                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#F15A24]">Mission</span>
+                <Logo tone="dark" className="shrink-0 scale-[0.78] origin-top-right" />
+              </div>
+              <div className="mt-auto pt-16">
+                <h3 className="max-w-[15ch] font-display text-2xl font-semibold leading-[1.08] tracking-[-0.03em] md:text-[28px]">
+                  Turn ambitious ideas into practical, scalable digital products.
+                </h3>
+                <p className="mt-5 max-w-[32ch] text-[15px] leading-relaxed text-[#555555]">
+                  We combine business understanding, thoughtful design and strong engineering to build technology that solves real problems and helps businesses move forward.
+                </p>
+              </div>
             </Reveal>
-            <Reveal delay={0.08} className="flex flex-col justify-between bg-ink p-8 text-paper md:p-10">
-              <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-signal">Vision</span>
-              <p className="mt-16 font-display text-2xl font-semibold leading-tight tracking-[-0.03em] md:mt-24 md:text-3xl">
-                {about.vision}
-              </p>
+            <Reveal delay={0.08} className="flex min-h-[430px] flex-col bg-[#101010] p-7 text-white md:p-8">
+              <div className="flex items-start justify-between gap-4">
+                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#F15A24]">Vision</span>
+                <Logo tone="light" className="shrink-0 scale-[0.78] origin-top-right" />
+              </div>
+              <div className="mt-auto pt-16">
+                <h3 className="max-w-[15ch] font-display text-2xl font-semibold leading-[1.08] tracking-[-0.03em] md:text-[28px] text-white">
+                  Make powerful technology accessible to businesses ready to grow.
+                </h3>
+                <p className="mt-5 max-w-[32ch] text-[15px] leading-relaxed text-[#BDBDBD]">
+                  We envision a future where startups and businesses can turn bold ideas into meaningful digital experiences through reliable, scalable and intelligent technology.
+                </p>
+              </div>
             </Reveal>
           </div>
         </div>
@@ -115,9 +131,9 @@ function FounderCard({ f, i, open, onToggle }: { f: Founder; i: number; open: bo
   return (
     <Reveal as="li" delay={i * 0.1} className="flex justify-center">
       <article
-        className="relative flex min-h-[460px] w-full max-w-[380px] flex-col overflow-hidden rounded-[1.125rem] border border-[#e9e5f0] bg-[#fffefd] shadow-[0_14px_38px_-30px_rgba(36,24,70,0.32)]"
+        className="relative flex min-h-[400px] w-full max-w-[380px] flex-col overflow-hidden rounded-[1.125rem] border border-[#e9e5f0] bg-[#fffefd] shadow-[0_14px_38px_-30px_rgba(36,24,70,0.32)]"
       >
-        <header className="flex min-h-[104px] flex-col items-center justify-center px-4 py-4 text-center">
+        <header className="flex min-h-[88px] flex-col items-center justify-center px-4 py-3 text-center">
           <h3 className="font-display text-[21px] font-semibold tracking-[-0.03em] text-[#171629]">
             {f.name}
           </h3>
@@ -126,7 +142,7 @@ function FounderCard({ f, i, open, onToggle }: { f: Founder; i: number; open: bo
           </p>
         </header>
 
-        <div className="flex min-h-0 flex-1 items-center justify-center px-4 py-1">
+        <div className="flex h-[270px] items-end justify-center overflow-hidden bg-[#fffefd] px-4">
           <img
             src={f.photo}
             alt={`${f.name} — ${f.role}, ${company.short}`}
@@ -134,10 +150,10 @@ function FounderCard({ f, i, open, onToggle }: { f: Founder; i: number; open: bo
             height={800}
             loading="lazy"
             decoding="async"
-            className="h-[270px] w-full max-w-[260px] object-contain"
+            className="h-full w-full object-contain object-center"
           />
         </div>
-        <div className="flex h-12 items-center justify-center">
+        <div className="flex h-11 items-center justify-center">
           <button
             type="button"
             onClick={onToggle}
@@ -205,18 +221,18 @@ export function Leadership({ index = "14" }: { index?: string }) {
 
   return (
     <section id="leadership" className="relative bg-[#f8f7fc] text-ink">
-      <div className="container-x relative py-14 md:py-16">
+      <div className="container-x relative py-10 md:py-12">
         <div className="mx-auto max-w-2xl text-center">
           <Eyebrow index={index} label="Leadership" tone="light" />
           <h2 className="mt-4 font-display text-3xl font-semibold tracking-[-0.04em] text-[#171629] sm:text-4xl md:text-5xl">
             Meet Our Leadership
           </h2>
-          <p className="mx-auto mt-4 max-w-[42ch] text-base leading-relaxed text-[#626174] md:text-lg">
+          <p className="mx-auto mt-3 max-w-[42ch] text-base leading-relaxed text-[#626174] md:text-lg">
             Meet our leadership team driving innovation and growth
           </p>
         </div>
 
-        <ul className="mx-auto mt-8 grid max-w-[792px] grid-cols-1 items-stretch gap-6 sm:grid-cols-2 sm:gap-7 md:gap-8">
+        <ul className="mx-auto mt-6 grid max-w-[792px] grid-cols-1 items-stretch gap-5 sm:grid-cols-2 sm:gap-6">
           {about.leadership.map((f, i) => (
             <FounderCard key={f.name} f={f} i={i} open={open === i} onToggle={() => setOpen(open === i ? null : i)} />
           ))}

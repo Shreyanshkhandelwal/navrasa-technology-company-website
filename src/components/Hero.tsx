@@ -34,33 +34,33 @@ export function Hero() {
         <Ecosystem className="pointer-events-auto absolute inset-0 h-full w-full" />
       </motion.div>
 
-      <div className="container-x relative flex flex-1 flex-col pt-28 md:pt-36 lg:pt-40">
-        <motion.div style={{ y, opacity }} className="grid flex-1 grid-cols-12 gap-x-4 md:gap-x-8">
+      <div className="container-x relative flex flex-1 flex-col pt-20 pb-4 md:pt-24 md:pb-5 lg:min-h-0 lg:pt-[6.5rem] lg:pb-4">
+        <motion.div style={{ y, opacity }} className="grid min-h-0 flex-1 grid-cols-12 gap-x-4 md:gap-x-8">
           <div className="col-span-12 flex flex-col justify-center lg:col-span-7 xl:col-span-6">
             <motion.div
               initial={reduce ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
-              className="eyebrow mb-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-mute-2"
+              className="eyebrow mb-5 flex flex-wrap items-center gap-x-2 gap-y-2 text-[10px] tracking-[0.16em] text-mute-2 md:text-[10.5px] md:tracking-[0.18em] xl:flex-nowrap xl:whitespace-nowrap lg:mb-6"
             >
               <span className="h-1.5 w-1.5 bg-signal" />
               <span>{company.name}</span>
               <span className="opacity-40">/</span>
-              <span>{hero.eyebrow}</span>
+              <span className="max-w-full whitespace-normal sm:whitespace-nowrap">{hero.eyebrow}</span>
             </motion.div>
 
             <Lines
               as="h1"
               lines={hero.lines}
               delay={0.2}
-              className="display display-lg text-paper"
+              className="display page-hero-title text-paper"
             />
 
             <motion.p
               initial={reduce ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, ease: EASE, delay: 0.7 }}
-              className="mt-8 max-w-[34rem] text-lg leading-relaxed text-paper/80 md:mt-10 md:text-xl"
+              className="mt-5 max-w-[34rem] text-base leading-relaxed text-paper/80 md:mt-6 md:text-lg lg:text-xl"
             >
               {hero.statement}
             </motion.p>
@@ -69,7 +69,7 @@ export function Hero() {
               initial={reduce ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, ease: EASE, delay: 0.85 }}
-              className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5"
+              className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-4 md:mt-7 lg:mt-8"
             >
               <Button href={hero.primaryCta.href} tone="dark" size="lg">
                 {hero.primaryCta.label}
@@ -96,26 +96,20 @@ export function Hero() {
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, ease: EASE, delay: 1.1 }}
-          className="mt-14 border-t border-white/10 py-6 md:mt-20"
+          className="mt-5 shrink-0 border-t border-white/10 py-4 md:mt-6 lg:mt-5"
         >
-          <div className="flex flex-wrap items-center justify-between gap-y-4">
-            <ol className="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase tracking-[0.2em] text-mute-2 sm:gap-x-4">
+          <div className="grid w-full grid-cols-1 items-center justify-items-center gap-y-4 text-center md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-x-8">
+            <ol className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase tracking-[0.2em] text-mute-2 sm:gap-x-4">
               {hero.strip.map((s, i) => (
                 <li key={s} className="flex items-center gap-3 sm:gap-4">
                   <span className={i === 0 ? "text-paper" : ""}>{s}</span>
                   {i < hero.strip.length - 1 && (
-                    <span className="block h-px w-6 bg-white/20 sm:w-10" aria-hidden="true" />
+                    <span className="block h-px w-5 bg-white/20 sm:w-8" aria-hidden="true" />
                   )}
                 </li>
               ))}
             </ol>
-            <p className="hidden max-w-sm text-sm text-paper/55 md:block">{hero.secondary}</p>
-            <div className="hidden items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-mute-2 lg:flex">
-              <span className="relative flex h-5 w-3 items-start justify-center border border-white/20">
-                <span className="mt-1 h-1 w-px bg-paper motion-safe:animate-bounce" />
-              </span>
-              Scroll
-            </div>
+            <p className="max-w-sm text-sm leading-relaxed text-paper/55">{hero.secondary}</p>
           </div>
         </motion.div>
       </div>

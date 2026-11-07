@@ -9,11 +9,16 @@ import { CapabilitiesPage } from "./pages/CapabilitiesPage";
 import { ContactPage } from "./pages/ContactPage";
 import { Home } from "./pages/Home";
 import { InsightsPage } from "./pages/InsightsPage";
+import { MobileAppDevelopmentPage } from "./pages/MobileAppDevelopmentPage";
 import { PrivacyPage, TermsPage } from "./pages/LegalPage";
 import { NotFound } from "./pages/NotFound";
 import { SolutionsPage } from "./pages/SolutionsPage";
 import { WhatWeBuildPage } from "./pages/WhatWeBuildPage";
 import { WorkPage } from "./pages/WorkPage";
+import { CaseStudyPage } from "./pages/CaseStudyPage";
+import { CareersPage } from "./pages/CareersPage";
+import { EnquiryProvider } from "./components/EnquiryContext";
+import { EnquiryModal } from "./components/EnquiryModal";
 
 /* Scroll to top on route change; honour #hash targets (instant across pages,
    smooth when jumping within the current page). */
@@ -47,6 +52,7 @@ export default function App() {
   const reduce = useReducedMotion();
 
   return (
+    <EnquiryProvider>
     <div className="relative min-w-0 overflow-x-clip">
       <a
         href="#main"
@@ -66,18 +72,23 @@ export default function App() {
         <Routes location={location}>
           <Route path="/" element={<Home />} />
           <Route path="/what-we-build" element={<WhatWeBuildPage />} />
+          <Route path="/mobile-app-development" element={<MobileAppDevelopmentPage />} />
           <Route path="/solutions" element={<SolutionsPage />} />
           <Route path="/capabilities" element={<CapabilitiesPage />} />
           <Route path="/work" element={<WorkPage />} />
+          <Route path="/work/:slug" element={<CaseStudyPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/insights" element={<InsightsPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/careers" element={<CareersPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.main>
       <Footer />
+      <EnquiryModal />
     </div>
+    </EnquiryProvider>
   );
 }

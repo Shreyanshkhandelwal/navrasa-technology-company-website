@@ -10,13 +10,12 @@ export function Why({ index = "11" }: { index?: string }) {
       <div className="container-x section-y relative">
         <div className="grid grid-cols-12 gap-x-4 md:gap-x-8 gap-y-8">
           <div className="col-span-12 lg:col-span-6">
-            <Eyebrow index={index} label="Why NavRasa" tone="light" />
-            <Lines lines={["Why", "NavRasa?"]} className="display display-lg mt-10 uppercase text-ink" />
+            <Eyebrow index={index} label="WHY NAVRASA" tone="light" />
+            <Lines lines={["WHY", "NAVRASA"]} className="display display-lg mt-10 uppercase text-ink" />
           </div>
           <Reveal className="col-span-12 self-end lg:col-span-5 lg:col-start-8">
             <p className="text-xl leading-snug tracking-[-0.01em] md:text-2xl">
-              Not a vendor that executes tickets. A team that takes responsibility for the product working — technically
-              and commercially.
+              Not a vendor that executes tickets. A technology partner that takes ownership of your product, its engineering and its business outcomes.
             </p>
           </Reveal>
         </div>

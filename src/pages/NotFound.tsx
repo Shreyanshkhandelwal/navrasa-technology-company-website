@@ -24,7 +24,7 @@ export function NotFound() {
             Back home
           </Button>
           <Button href="/contact" tone="dark" variant="text">
-            Start Building
+            Start Your Project
           </Button>
         </div>
       </div>

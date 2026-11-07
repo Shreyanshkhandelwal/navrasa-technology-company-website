@@ -48,7 +48,7 @@ export function PageHero({
             <Lines
               as="h1"
               lines={lines}
-              className={cn("display uppercase text-paper", size === "lg" ? "display-lg" : "display-md")}
+              className={cn("display page-hero-title uppercase text-paper")}
             />
           </div>
           {intro && (

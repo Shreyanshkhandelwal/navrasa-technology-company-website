@@ -98,13 +98,19 @@
     @apply mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-12 xl:px-16;
   }
   .section-y {
-    @apply py-24 md:py-32 lg:py-40;
+    @apply py-14 md:py-18 lg:py-24;
   }
   .eyebrow {
     @apply font-mono text-[11px] tracking-[0.22em] uppercase;
   }
   .display {
     @apply font-display font-semibold tracking-[-0.04em] leading-[0.92];
+  }
+  .page-hero-title {
+    font-size: clamp(2.75rem, 6vw, 4.75rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
   }
   .display-lg {
     font-size: clamp(3rem, 9vw, 10rem);

@@ -2,8 +2,11 @@ import { Contact } from "@/components/Contact";
 import { PageHero } from "@/components/PageHero";
 import { company, finalCta } from "@/data/site";
 import { useSEO } from "@/hooks/useSEO";
+import { useEffect } from "react";
+import { trackEvent } from "@/utils/analytics";
 
 export function ContactPage() {
+  useEffect(() => trackEvent("contact_page_view"), []);
   useSEO({
     title: "Start Building — Contact NavRasa IT Solutions",
     description:
@@ -14,7 +17,7 @@ export function ContactPage() {
   return (
     <>
       <PageHero
-        label="Start Building"
+        label="Start Your Project"
         lines={["Have a", "big idea?"]}
         intro={`${finalCta.text} Tell us where you are — we'll reply with honest thoughts on scope, approach and fit.`}
         meta={

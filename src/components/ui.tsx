@@ -18,6 +18,8 @@ import {
 } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/utils/cn";
+import { useEnquiry } from "./EnquiryContext";
+import { trackEvent } from "@/utils/analytics";
 
 export const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -127,6 +129,7 @@ export function Button({
   size = "md",
   onClick,
 }: ButtonProps) {
+  const { openEnquiry } = useEnquiry();
   const onDark = tone === "dark";
   const base =
     "group relative inline-flex items-center justify-center gap-3 font-medium tracking-[-0.01em] transition-colors duration-300 ease-out select-none";
@@ -169,7 +172,11 @@ export function Button({
 
   return (
     <Magnetic strength={variant === "text" ? 0.15 : 0.3}>
-      {internal ? (
+      {href === "/contact" ? (
+        <button type="button" onClick={() => { trackEvent("primary_cta_click", { cta: "enquiry" }); onClick?.(); openEnquiry(); }} className={classes}>
+          {inner}
+        </button>
+      ) : internal ? (
         <Link to={href} onClick={onClick} className={classes}>
           {inner}
         </Link>

@@ -11,7 +11,7 @@ export function Engineering({ index = "05" }: { index?: string }) {
       <div className="container-x section-y">
         <div className="grid grid-cols-12 gap-x-4 md:gap-x-8 gap-y-8">
           <div className="col-span-12 lg:col-span-8">
-            <Eyebrow index={index} label="Product Engineering" tone="light" />
+            <Eyebrow index={index} label="02 / Product Engineering" tone="light" />
             <Lines lines={["Engineered for", "what comes next."]} className="display display-md mt-10 uppercase text-ink" />
           </div>
           <Reveal className="col-span-12 self-end lg:col-span-4">

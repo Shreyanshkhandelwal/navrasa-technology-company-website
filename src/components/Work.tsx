@@ -1,8 +1,11 @@
-import { ArrowUpRight } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ChevronLeft, ChevronRight, Pause, Play, ArrowUpRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/utils/cn";
 import { work } from "@/data/site";
 import { Button, Eyebrow, Lines, Reveal } from "./ui";
+import { useEnquiry } from "./EnquiryContext";
 
 type Project = (typeof work.projects)[number];
 
@@ -133,10 +136,62 @@ export function Work({
   teaser?: boolean;
   index?: string;
 }) {
+  const { openEnquiry } = useEnquiry();
   const projects = limit ? work.projects.slice(0, limit) : work.projects;
+  const carouselProjects = work.projects;
+  const sectionRef = useRef<HTMLElement>(null);
+  const touchStart = useRef<number | null>(null);
+  const reduceMotion = useReducedMotion();
+  const [activeProject, setActiveProject] = useState(0);
+  const [inView, setInView] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [progressKey, setProgressKey] = useState(0);
+  const activeIndex = Math.min(activeProject, carouselProjects.length - 1);
+  const current = carouselProjects[activeIndex];
+  const autoPlaying = inView && !hovered;
+
+  useEffect(() => {
+    if (!teaser || !sectionRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.25 }
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, [teaser]);
+
+  useEffect(() => {
+    if (!teaser || !autoPlaying || reduceMotion) return;
+    const timer = window.setInterval(() => {
+      setActiveProject((currentIndex) => (currentIndex + 1) % carouselProjects.length);
+      setProgressKey((key) => key + 1);
+    }, 5500);
+    return () => window.clearInterval(timer);
+  }, [teaser, autoPlaying, reduceMotion, carouselProjects.length]);
+
+  const goToProject = (index: number) => {
+    setActiveProject((index + carouselProjects.length) % carouselProjects.length);
+    setProgressKey((key) => key + 1);
+  };
+
+  const moveProject = (amount: number) => {
+    goToProject(activeIndex + amount);
+  };
 
   return (
-    <section id="work" className="relative bg-paper text-ink">
+    <section
+      id="work"
+      ref={sectionRef}
+      tabIndex={teaser ? 0 : undefined}
+      onKeyDown={(event) => {
+        if (!teaser) return;
+        if (event.key === "ArrowLeft") moveProject(-1);
+        if (event.key === "ArrowRight") moveProject(1);
+      }}
+      onMouseEnter={() => teaser && setHovered(true)}
+      onMouseLeave={() => teaser && setHovered(false)}
+      className="relative bg-paper text-ink outline-none"
+    >
       <div className="container-x section-y">
         {!headless && (
           <div className="grid grid-cols-12 gap-x-4 gap-y-8 md:gap-x-8">
@@ -153,8 +208,85 @@ export function Work({
         )}
 
         <div className={cn("flex flex-col gap-20 md:gap-28", !headless && "mt-16 md:mt-24")}>
-          {projects.map((p, i) => {
-            const flip = i % 2 === 1;
+          {teaser ? (
+            current && (
+              <div
+                onTouchStart={(event) => { touchStart.current = event.touches[0]?.clientX ?? null; }}
+                onTouchEnd={(event) => {
+                  if (touchStart.current === null) return;
+                  const distance = (event.changedTouches[0]?.clientX ?? touchStart.current) - touchStart.current;
+                  if (Math.abs(distance) > 50) moveProject(distance > 0 ? -1 : 1);
+                  touchStart.current = null;
+                }}
+                aria-label={`Project showcase, project ${activeIndex + 1} of ${carouselProjects.length}`}
+              >
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.article
+                    key={current.id}
+                    initial={reduceMotion ? false : { opacity: 0, x: 24 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -24 }}
+                    transition={{ duration: reduceMotion ? 0 : 0.45, ease: [0.16, 1, 0.3, 1] }}
+                    className={cn("group grid touch-pan-y grid-cols-12 gap-x-4 gap-y-8 md:gap-x-8", activeIndex % 2 === 1 && "md:items-stretch")}
+                  >
+                    <div className={cn("col-span-12 lg:col-span-7", activeIndex % 2 === 1 && "lg:order-2")}>
+                      <Mock p={current} kind={activeIndex === 0 ? "mobile" : "web"} />
+                    </div>
+                    <div className={cn("col-span-12 flex flex-col lg:col-span-5", activeIndex % 2 === 1 ? "lg:order-1 lg:pr-8" : "lg:pl-8")}>
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-[11px] tracking-[0.2em] text-mute">{String(activeIndex + 1).padStart(2, "0")}</span>
+                        <span className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-mute">{current.industry}</span>
+                      </div>
+                      <h3 className="mt-5 font-display text-4xl font-semibold tracking-[-0.04em] md:text-5xl">{current.name}</h3>
+                      <dl className="mt-8 border-t border-ink/10">
+                        <Row k="Problem" v={current.problem} />
+                        <Row k="Product" v={current.product} />
+                        <Row k="Technology" v={current.technology} />
+                      </dl>
+                      <figure className="mt-8">
+                        <blockquote className="border-l-2 pl-5 text-[17px] leading-snug tracking-[-0.01em] text-ink" style={{ borderColor: current.accent }}>
+                          {current.impact}
+                        </blockquote>
+                        <figcaption className="mt-3 pl-5 font-mono text-[10.5px] uppercase tracking-[0.18em] text-mute">
+                          — {current.attribution}
+                        </figcaption>
+                      </figure>
+                    </div>
+                  </motion.article>
+                </AnimatePresence>
+
+                <div className="mt-10 flex flex-wrap items-center justify-between gap-5 border-t border-ink/10 pt-5">
+                  <div className="flex items-center gap-2">
+                    {carouselProjects.map((project, index) => (
+                      <button
+                        key={project.id}
+                        type="button"
+                        aria-label={`Show ${project.name}`}
+                        aria-current={index === activeIndex ? "true" : undefined}
+                        onClick={() => goToProject(index)}
+                        className="group relative flex h-8 items-center px-1"
+                      >
+                        <span className={cn("block h-px w-7 transition-all duration-500", index === activeIndex ? "w-12 bg-ink" : "bg-ink/25 group-hover:bg-ink/60")} />
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="min-w-12 font-mono text-[11px] tracking-[0.18em] text-mute">
+                      {String(activeIndex + 1).padStart(2, "0")} / {String(carouselProjects.length).padStart(2, "0")}
+                    </span>
+                    <button type="button" aria-label="Previous project" onClick={() => moveProject(-1)} className="flex h-10 w-10 items-center justify-center border border-ink/15 transition-colors hover:bg-ink hover:text-paper"><ChevronLeft className="h-4 w-4" /></button>
+                    <button type="button" aria-label="Next project" onClick={() => moveProject(1)} className="flex h-10 w-10 items-center justify-center border border-ink/15 transition-colors hover:bg-ink hover:text-paper"><ChevronRight className="h-4 w-4" /></button>
+                  </div>
+                </div>
+                <div className="mt-4 h-px overflow-hidden bg-ink/10">
+                  {autoPlaying && !reduceMotion && (
+                    <motion.div key={progressKey} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 5.5, ease: "linear" }} className="h-full origin-left bg-ink" />
+                  )}
+                </div>
+              </div>
+            )
+          ) : (
+          projects.map((p, i) => {
             return (
               <article key={p.id} className="group grid grid-cols-12 gap-x-4 gap-y-8 md:gap-x-8">
                 <Reveal className={cn("col-span-12 lg:col-span-7", flip && "lg:order-2")}>
@@ -188,13 +320,14 @@ export function Work({
                 </Reveal>
               </article>
             );
-          })}
+          }))}
 
           {!teaser && (
             <Reveal>
-              <Link
-                to="/contact"
-                className="group grid grid-cols-12 items-center gap-x-4 gap-y-6 border border-dashed border-ink/25 p-8 transition-colors duration-500 hover:border-ink md:gap-x-8 md:p-12"
+              <button
+                type="button"
+                onClick={openEnquiry}
+                className="group grid w-full grid-cols-12 text-left items-center gap-x-4 gap-y-6 border border-dashed border-ink/25 p-8 transition-colors duration-500 hover:border-ink md:gap-x-8 md:p-12"
               >
                 <div className="col-span-12 md:col-span-8">
                   <span className="font-mono text-[11px] tracking-[0.2em] text-mute">0{work.projects.length + 1}</span>
@@ -214,7 +347,7 @@ export function Work({
                     />
                   </span>
                 </div>
-              </Link>
+              </button>
             </Reveal>
           )}
         </div>

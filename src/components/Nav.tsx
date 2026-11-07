@@ -78,7 +78,7 @@ export function Nav() {
           <div className="flex items-center gap-3">
             <div className="hidden sm:block">
               <Button href="/contact" tone="dark" size="md" className="h-11 px-5">
-                Start Building
+                Start Your Project
               </Button>
             </div>
             <button
@@ -151,7 +151,7 @@ export function Nav() {
                 className="mt-10 flex flex-col gap-6"
               >
                 <Button href="/contact" tone="dark" size="lg" className="w-full">
-                  Start Building
+                  Start Your Project
                 </Button>
                 <div className="flex flex-wrap items-center justify-between gap-4 font-mono text-[11px] uppercase tracking-[0.2em] text-mute-2">
                   <a href={`mailto:${company.email}`} className="hover:text-paper">

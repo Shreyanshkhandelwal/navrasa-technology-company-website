@@ -11,8 +11,8 @@ export const company = {
   tagline: "Build what's next.",
   url: "https://www.navrasaitsolutions.com",
   email: "info@navrasaitsolutions.com",
-  phones: ["+91 63770 67867", "+91 70146 86805"],
-  location: "Shyam Nagar, Jaipur, Rajasthan, India",
+  phones: ["+91 70146 86805"],
+  location: "Mansarovar, Jaipur, Rajasthan, India",
   city: "Jaipur, India",
   // Optional: paste a form endpoint (e.g. Formspree / your API). Empty = email fallback.
   formEndpoint: "",
@@ -31,8 +31,8 @@ export const company = {
     { label: "X", handle: "@NavrasaIT", href: "https://x.com/NavrasaIT", icon: "x", show: true },
     {
       label: "WhatsApp",
-      handle: "+91 63770 67867",
-      href: "https://wa.me/916377067867",
+      handle: "+91 70146 86805",
+      href: "https://wa.me/917014686805",
       icon: "whatsapp",
       show: true,
     },
@@ -58,19 +58,19 @@ export const company = {
 /* Figures below are drawn from information published on navrasaitsolutions.com.
    EDIT the values as the business grows — keep every number defensible. */
 export const credentials = [
-  { value: "4+", label: "Client products shipped", note: "Named on our site with client feedback" },
-  { value: "4–8", label: "Weeks to a typical MVP", note: "Depending on scope and integrations" },
-  { value: "2", label: "Co-founders leading delivery", note: "Direct access, no account layer" },
-  { value: "Jaipur", label: "Engineering base, India", note: "Working with clients remotely" },
+  { value: "15+", label: "Products Delivered", note: "Digital solutions built to address real business needs." },
+  { value: "6–10", label: "Weeks to Typical MVP", note: "Depends on project scope, complexity, and integrations." },
+  { value: "2", label: "Founders Leading Delivery", note: "Direct communication with the people leading your project." },
+  { value: "Jaipur", label: "Engineering & Delivery", note: "India-based team serving businesses across markets." },
 ];
 
 export const industries = [
-  { name: "Fintech", note: "Payments, onboarding and compliance-aware workflows." },
-  { name: "E-commerce & Retail", note: "Storefronts, catalogues, vendor and order systems." },
-  { name: "Healthcare", note: "Patient-facing apps and clinical operations tooling." },
-  { name: "Education", note: "Learning platforms, assessments and student portals." },
-  { name: "Energy & Industrial", note: "Service booking, field operations and lead capture." },
-  { name: "Professional Services", note: "Internal systems, dashboards and client portals." },
+  { name: "E-commerce & Marketplaces", note: "Buying and selling platforms, multi-vendor marketplaces, coupon platforms and digital commerce experiences." },
+  { name: "Service Booking & On-Demand Platforms", note: "Service booking applications, appointment management, vendor platforms and on-demand service experiences." },
+  { name: "Mobility & Transportation", note: "Ride-sharing, carpooling, delivery platforms, real-time tracking and smart mobility solutions." },
+  { name: "AI-Powered Applications", note: "AI-powered products, intelligent recommendations, image-based AI solutions and automated workflows." },
+  { name: "Enterprise & Business Software", note: "ERP systems, financial management platforms, business dashboards and operational software." },
+  { name: "Social & Community Platforms", note: "Social networking, communication applications, trader communities, content sharing and digital communities." },
 ];
 
 export const engagements = [
@@ -144,36 +144,58 @@ export const process = [
 
 /* Verbatim client feedback published on navrasaitsolutions.com. Do not edit the
    wording — these are quotes. Add new entries only with written client consent. */
-export const testimonials = [
+export const GOOGLE_REVIEWS_URL = "https://www.google.com/search?q=NavRasa+IT+Solutions";
+
+export const googleReviews = [
   {
+    name: "Sanjay Kalyani",
+    rating: 5,
+    date: "7 days ago",
     quote:
-      "The app turned out fantastic! Smooth interface, vendor panel, real-time coupon tracking — they built exactly what we needed. Can't recommend them enough.",
-    name: "Keshavendra Singh Raghav",
-    role: "Founder, EzyFix",
-    project: "Coupon-selling app",
+      "Very excellent team.They do exactly what you ask them to do.I had very pleasant experience with my app. With this company.If I had option of 10 stars i would have given all 10.",
   },
   {
+    name: "Mani Kandan",
+    rating: 5,
+    date: "4 weeks ago",
     quote:
-      "Our perfume brand needed elegance, speed, and trust — they delivered all three. The website looks stunning and works beautifully on mobile. Customers love it.",
-    name: "Harsh",
-    role: "Founder, Richony",
-    project: "E-commerce website",
+      "Hello Navarasa IT Solutions Team,\n\nI'm genuinely so happy to have had the opportunity to work with you guys! ❤️\n\nI came to you with an idea for my project, Velvet Chat, and the entire experience has been amazing. Your services, teamwork, communication, and the way you handle and fix issues throughout the Velvet Chat app development process have really impressed me.\n\nFrom developing the Velvet Chat app to delivering the app and a website, I truly appreciate the dedication and effort your team has put into the project. I feel really lucky to have found such a great IT solutions team to bring my ideas to life.\n\nI'm really happy to work with you guys, and I'm looking forward to continuing this journey together! 👍🔥\n\nIf you're looking for a reliable team for app development, website development, or AI solutions, I would definitely recommend Navarasa IT Solutions.\n\nGreat team. Great people. Superb work. Highly recommended! 🚀🔥",
   },
   {
+    name: "Canvade",
+    rating: 5,
+    date: "13 weeks ago",
     quote:
-      "We finally have a website that brings us leads. They made it user-friendly, added service booking, and kept it SEO-ready. It's driving results.",
-    name: "Suresh Kumar Yadav",
-    role: "Suntech Power Corporation",
-    project: "Solar services website",
+      "Working with Team NavRasa, especially Shreyansh, has been a great experience. They handled our project with professionalism from the initial concept to a market-ready website. What stood out most was their willingness to understand our vision, actively contribute ideas, and improve the overall product rather than just provide technical solutions.",
   },
   {
+    name: "Dilip Sharma",
+    rating: 5,
+    date: "14 weeks ago",
     quote:
-      "They understood our brand instantly and built a clean, modern website that speaks to our audience. Everything's on point — layout, speed, and responsiveness.",
-    name: "CRID Innovations",
-    role: "Business website",
-    project: "Corporate website",
+      "Since 30 days working with the team has been exciting to get started on trust in developing final ai tech we need in 2026. Thanks to the whole team for amazing work.",
+  },
+  {
+    name: "Rahul Nagdeve",
+    rating: 5,
+    date: "13 hours ago",
+    quote:
+      "Had a great experience with Navrasa IT Solutions. Their team is professional, knowledgeable and supportive. They understand client requirements well and provide effective IT solutions with a strong focus on quality and timely delivery.\n\nReally appreciate their dedication, communication and commitment to customer satisfaction. Highly recommended for anyone looking for reliable IT services and technology solutions.\n\nWishing the entire team continued success!",
+  },
+  {
+    name: "Collably",
+    rating: 5,
+    date: "13 hours ago",
+    quote:
+      "We had a great experience working with NavRasa IT Solutions on our project. Their team was professional, responsive, and attentive to our requirements. They understood our vision and worked closely with us to turn our ideas into a practical digital solution. Communication was smooth, and the team was supportive throughout the development process. I would recommend NavRasa IT Solutions to businesses looking for reliable mobile app and software development services. KUDOS to the founders!",
   },
 ];
+
+export const googleReviewsSummary = {
+  rating: "5.0",
+  totalReviews: 8,
+  featuredReviews: googleReviews.length,
+};
 
 export const faqs = [
   {
@@ -182,7 +204,7 @@ export const faqs = [
   },
   {
     q: "How long does an MVP take to build?",
-    a: "Most MVPs are delivered in four to eight weeks, depending on complexity, features and integrations. We work in agile sprints so you see working software throughout, not just at the end.",
+    a: "The timeline depends on the product scope, required integrations, design complexity and decision-making speed. We break the work into clear delivery stages, agree the MVP scope before development starts, and share progress through working builds throughout the engagement."
   },
   {
     q: "How do you price projects?",
@@ -224,24 +246,34 @@ export const nav = [
 ];
 
 export const hero = {
-  eyebrow: "Technology & Product Engineering",
-  lines: ["BUILD", "WHAT'S", "NEXT."],
+  eyebrow: "Mobile Applications & Custom Software Solutions",
+  lines: ["ENGINEERED", "FOR BUSINESS.", "BUILT TO", "SCALE."],
   statement:
-    "We design, engineer and scale digital products, AI systems and technology platforms for ambitious businesses.",
+    "We partner with startups and growing businesses to build high-performance mobile applications and custom software that solve real problems and drive measurable growth.",
   secondary:
-    "From the first idea to millions of users, NavRasa builds the technology behind ambitious products.",
-  primaryCta: { label: "Start Building", href: "/contact" },
-  secondaryCta: { label: "Explore What We Build", href: "/what-we-build" },
-  strip: ["Idea", "Product", "Launch", "Scale"],
-  nodes: ["AI", "Mobile", "Web", "Cloud", "Data", "APIs", "Automation", "SaaS", "Infrastructure"],
+    "From mobile applications to enterprise software, we turn complex requirements into reliable digital products.",
+  primaryCta: { label: "Start Your Project", href: "/contact" },
+  secondaryCta: { label: "Explore Our Work", href: "/work" },
+  strip: ["Strategy", "Engineering", "Delivery", "Growth"],
+  nodes: [
+    "Android",
+    "iOS",
+    "Flutter",
+    "React Native",
+    "Custom Software",
+    "SaaS",
+    "AI",
+    "APIs",
+    "Automation",
+  ],
 };
 
 export const manifesto = {
   headline: "Technology should create possibilities.",
   belief:
-    "We believe great technology doesn't simply automate what already exists. It creates entirely new ways to build, operate and grow.",
+    "We turn ambitious ideas into high-performance mobile applications and custom software that help businesses operate smarter, serve customers better, and scale with confidence.",
   intro:
-    "NavRasa works with ambitious founders, businesses and organizations to turn complex ideas into scalable digital products.",
+    "NavRasa partners with startups and growing businesses to turn complex requirements into reliable digital products, from mobile applications to scalable business software.",
   principles: [
     { title: "Build With Purpose", text: "Technology should solve meaningful problems." },
     { title: "Think Beyond Today", text: "Products are designed for where the business is going, not only where it is." },
@@ -252,44 +284,56 @@ export const manifesto = {
   ],
 };
 
+
 export const builds = [
   {
-    id: "ai",
-    title: "AI Systems",
-    text: "Intelligent applications, AI assistants, automation systems and AI-powered workflows.",
-    tags: ["LLM apps", "Agents", "Automation"],
-  },
-  {
-    id: "saas",
-    title: "SaaS Platforms",
-    text: "Scalable software products designed for recurring users, businesses and large-scale operations.",
-    tags: ["Multi-tenant", "Billing", "Analytics"],
-  },
-  {
     id: "mobile",
-    title: "Mobile Products",
-    text: "High-performance mobile applications designed around real user experiences.",
-    tags: ["iOS", "Android", "Cross-platform"],
-  },
-  {
-    id: "web",
-    title: "Web Platforms",
-    text: "Modern web applications, dashboards, marketplaces and digital platforms.",
-    tags: ["Marketplaces", "Dashboards", "Portals"],
+    title: "Mobile Application Development",
+    text: "We design and develop high-performance Android and iOS applications that deliver intuitive experiences, support business operations and grow with your users.",
+    tags: ["Android", "iOS", "Flutter & React Native"],
+    capabilities: ["Android App Development", "iOS App Development", "Flutter Development", "React Native Development", "App UI/UX Engineering", "API & Third-Party Integrations", "App Maintenance & Modernization"],
   },
   {
     id: "enterprise",
-    title: "Enterprise Systems",
-    text: "Custom technology platforms that solve complex operational and business problems.",
-    tags: ["Operations", "Integrations", "Internal tools"],
+    title: "Custom Software Development",
+    text: "We engineer software around your business processes, operational requirements and long-term goals, simplifying workflows and solving complex challenges.",
+    tags: ["Business Systems", "Integrations", "Automation"],
+    capabilities: ["Custom Business Software", "Enterprise Applications", "Business Management Systems", "CRM & ERP Solutions", "Admin Dashboards", "Workflow Automation", "API Development & Integrations"],
+  },
+  {
+    id: "saas",
+    title: "SaaS & Digital Product Development",
+    text: "From product architecture to launch, we help founders and businesses transform ideas into scalable digital products.",
+    tags: ["SaaS", "Digital Products", "Integrations"],
+    capabilities: ["SaaS Platform Development", "MVP Development", "Product Engineering", "Multi-Tenant Applications", "Subscription & Payment Systems", "Scalable Product Architecture", "Product Modernization"],
+  },
+  {
+    id: "ai",
+    title: "AI-Powered Solutions",
+    text: "We integrate practical AI capabilities into applications and business workflows to automate tasks, improve efficiency and create smarter digital experiences.",
+    tags: ["AI Integration", "LLM Apps", "Workflows"],
+    capabilities: ["Generative AI Integration", "LLM Applications", "AI Agents & Assistants", "Intelligent Automation", "Document Intelligence", "AI APIs & Integrations", "Machine Learning Solutions"],
+  },
+  {
+    id: "web",
+    title: "Web Application Development",
+    text: "We build responsive web applications, interactive platforms, dashboards and portals tailored to your business requirements and user needs.",
+    tags: ["Web Apps", "Dashboards", "Portals"],
+  },
+  {
+    id: "ai",
+    title: "AI-Powered Solutions",
+    text: "We integrate practical AI capabilities into applications and business processes to automate tasks, improve efficiency and create smarter user experiences.",
+    tags: ["AI Integration", "LLM Apps", "Workflows"],
   },
   {
     id: "infra",
-    title: "Digital Infrastructure",
-    text: "Backend systems, APIs, cloud architecture, databases and technology foundations designed for scale.",
-    tags: ["APIs", "Cloud", "Data"],
+    title: "Backend, APIs & Cloud Solutions",
+    text: "We engineer secure backend systems, APIs, databases and cloud infrastructure that connect applications and support reliable performance as your business grows.",
+    tags: ["Backend", "APIs", "Cloud"],
   },
 ];
+
 
 export const journey = {
   headline: "From zero to scale.",
@@ -337,8 +381,8 @@ export const journey = {
 
 export const ai = {
   headline: "Intelligence, built into the product.",
-  lead: "AI is changing how products are built, how businesses operate and how people interact with technology.",
-  text: "NavRasa builds practical AI systems that become part of real products and workflows — measured by the value they create, not the noise they make.",
+  lead: "AI can make digital products smarter, workflows faster and business operations more efficient.",
+  text: "NavRasa integrates AI-powered features, intelligent automation and custom AI solutions into applications and business systems to solve practical business challenges.",
   capabilities: [
     "Generative AI",
     "LLM Applications",
@@ -360,16 +404,16 @@ export const ai = {
 
 export const engineering = {
   headline: "Engineered for what comes next.",
-  lead: "Products need foundations that can evolve. The architecture decided on day one determines what is possible in year three.",
+  lead: "Every digital product needs a reliable foundation. We build the architecture, integrations and infrastructure that keep applications secure, performant and ready to evolve.",
   message: "We build systems that are designed not only to launch, but to evolve.",
   layers: [
-    { name: "Frontend", modules: ["Web app", "Mobile app", "Admin"] },
-    { name: "APIs", modules: ["REST", "GraphQL", "Webhooks"] },
-    { name: "Backend", modules: ["Services", "Auth", "Jobs"] },
-    { name: "Data", modules: ["PostgreSQL", "MongoDB", "Cache"] },
-    { name: "AI", modules: ["LLM", "Embeddings", "Agents"] },
+    { name: "Frontend", modules: ["React", "Next.js", "Web Applications", "Mobile Interfaces"] },
+    { name: "APIs", modules: ["REST APIs", "GraphQL", "Webhooks", "Integrations"] },
+    { name: "Backend", modules: ["Node.js", "Python", "FastAPI", "Django"] },
+    { name: "Data", modules: ["PostgreSQL", "MySQL", "MongoDB", "Redis"] },
+    { name: "AI", modules: ["LLM Applications", "Embeddings", "AI Agents"] },
     { name: "Cloud", modules: ["AWS", "Google Cloud", "Firebase"] },
-    { name: "Infrastructure", modules: ["CI/CD", "Monitoring", "Security"] },
+    { name: "Infrastructure", modules: ["CI/CD", "Monitoring", "Security", "Deployment"] },
   ],
   qualities: [
     { title: "Performance", text: "Fast by default. Measured, not assumed." },
@@ -392,7 +436,7 @@ export const startups = {
     { k: "Approach", v: "Validate → Prototype → Build → Iterate → Scale" },
     { k: "After launch", v: "Feature expansion and infrastructure that grows without a rebuild" },
   ],
-  cta: { label: "Build My MVP", href: "/contact" },
+  cta: { label: "Build Your MVP", href: "/contact" },
 };
 
 export const businesses = {
@@ -407,7 +451,7 @@ export const businesses = {
     { title: "Build internal systems", text: "Dashboards, tooling and back-office systems tailored to your operation." },
     { title: "Create new digital revenue channels", text: "Turn existing capabilities into products, marketplaces and services." },
   ],
-  cta: { label: "Explore Business Solutions", href: "/contact" },
+  cta: { label: "Discuss Custom Software", href: "/contact" },
 };
 
 export const capabilities = [
@@ -506,12 +550,30 @@ export const work = {
 export const why = {
   headline: "Why NavRasa?",
   principles: [
-    { title: "Product Thinking", text: "We think about the product, not just the code." },
-    { title: "Engineering Depth", text: "Strong technical foundations create long-term advantages." },
-    { title: "Speed With Purpose", text: "Move quickly without sacrificing important architectural decisions." },
-    { title: "AI-Native Mindset", text: "Use AI where it creates meaningful leverage." },
-    { title: "Business Understanding", text: "Technology must connect to measurable business goals." },
-    { title: "Long-Term Partnership", text: "Build today with tomorrow in mind." },
+    {
+      title: "Product Thinking",
+      text: "We understand the problem before writing code, building products around real user needs and business objectives.",
+    },
+    {
+      title: "Engineering Depth",
+      text: "Strong technical foundations, scalable architecture and reliable engineering built for the long term.",
+    },
+    {
+      title: "Speed With Purpose",
+      text: "We move quickly without compromising quality, maintainability or critical architectural decisions.",
+    },
+    {
+      title: "AI-Native Mindset",
+      text: "We integrate AI where it creates meaningful value, smarter workflows and measurable business impact.",
+    },
+    {
+      title: "Business Understanding",
+      text: "Every technical decision connects to your goals, customers, operations and growth.",
+    },
+    {
+      title: "Long-Term Partnership",
+      text: "We build beyond launch, supporting continuous improvement as your product and business evolve.",
+    },
   ],
 };
 
@@ -521,7 +583,7 @@ export const future = {
     "The biggest technology companies are built one product, one problem and one ambitious idea at a time.",
     "NavRasa is building toward that future.",
   ],
-  cta: { label: "Build With Us", href: "/contact" },
+  cta: { label: "Start Your Project", href: "/contact" },
 };
 
 export const about = {
@@ -543,7 +605,7 @@ export const about = {
       role: "Co-Founder & CEO",
       focus: ["Vision", "Product", "Entrepreneurship"],
       href: "https://www.linkedin.com/in/shreyansh-khandelwal",
-      photo: "/images/shreyansh_about.png",
+      photo: "/images/shreyansh_about_cutout.png",
       // EDIT: add a verified short bio when available.
       bio: "",
     },
@@ -552,7 +614,7 @@ export const about = {
       role: "Co-Founder & CMO",
       focus: ["Growth", "Brand", "Partnerships"],
       href: "https://www.linkedin.com/in/sargamyadav",
-      photo: "/images/sargam_about.jpg",
+      photo: "/images/sargam_about_cutout.png",
       // EDIT: add a verified short bio when available.
       bio: "",
     },
@@ -576,14 +638,14 @@ export const insights = {
 export const finalCta = {
   headline: "Have a big idea?",
   text: "Let's build the technology to make it real.",
-  primary: { label: "Start Building", href: "/contact" },
-  secondary: { label: "Talk to Our Team", href: `mailto:${company.email}` },
+  primary: { label: "Start Your Project", href: "/contact" },
+  secondary: { label: "Talk to Our Team", href: "/contact" },
 };
 
 export const contactForm = {
-  projectTypes: ["AI Product", "SaaS", "Mobile App", "Web Platform", "MVP", "Enterprise Software", "Automation", "Other"],
-  budgets: ["Under ₹1L", "₹1–3L", "₹3–5L", "₹5–10L", "₹10–25L", "₹25L+", "Not Sure"],
-  timelines: ["As soon as possible", "Within 1 month", "1–3 months", "3–6 months", "Exploring"],
+  projectTypes: ["AI Product", "SaaS Platform", "Mobile Application", "Web Platform / Website", "MVP Development", "Enterprise Software", "Business Automation", "Other"],
+  budgets: ["Under 1 Lakh INR", "1 to 3 Lakhs INR", "3 to 5 Lakhs INR", "5 to 10 Lakhs INR", "10 to 25 Lakhs INR", "25 Lakhs+ INR", "Not Sure Yet"],
+  timelines: ["As soon as possible", "Within 1 month", "1 to 3 months", "3 to 6 months", "Just exploring"],
 };
 
 export const footer = {
@@ -592,7 +654,7 @@ export const footer = {
     { label: "Work", href: "/work" },
     { label: "Capabilities", href: "/capabilities" },
     { label: "Insights", href: "/insights" },
-    { label: "Careers", href: `mailto:${company.email}?subject=Careers%20at%20NavRasa` },
+    { label: "Careers", href: "/careers" },
     { label: "Contact", href: "/contact" },
   ],
   legal: [

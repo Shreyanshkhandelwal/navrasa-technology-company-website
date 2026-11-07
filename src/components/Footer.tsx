@@ -1,9 +1,12 @@
 import { useReducedMotion } from "framer-motion";
+import { Clock3, Mail, MapPin, Phone } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { company, footer } from "@/data/site";
 import { SocialIcons } from "./Social";
 import { Logo, Mark } from "./ui";
+import { useEnquiry } from "./EnquiryContext";
+import { ArrowUpRight } from "lucide-react";
 
 function FooterLink({ href, children }: { href: string; children: ReactNode }) {
   const cls = "text-[15px] text-paper/75 transition-colors hover:text-paper";
@@ -21,6 +24,7 @@ function FooterLink({ href, children }: { href: string; children: ReactNode }) {
 export function Footer() {
   const year = new Date().getFullYear();
   const reduce = useReducedMotion();
+  const { openEnquiry } = useEnquiry();
   const toTop = () => window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
 
   return (
@@ -36,6 +40,9 @@ export function Footer() {
               <br />
               next.
             </p>
+            <button type="button" onClick={openEnquiry} className="mt-8 inline-flex min-h-12 items-center gap-3 bg-signal px-6 text-[14px] font-medium text-white transition-colors hover:bg-[#d94d1c]">
+              Start Your Project <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </button>
           </div>
 
           <div className="col-span-12 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-[1fr_1fr_1.6fr] lg:col-span-6 lg:pt-3">
@@ -61,17 +68,36 @@ export function Footer() {
             </div>
             <div className="col-span-2 sm:col-span-1">
               <h4 className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-mute-2">Get in touch</h4>
-              <ul className="mt-5 flex flex-col gap-3">
+              <ul className="mt-5 flex flex-col gap-3 text-[14px] text-paper/60">
                 <li>
-                  <FooterLink href={`mailto:${company.email}`}>{company.email}</FooterLink>
+                  <a href={`mailto:${company.email}`} className="flex items-start gap-2.5 transition-colors hover:text-paper">
+                    <Mail className="mt-0.5 h-4 w-4 shrink-0 text-paper/40" strokeWidth={1.5} aria-hidden="true" />
+                    <span>{company.email}</span>
+                  </a>
                 </li>
-                {company.phones.map((p) => (
-                  <li key={p}>
-                    <FooterLink href={`tel:${p.replace(/\s/g, "")}`}>{p}</FooterLink>
+                {company.phones.map((phone) => (
+                  <li key={phone}>
+                    <a href={`tel:${phone.replace(/[^+\d]/g, "")}`} className="flex items-start gap-2.5 transition-colors hover:text-paper">
+                      <Phone className="mt-0.5 h-4 w-4 shrink-0 text-paper/40" strokeWidth={1.5} aria-hidden="true" />
+                      <span>{phone}</span>
+                    </a>
                   </li>
                 ))}
-                <li className="pt-1 text-[14px] leading-relaxed text-paper/50">{company.location}</li>
-                <li className="text-[14px] text-paper/50">{company.hours}</li>
+                <li>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(company.location)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-start gap-2.5 transition-colors hover:text-paper"
+                  >
+                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-paper/40" strokeWidth={1.5} aria-hidden="true" />
+                    <span className="leading-relaxed">{company.location}</span>
+                  </a>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <Clock3 className="mt-0.5 h-4 w-4 shrink-0 text-paper/40" strokeWidth={1.5} aria-hidden="true" />
+                  <span>{company.hours}</span>
+                </li>
               </ul>
 
               <h4 className="mt-9 font-mono text-[10.5px] uppercase tracking-[0.2em] text-mute-2">Follow</h4>

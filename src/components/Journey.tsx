@@ -58,8 +58,8 @@ export function Journey({ index = "03" }: { index?: string }) {
                     className="absolute -left-[3px] h-[7px] w-[7px] -translate-y-1/2 bg-signal"
                   />
                 </div>
-                <div>
-                  <div className="relative h-[0.95em] overflow-hidden font-display text-[11rem] font-semibold leading-[0.9] tracking-[-0.06em] xl:text-[14rem]">
+                <div className="min-w-0">
+                  <div className="relative h-[1em] w-[1.8em] whitespace-nowrap overflow-visible font-display text-[11rem] font-semibold leading-[0.9] tracking-[-0.06em] xl:w-[1.7em] xl:text-[14rem]">
                     <AnimatePresence mode="popLayout" initial={false}>
                       <motion.span
                         key={stage.n}

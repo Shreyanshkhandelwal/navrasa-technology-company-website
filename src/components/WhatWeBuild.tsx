@@ -1,8 +1,8 @@
 import { ArrowUpRight } from "lucide-react";
-import { Link } from "react-router-dom";
 import { cn } from "@/utils/cn";
 import { builds } from "@/data/site";
 import { Button, Eyebrow, Lines, Reveal, useSpotlight } from "./ui";
+import { useEnquiry } from "./EnquiryContext";
 
 function Glyph({ id }: { id: string }) {
   const common = {
@@ -72,11 +72,22 @@ function Glyph({ id }: { id: string }) {
 }
 
 export function WhatWeBuild({ headless = false, index = "02" }: { headless?: boolean; index?: string }) {
-  const spotlight = useSpotlight<HTMLAnchorElement>();
+  const { openEnquiry } = useEnquiry();
+  const spotlight = useSpotlight<HTMLElement>();
   return (
     <section id="what-we-build" className="grain relative bg-ink text-paper">
       <div className={cn("container-x relative", headless ? "pb-24 md:pb-32 lg:pb-40" : "section-y")}>
-        {!headless && (
+        {headless ? (
+          <div className="grid grid-cols-12 gap-x-4 gap-y-8 border-b border-white/10 pb-12 pt-24 md:gap-x-8 md:pb-16 md:pt-32">
+            <div className="col-span-12 lg:col-span-8">
+              <Eyebrow index={index} label="01 / What We Build" />
+              <Lines lines={["Technology built", "around your business."]} className="display display-md mt-10 uppercase text-paper" />
+            </div>
+            <Reveal className="col-span-12 self-end lg:col-span-4">
+              <p className="max-w-[38ch] text-lg leading-relaxed text-paper/60">Every business has different challenges. We build the digital products and software systems needed to solve them.</p>
+            </Reveal>
+          </div>
+        ) : (
           <div className="grid grid-cols-12 gap-x-4 gap-y-8 md:gap-x-8">
             <div className="col-span-12 lg:col-span-8">
               <Eyebrow index={index} label="What We Build" />
@@ -96,17 +107,18 @@ export function WhatWeBuild({ headless = false, index = "02" }: { headless?: boo
 
         <div
           className={cn(
-            "grid grid-cols-1 border-t border-l border-white/10 md:grid-cols-2 xl:grid-cols-3",
+            "grid grid-cols-1 border-t border-l border-white/10 md:grid-cols-2",
             !headless && "mt-16 md:mt-24"
           )}
         >
-          {builds.map((b, i) => (
+          {builds.slice(0, 4).map((b, i) => (
             <Reveal key={b.id} delay={(i % 3) * 0.06} className="flex">
-              <Link
+              <button
+                type="button"
                 id={`build-${b.id}`}
-                to="/contact"
+                onClick={openEnquiry}
                 onMouseMove={spotlight}
-                className="spotlight group flex min-h-[340px] w-full flex-col justify-between border-b border-r border-white/10 p-7 transition-colors duration-500 hover:bg-white/[0.03] md:min-h-[400px] md:p-9"
+                className={cn("spotlight group flex min-h-[380px] w-full flex-col justify-between border-b border-r border-white/10 p-7 transition-colors duration-500 hover:bg-white/[0.03] md:p-9", i === 0 && "md:min-h-[520px]", i === 1 && "md:min-h-[470px]", i > 1 && "md:min-h-[430px]")}
               >
                 <div className="flex items-start justify-between">
                   <span className="font-mono text-[11px] tracking-[0.2em] text-mute-2 transition-colors duration-500 group-hover:text-signal">
@@ -121,7 +133,7 @@ export function WhatWeBuild({ headless = false, index = "02" }: { headless?: boo
                   <p className="mt-4 max-w-[34ch] text-[15px] leading-relaxed text-paper/60">{b.text}</p>
                   <div className="mt-8 flex items-center justify-between">
                     <ul className="flex flex-wrap gap-2">
-                      {b.tags.map((t) => (
+                      {(b.capabilities ?? b.tags).map((t) => (
                         <li
                           key={t}
                           className="border border-white/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-paper/60"
@@ -136,7 +148,7 @@ export function WhatWeBuild({ headless = false, index = "02" }: { headless?: boo
                     />
                   </div>
                 </div>
-              </Link>
+              </button>
             </Reveal>
           ))}
         </div>

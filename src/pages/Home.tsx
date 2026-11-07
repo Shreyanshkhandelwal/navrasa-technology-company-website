@@ -12,11 +12,11 @@ import { useSEO } from "@/hooks/useSEO";
 
 export function Home() {
   useSEO({
-    title: "NavRasa IT Solutions — Build What's Next | Product Engineering, AI & Software Development",
-    description:
-      "NavRasa IT Solutions is a technology and product engineering company. We design, engineer and scale digital products, AI systems, SaaS platforms, mobile and web applications for ambitious founders and businesses. Based in Jaipur, India.",
-    path: "/",
-  });
+  title: "Mobile App & Software Development Company in Jaipur | NavRasa",
+  description:
+    "NavRasa IT Solutions builds Android and iOS apps, Flutter and React Native applications, and custom business software for startups and growing businesses. We also develop SaaS platforms and AI-powered solutions. Based in Jaipur, India.",
+  path: "/",
+});
 
   return (
     <>

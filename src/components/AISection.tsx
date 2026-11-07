@@ -85,7 +85,7 @@ export function AISection({ index = "04" }: { index?: string }) {
     <section id="ai" className="grain relative bg-ink text-paper">
       <div className="absolute inset-0 bg-[radial-gradient(50%_40%_at_20%_20%,rgba(255,77,18,0.07),transparent_60%)]" aria-hidden="true" />
       <div className="container-x section-y relative">
-        <Eyebrow index={index} label="Applied Intelligence" />
+        <Eyebrow index={index} label="03 / Applied Intelligence" />
         <div className="mt-10 grid grid-cols-12 gap-x-4 md:gap-x-8 gap-y-10">
           <div className="col-span-12 lg:col-span-9">
             <Lines lines={["Intelligence,", "built into the product."]} className="display display-md uppercase text-paper" />

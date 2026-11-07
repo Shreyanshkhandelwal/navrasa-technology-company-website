@@ -17,7 +17,7 @@ export function AITeaser({ index = "04" }: { index?: string }) {
         aria-hidden="true"
       />
 
-      <div className="container-x section-y relative">
+      <div className="container-x relative pb-14 pt-14 md:pb-18 md:pt-18 lg:pb-24 lg:pt-24">
         <Eyebrow index={index} label="Applied Intelligence" />
         <div className="mt-10 grid grid-cols-12 gap-x-4 gap-y-10 md:gap-x-8">
           <div className="col-span-12 lg:col-span-8">

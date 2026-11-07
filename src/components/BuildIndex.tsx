@@ -2,9 +2,11 @@ import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { builds } from "@/data/site";
 import { Button, Eyebrow, Lines, Reveal } from "./ui";
+import { useEnquiry } from "./EnquiryContext";
 
 /* Home teaser: an editorial index of what we build, linking into the full page. */
 export function BuildIndex({ index = "02" }: { index?: string }) {
+  const { openEnquiry } = useEnquiry();
   return (
     <section id="what-we-build" className="grain relative bg-ink text-paper">
       <div className="container-x section-y relative">
@@ -13,7 +15,7 @@ export function BuildIndex({ index = "02" }: { index?: string }) {
             <Eyebrow index={index} label="What We Build" />
             <Lines
               lines={["We build products.", "Not just projects."]}
-              className="display display-md mt-10 uppercase text-paper"
+              className="display display-md mt-7 uppercase text-paper md:mt-8"
             />
           </div>
           <Reveal className="col-span-12 self-end lg:col-span-4">
@@ -21,7 +23,7 @@ export function BuildIndex({ index = "02" }: { index?: string }) {
               Six areas where we go deep. Each one is a discipline in its own right — and most serious products need
               several of them at once.
             </p>
-            <div className="mt-8">
+            <div className="mt-5 md:mt-6">
               <Button href="/what-we-build" tone="dark" variant="text">
                 Explore what we build
               </Button>
@@ -29,12 +31,12 @@ export function BuildIndex({ index = "02" }: { index?: string }) {
           </Reveal>
         </div>
 
-        <ol className="mt-16 border-t border-white/10 md:mt-24">
+        <ol className="mt-8 border-t border-white/10 md:mt-10 lg:mt-12">
           {builds.map((b, i) => (
             <Reveal as="li" key={b.id} delay={i * 0.04}>
               <Link
                 to={`/what-we-build#build-${b.id}`}
-                className="group grid grid-cols-12 items-center gap-x-4 border-b border-white/10 py-6 transition-colors duration-500 hover:bg-white/[0.03] md:gap-x-8 md:py-8"
+                className="group grid grid-cols-12 items-center gap-x-4 gap-y-3 border-b border-white/10 py-5 transition-colors duration-500 hover:bg-white/[0.03] md:gap-x-8 md:py-6"
               >
                 <span className="col-span-2 font-mono text-[11px] tracking-[0.2em] text-mute-2 transition-colors duration-500 group-hover:text-signal sm:col-span-1">
                   0{i + 1}
@@ -53,6 +55,10 @@ export function BuildIndex({ index = "02" }: { index?: string }) {
             </Reveal>
           ))}
         </ol>
+        <div className="mt-10 flex flex-col gap-5 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-[48ch] text-sm leading-relaxed text-paper/55">Not sure where your idea fits? Start with the outcome you want to create.</p>
+          <button type="button" onClick={openEnquiry} className="inline-flex min-h-12 items-center justify-center gap-3 bg-signal px-6 text-[14px] font-medium text-white transition-colors hover:bg-[#d94d1c]">Discuss Custom Software <ArrowUpRight className="h-4 w-4" /></button>
+        </div>
       </div>
     </section>
   );
