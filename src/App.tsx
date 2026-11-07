@@ -19,6 +19,11 @@ import { CaseStudyPage } from "./pages/CaseStudyPage";
 import { CareersPage } from "./pages/CareersPage";
 import { EnquiryProvider } from "./components/EnquiryContext";
 import { EnquiryModal } from "./components/EnquiryModal";
+import {
+  AndroidAppPage, AIAgentDevelopmentPage, AIDevelopmentPage, CustomSoftwarePage,
+  FlutterAppPage, IOSAppPage, MVPDevelopmentPage, ReactNativeAppPage,
+  SaaSDevelopmentPage, WebApplicationPage,
+} from "./pages/DedicatedServicesPage";
 
 /* Scroll to top on route change; honour #hash targets (instant across pages,
    smooth when jumping within the current page). */
@@ -73,6 +78,16 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/what-we-build" element={<WhatWeBuildPage />} />
           <Route path="/mobile-app-development" element={<MobileAppDevelopmentPage />} />
+          <Route path="/android-app-development" element={<AndroidAppPage />} />
+          <Route path="/ios-app-development" element={<IOSAppPage />} />
+          <Route path="/flutter-app-development" element={<FlutterAppPage />} />
+          <Route path="/react-native-development" element={<ReactNativeAppPage />} />
+          <Route path="/custom-software-development" element={<CustomSoftwarePage />} />
+          <Route path="/saas-development" element={<SaaSDevelopmentPage />} />
+          <Route path="/mvp-development" element={<MVPDevelopmentPage />} />
+          <Route path="/web-application-development" element={<WebApplicationPage />} />
+          <Route path="/ai-development" element={<AIDevelopmentPage />} />
+          <Route path="/ai-agent-development" element={<AIAgentDevelopmentPage />} />
           <Route path="/solutions" element={<SolutionsPage />} />
           <Route path="/capabilities" element={<CapabilitiesPage />} />
           <Route path="/work" element={<WorkPage />} />

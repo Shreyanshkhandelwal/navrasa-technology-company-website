@@ -16,7 +16,7 @@ export function Testimonials({ index = "06", tone = "light" }: { index?: string;
   const sectionRef = useRef<HTMLElement>(null);
   const touchStart = useRef<number | null>(null);
   const [activeReview, setActiveReview] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(() => (typeof window === "undefined" ? 3 : getVisibleCount()));
+  const [visibleCount, setVisibleCount] = useState(3);
   const [inView, setInView] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [fullReview, setFullReview] = useState<(typeof googleReviews)[number] | null>(null);

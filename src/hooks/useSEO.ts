@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { company } from "@/data/site";
+import { DEFAULT_IMAGE, getSEO } from "@/config/seo";
 
 type SEO = { title: string; description: string; path: string; noindex?: boolean };
 
@@ -23,15 +24,26 @@ function setMeta(key: string, content: string, attr: "name" | "property" = "name
 /** Per-route metadata: title, description, canonical, Open Graph and Twitter. */
 export function useSEO({ title, description, path, noindex = false }: SEO) {
   useEffect(() => {
-    const url = new URL(path, company.url).toString();
-    document.title = title;
-    setMeta("description", description);
-    setMeta("robots", noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large");
-    setMeta("og:title", title, "property");
-    setMeta("og:description", description, "property");
+    const routeSEO = getSEO(path);
+    const normalizedPath = routeSEO.path;
+    const url = routeSEO.canonical;
+    const finalTitle = routeSEO.title;
+    const finalDescription = routeSEO.description;
+    const finalNoindex = routeSEO.noindex ?? noindex;
+    document.title = finalTitle;
+    setMeta("description", finalDescription);
+    setMeta("robots", finalNoindex ? "noindex, nofollow" : "index, follow, max-image-preview:large");
+    setMeta("og:title", finalTitle, "property");
+    setMeta("og:description", finalDescription, "property");
     setMeta("og:url", url, "property");
-    setMeta("twitter:title", title);
-    setMeta("twitter:description", description);
+    setMeta("og:type", "website", "property");
+    setMeta("og:locale", "en_IN", "property");
+    setMeta("og:site_name", "NavRasa IT Solutions", "property");
+    setMeta("og:image", DEFAULT_IMAGE, "property");
+    setMeta("twitter:card", "summary");
+    setMeta("twitter:title", finalTitle);
+    setMeta("twitter:description", finalDescription);
+    setMeta("twitter:image", DEFAULT_IMAGE);
     ensure<HTMLLinkElement>('link[rel="canonical"]', () => {
       const l = document.createElement("link");
       l.rel = "canonical";

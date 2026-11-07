@@ -321,12 +321,6 @@ export const builds = [
     tags: ["Web Apps", "Dashboards", "Portals"],
   },
   {
-    id: "ai",
-    title: "AI-Powered Solutions",
-    text: "We integrate practical AI capabilities into applications and business processes to automate tasks, improve efficiency and create smarter user experiences.",
-    tags: ["AI Integration", "LLM Apps", "Workflows"],
-  },
-  {
     id: "infra",
     title: "Backend, APIs & Cloud Solutions",
     text: "We engineer secure backend systems, APIs, databases and cloud infrastructure that connect applications and support reliable performance as your business grows.",
@@ -594,7 +588,7 @@ export const about = {
   mission: "Make powerful technology accessible to ambitious businesses and founders.",
   vision: "Build technology that creates meaningful impact at scale.",
   facts: [
-    { k: "Based in", v: "Jaipur, Rajasthan, India" },
+    { k: "Based in", v: "Mansarovar, Jaipur, Rajasthan, India" },
     { k: "Focus", v: "Digital products · AI · Scalable systems" },
     { k: "Working with", v: "Founders, startups and businesses across industries" },
   ],

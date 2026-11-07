@@ -4,6 +4,15 @@ import { builds } from "@/data/site";
 import { Button, Eyebrow, Lines, Reveal } from "./ui";
 import { useEnquiry } from "./EnquiryContext";
 
+const servicePaths: Record<string, string> = {
+  mobile: "/mobile-app-development",
+  enterprise: "/custom-software-development",
+  saas: "/saas-development",
+  ai: "/ai-development",
+  web: "/web-application-development",
+  infra: "/custom-software-development",
+};
+
 /* Home teaser: an editorial index of what we build, linking into the full page. */
 export function BuildIndex({ index = "02" }: { index?: string }) {
   const { openEnquiry } = useEnquiry();
@@ -35,7 +44,7 @@ export function BuildIndex({ index = "02" }: { index?: string }) {
           {builds.map((b, i) => (
             <Reveal as="li" key={b.id} delay={i * 0.04}>
               <Link
-                to={`/what-we-build#build-${b.id}`}
+                to={servicePaths[b.id] ?? `/what-we-build#build-${b.id}`}
                 className="group grid grid-cols-12 items-center gap-x-4 gap-y-3 border-b border-white/10 py-5 transition-colors duration-500 hover:bg-white/[0.03] md:gap-x-8 md:py-6"
               >
                 <span className="col-span-2 font-mono text-[11px] tracking-[0.2em] text-mute-2 transition-colors duration-500 group-hover:text-signal sm:col-span-1">

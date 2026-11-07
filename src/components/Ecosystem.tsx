@@ -19,7 +19,10 @@ type Node = {
   accent: boolean;
 };
 
-const MARK = new Path2D("M0 896V240L419 0l419 240v656l-212 123V361L419 240 214 361v658Z");
+const MARK_PATH = "M0 896V240L419 0l419 240v656l-212 123V361L419 240 214 361v658Z";
+
+const createMark = () =>
+  typeof Path2D !== "undefined" ? new Path2D(MARK_PATH) : null;
 
 const rotX = (p: Vec, t: number): Vec => {
   const c = Math.cos(t), s = Math.sin(t);
@@ -278,7 +281,8 @@ export function Ecosystem({ className, dim = false }: { className?: string; dim?
       ctx.translate(cx - mw / 2, cy - mh / 2);
       ctx.scale(mw / 838, mh / 1019);
       ctx.fillStyle = `rgba(245,244,240,${breathe * base})`;
-      ctx.fill(MARK);
+      const mark = createMark();
+      if (mark) ctx.fill(mark);
       ctx.restore();
 
       drawLinks(front);

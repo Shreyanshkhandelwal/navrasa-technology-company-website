@@ -8,6 +8,20 @@
   <url><loc>https://www.navrasaitsolutions.com/about</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.navrasaitsolutions.com/insights</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://www.navrasaitsolutions.com/contact</loc><changefreq>yearly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.navrasaitsolutions.com/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://www.navrasaitsolutions.com/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/careers</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/mobile-app-development</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/android-app-development</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/ios-app-development</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/flutter-app-development</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/react-native-development</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/custom-software-development</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/saas-development</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/mvp-development</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/web-application-development</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/ai-development</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/ai-agent-development</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/work/ezyfix</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/work/richony</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/work/suntech-power</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.navrasaitsolutions.com/work/crid-innovations</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>
