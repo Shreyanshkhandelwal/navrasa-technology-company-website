@@ -143,15 +143,18 @@ function FounderCard({ f, i, open, onToggle }: { f: Founder; i: number; open: bo
         </header>
 
         <div className="flex h-[270px] items-end justify-center overflow-hidden bg-[#fffefd] px-4">
-          <img
-            src={f.photo}
-            alt={`${f.name} — ${f.role}, ${company.short}`}
-            width={800}
-            height={800}
-            loading="lazy"
-            decoding="async"
-            className="h-full w-full object-contain object-center"
-          />
+          <picture className="h-full w-full">
+            <source srcSet={f.photo} type="image/webp" />
+            <img
+              src={f.photoFallback}
+              alt={`${f.name}, ${f.role} at ${company.short}`}
+              width={f.photoWidth}
+              height={f.photoHeight}
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-contain object-center"
+            />
+          </picture>
         </div>
         <div className="flex h-11 items-center justify-center">
           <button

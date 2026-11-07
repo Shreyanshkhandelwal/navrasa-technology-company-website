@@ -599,7 +599,10 @@ export const about = {
       role: "Co-Founder & CEO",
       focus: ["Vision", "Product", "Entrepreneurship"],
       href: "https://www.linkedin.com/in/shreyansh-khandelwal",
-      photo: "/images/shreyansh_about_cutout.png",
+      photo: "/images/shreyansh_about_cutout.webp",
+      photoFallback: "/images/shreyansh_about_cutout.png",
+      photoWidth: 800,
+      photoHeight: 800,
       // EDIT: add a verified short bio when available.
       bio: "",
     },
@@ -608,7 +611,10 @@ export const about = {
       role: "Co-Founder & CMO",
       focus: ["Growth", "Brand", "Partnerships"],
       href: "https://www.linkedin.com/in/sargamyadav",
-      photo: "/images/sargam_about_cutout.png",
+      photo: "/images/sargam_about_cutout.webp",
+      photoFallback: "/images/sargam_about_cutout.png",
+      photoWidth: 685,
+      photoHeight: 699,
       // EDIT: add a verified short bio when available.
       bio: "",
     },

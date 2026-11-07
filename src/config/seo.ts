@@ -1,9 +1,9 @@
 export const SITE_URL = "https://www.navrasaitsolutions.com";
-export const DEFAULT_IMAGE = `${SITE_URL}/logo.svg`;
+export const DEFAULT_IMAGE = `${SITE_URL}/navrasa-social.jpg`;
 export type RouteSEO = { title: string; description: string; noindex?: boolean };
 
 export const seoByPath: Record<string, RouteSEO> = {
-  "/": { title: "Mobile App & Software Development Company in Jaipur | NavRasa", description: "NavRasa IT Solutions is a mobile app and custom software development company in Jaipur, building Android, iOS, web, SaaS and AI products for startups and businesses." },
+  "/": { title: "Mobile App & Software Development Company in Jaipur | NavRasa", description: "NavRasa IT Solutions is a Jaipur-based mobile app and software development company building custom Android, iOS, web and AI solutions for startups and businesses. Transform your ideas into scalable digital products." },
   "/what-we-build": { title: "Software Development Services in Jaipur | NavRasa", description: "Explore mobile app, custom software, SaaS, AI, web application, backend and cloud development services from NavRasa IT Solutions in Jaipur." },
   "/mobile-app-development": { title: "Mobile App Development Company in Jaipur | NavRasa", description: "NavRasa IT Solutions develops custom Android, iOS, Flutter and React Native mobile apps for startups and businesses in Jaipur and international markets." },
   "/android-app-development": { title: "Android App Development Company in Jaipur | NavRasa", description: "NavRasa IT Solutions builds custom Android apps in Jaipur for startups and businesses, including business applications, customer platforms, API integrations and scalable Android products." },
