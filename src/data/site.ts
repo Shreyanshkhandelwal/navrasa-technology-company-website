@@ -249,7 +249,7 @@ export const hero = {
   eyebrow: "Mobile Applications & Custom Software Solutions",
   lines: ["ENGINEERED", "FOR BUSINESS.", "BUILT TO", "SCALE."],
   statement:
-    "We partner with startups and growing businesses to build high-performance mobile applications and custom software that solve real problems and drive measurable growth.",
+    "NavRasa IT Solutions is a Jaipur-based mobile app and software development company helping startups and businesses build scalable digital products. From custom Android and iOS app development to web applications, SaaS platforms and custom software solutions, we turn business ideas into reliable technology.",
   secondary:
     "From mobile applications to enterprise software, we turn complex requirements into reliable digital products.",
   primaryCta: { label: "Start Your Project", href: "/contact" },
