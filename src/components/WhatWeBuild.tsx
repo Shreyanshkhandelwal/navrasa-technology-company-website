@@ -1,7 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { builds } from "@/data/site";
-import { Button, Eyebrow, Lines, Reveal, useSpotlight } from "./ui";
+import { Eyebrow, Lines, Reveal, useSpotlight } from "./ui";
 import { useEnquiry } from "./EnquiryContext";
 
 function Glyph({ id }: { id: string }) {
@@ -111,14 +111,14 @@ export function WhatWeBuild({ headless = false, index = "02" }: { headless?: boo
             !headless && "mt-16 md:mt-24"
           )}
         >
-          {builds.slice(0, 4).map((b, i) => (
+          {builds.map((b, i) => (
             <Reveal key={b.id} delay={(i % 3) * 0.06} className="flex">
               <button
                 type="button"
                 id={`build-${b.id}`}
                 onClick={openEnquiry}
                 onMouseMove={spotlight}
-                className={cn("spotlight group flex min-h-[300px] w-full flex-col justify-between border-b border-r border-white/10 p-6 transition-colors duration-300 hover:bg-white/[0.03] md:p-8", i === 0 && "md:min-h-[400px]", i === 1 && "md:min-h-[370px]", i > 1 && "md:min-h-[350px]")}
+                className="spotlight group flex min-h-[260px] w-full flex-col justify-between border-b border-r border-white/10 p-6 transition-colors duration-300 hover:bg-white/[0.03] md:min-h-[290px] md:p-8"
               >
                 <div className="flex items-start justify-between">
                   <span className="font-mono text-[11px] tracking-[0.2em] text-mute-2 transition-colors duration-500 group-hover:text-signal">
@@ -133,7 +133,7 @@ export function WhatWeBuild({ headless = false, index = "02" }: { headless?: boo
                   <p className="mt-4 max-w-[34ch] text-[15px] leading-relaxed text-paper/60">{b.text}</p>
                   <div className="mt-8 flex items-center justify-between">
                     <ul className="flex flex-wrap gap-2">
-                      {(b.capabilities ?? b.tags).map((t) => (
+                      {b.tags.map((t) => (
                         <li
                           key={t}
                           className="border border-white/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-paper/60"
@@ -153,17 +153,6 @@ export function WhatWeBuild({ headless = false, index = "02" }: { headless?: boo
           ))}
         </div>
 
-        {headless && (
-          <Reveal className="mt-14 flex flex-wrap items-center justify-between gap-6">
-            <p className="max-w-[52ch] text-base text-paper/55">
-              Most serious products need several of these at once. Start with the one that matters most — we'll design
-              the rest to fit.
-            </p>
-            <Button href="/contact" tone="dark" variant="outline">
-              Start with a conversation
-            </Button>
-          </Reveal>
-        )}
       </div>
     </section>
   );

@@ -11,32 +11,31 @@ export function Why({ index = "11" }: { index?: string }) {
         <div className="grid grid-cols-12 gap-x-4 md:gap-x-8 gap-y-8">
           <div className="col-span-12 lg:col-span-6">
             <Eyebrow index={index} label="WHY NAVRASA" tone="light" />
-            <Lines lines={["WHY", "NAVRASA"]} className="display display-lg mt-10 uppercase text-ink" />
+            <Lines lines={["A partner in", "building products."]} className="display display-md mt-6 uppercase text-ink" />
           </div>
           <Reveal className="col-span-12 self-end lg:col-span-5 lg:col-start-8">
-            <p className="text-xl leading-snug tracking-[-0.01em] md:text-2xl">
-              Not a vendor that executes tickets. A technology partner that takes ownership of your product, its engineering and its business outcomes.
+            <p className="text-lg leading-relaxed tracking-[-0.01em] md:text-xl">
+              Product thinking, strong engineering and a focus on the outcome.
             </p>
           </Reveal>
         </div>
 
-        <ol className="mt-16 grid grid-cols-1 border-t border-l border-ink/12 sm:grid-cols-2 lg:grid-cols-3 md:mt-24">
+        <ol className="mt-10 grid grid-cols-1 border-t border-l border-ink/12 sm:grid-cols-2 lg:grid-cols-3 md:mt-12">
           {why.principles.slice(0, 3).map((p, i) => (
             <Reveal
               as="li"
               key={p.title}
               delay={(i % 3) * 0.06}
-              className="group relative flex min-h-[220px] flex-col justify-between border-b border-r border-ink/12 p-6 transition-colors duration-300 hover:bg-ink hover:text-paper md:min-h-[260px] md:p-8"
+              className="group relative flex min-h-[170px] flex-col justify-between border-b border-r border-ink/12 p-5 transition-colors duration-300 hover:bg-ink hover:text-paper md:min-h-[190px] md:p-6"
             >
               <div className="flex items-start justify-between">
-                <span className="font-display text-5xl font-semibold tracking-[-0.05em] text-ink/15 transition-colors duration-500 group-hover:text-paper/20 md:text-6xl">
+                <span className="font-mono text-[10px] tracking-[0.18em] text-mute transition-colors duration-500 group-hover:text-signal">
                   0{i + 1}
                 </span>
-                <span className="mt-2 h-1.5 w-1.5 bg-ink/20 transition-colors duration-500 group-hover:bg-signal" />
               </div>
               <div>
-                <h3 className="font-display text-2xl font-semibold uppercase tracking-[-0.02em] md:text-3xl">{p.title}</h3>
-                <p className="mt-3 max-w-[32ch] text-[15px] leading-relaxed text-ink/60 transition-colors duration-500 group-hover:text-paper/70">
+                <h3 className="font-display text-xl font-semibold tracking-[-0.02em] md:text-2xl">{p.title}</h3>
+                <p className="mt-2 max-w-[32ch] text-sm leading-relaxed text-ink/60 transition-colors duration-500 group-hover:text-paper/70">
                   {p.text}
                 </p>
               </div>
