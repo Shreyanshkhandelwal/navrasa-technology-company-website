@@ -46,12 +46,12 @@ export function Journey({ index = "03" }: { index?: string }) {
           </Reveal>
         </div>
 
-        <div className="mt-20 grid grid-cols-12 gap-x-4 md:gap-x-8 md:mt-28">
+        <div className="mt-14 grid grid-cols-12 gap-x-4 md:gap-x-8 md:mt-20">
           {/* sticky counter */}
           <div className="hidden lg:col-span-5 lg:block">
             <div className="sticky top-28">
               <div className="flex items-start gap-8">
-                <div className="relative mt-3 h-[420px] w-px bg-ink/10" aria-hidden="true">
+                <div className="relative mt-3 h-[340px] w-px bg-ink/10" aria-hidden="true">
                   <motion.div style={{ scaleY }} className="absolute inset-0 origin-top bg-ink" />
                   <motion.div
                     style={{ top: markerTop }}
@@ -59,7 +59,7 @@ export function Journey({ index = "03" }: { index?: string }) {
                   />
                 </div>
                 <div className="min-w-0">
-                  <div className="relative h-[1em] w-[1.8em] whitespace-nowrap overflow-visible font-display text-[11rem] font-semibold leading-[0.9] tracking-[-0.06em] xl:w-[1.7em] xl:text-[14rem]">
+                  <div className="relative h-[1em] w-[1.8em] whitespace-nowrap overflow-visible font-display text-[8rem] font-semibold leading-[0.9] tracking-[-0.06em] xl:w-[1.7em] xl:text-[10rem]">
                     <AnimatePresence mode="popLayout" initial={false}>
                       <motion.span
                         key={stage.n}
@@ -122,7 +122,7 @@ export function Journey({ index = "03" }: { index?: string }) {
                 key={s.n}
                 data-stage={i}
                 className={cn(
-                  "group grid grid-cols-12 gap-x-6 border-t border-ink/10 py-12 transition-colors duration-700 md:py-16",
+                "group grid grid-cols-12 gap-x-6 border-t border-ink/10 py-9 transition-colors duration-300 md:py-12",
                   i === journey.stages.length - 1 && "border-b"
                 )}
               >

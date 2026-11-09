@@ -76,7 +76,7 @@ export function Nav() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <div className="hidden sm:block">
+            <div className="hidden lg:block">
               <Button href="/contact" tone="dark" size="md" className="h-11 px-5">
                 Start Your Project
               </Button>
@@ -131,7 +131,7 @@ export function Nav() {
                       <Link
                         to={item.href}
                         aria-current={active ? "page" : undefined}
-                        className="flex items-center justify-between border-b border-white/10 py-5 font-display text-4xl font-semibold tracking-[-0.03em] text-paper sm:text-5xl"
+                        className="flex items-center justify-between border-b border-white/10 py-4 font-display text-3xl font-semibold tracking-[-0.03em] text-paper sm:py-5 sm:text-4xl"
                       >
                         <span className="flex items-center gap-4">
                           {active && <span className="h-2 w-2 bg-signal" aria-hidden="true" />}

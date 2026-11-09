@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { company } from "@/data/site";
 import { DEFAULT_IMAGE, getSEO } from "@/config/seo";
 
 type SEO = { title: string; description: string; path: string; noindex?: boolean };
@@ -25,7 +24,6 @@ function setMeta(key: string, content: string, attr: "name" | "property" = "name
 export function useSEO({ title, description, path, noindex = false }: SEO) {
   useEffect(() => {
     const routeSEO = getSEO(path);
-    const normalizedPath = routeSEO.path;
     const url = routeSEO.canonical;
     const finalTitle = routeSEO.title;
     const finalDescription = routeSEO.description;

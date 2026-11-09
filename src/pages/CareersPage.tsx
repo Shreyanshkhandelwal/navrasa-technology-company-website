@@ -13,13 +13,14 @@ export function CareersPage() {
 
   return (
     <>
-      <section className="grain relative isolate min-h-[72svh] overflow-hidden bg-ink text-paper">
+      <section className="grain relative isolate min-h-[62svh] overflow-hidden bg-ink text-paper">
         <div className="dots-dark absolute inset-0 -z-10 opacity-50 [mask-image:radial-gradient(ellipse_at_75%_20%,#000,transparent_65%)]" aria-hidden="true" />
-        <div className="container-x flex min-h-[72svh] flex-col justify-end pb-14 pt-32 md:pb-20 md:pt-40">
+        <div className="container-x flex min-h-[62svh] flex-col justify-end pb-12 pt-28 md:pb-16 md:pt-36">
           <Eyebrow label="Careers at NavRasa" />
           <Lines
             as="h1"
             lines={["BUILD WHAT'S NEXT. WITH US."]}
+            reveal={false}
             className="page-hero-title mt-8 max-w-[13ch] uppercase text-paper"
           />
           <div className="mt-8 grid grid-cols-12 gap-x-4 gap-y-7 md:gap-x-8">

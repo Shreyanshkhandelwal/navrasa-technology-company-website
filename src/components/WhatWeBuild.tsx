@@ -118,7 +118,7 @@ export function WhatWeBuild({ headless = false, index = "02" }: { headless?: boo
                 id={`build-${b.id}`}
                 onClick={openEnquiry}
                 onMouseMove={spotlight}
-                className={cn("spotlight group flex min-h-[380px] w-full flex-col justify-between border-b border-r border-white/10 p-7 transition-colors duration-500 hover:bg-white/[0.03] md:p-9", i === 0 && "md:min-h-[520px]", i === 1 && "md:min-h-[470px]", i > 1 && "md:min-h-[430px]")}
+                className={cn("spotlight group flex min-h-[300px] w-full flex-col justify-between border-b border-r border-white/10 p-6 transition-colors duration-300 hover:bg-white/[0.03] md:p-8", i === 0 && "md:min-h-[400px]", i === 1 && "md:min-h-[370px]", i > 1 && "md:min-h-[350px]")}
               >
                 <div className="flex items-start justify-between">
                   <span className="font-mono text-[11px] tracking-[0.2em] text-mute-2 transition-colors duration-500 group-hover:text-signal">

@@ -1,6 +1,5 @@
 import { Capabilities, Technology } from "@/components/Capabilities";
 import { FinalCTA } from "@/components/Contact";
-import { Industries } from "@/components/Industries";
 import { PageHero } from "@/components/PageHero";
 import { capabilities } from "@/data/site";
 import { useSEO } from "@/hooks/useSEO";
@@ -29,8 +28,7 @@ export function CapabilitiesPage() {
       />
       <Capabilities headless />
       <Technology index="02" />
-      <Industries index="03" />
-      <FinalCTA tone="light" index="04" />
+      <FinalCTA tone="light" index="03" />
     </>
   );
 }

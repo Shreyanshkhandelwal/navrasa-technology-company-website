@@ -27,10 +27,10 @@ export function CaseStudyPage() {
           <Link to="/work" className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-paper/70 transition-colors hover:text-paper">
             <ArrowLeft className="h-4 w-4" /> All work
           </Link>
-          <div className="mt-16 grid gap-8 md:grid-cols-12 md:items-end">
+          <div className="mt-12 grid gap-8 md:grid-cols-12 md:items-end">
             <div className="md:col-span-8">
               <Eyebrow tone="dark">{project.industry}</Eyebrow>
-              <h1 className="mt-5 max-w-[14ch] font-display text-5xl font-semibold leading-[0.92] tracking-[-0.045em] sm:text-6xl md:text-7xl">{project.name}</h1>
+              <h1 className="page-hero-title mt-5 max-w-[14ch] font-display font-semibold leading-[0.98] tracking-[-0.04em]">{project.name}</h1>
               <p className="mt-7 max-w-[46rem] text-lg leading-relaxed text-paper/70 md:text-xl">{project.headline}</p>
             </div>
             <div className="border-l border-paper/20 pl-5 md:col-span-4">
@@ -47,7 +47,7 @@ export function CaseStudyPage() {
             <Eyebrow>Project overview</Eyebrow>
           </Reveal>
           <Reveal className="md:col-span-8 md:col-start-5" delay={0.08}>
-            <p className="font-display text-3xl leading-[1.08] tracking-[-0.03em] md:text-4xl">{project.overview}</p>
+            <p className="font-display text-2xl leading-[1.12] tracking-[-0.03em] md:text-3xl">{project.overview}</p>
             <p className="mt-7 max-w-[38rem] text-base leading-relaxed text-ink/70">{project.responsibility}</p>
           </Reveal>
         </div>
@@ -60,7 +60,7 @@ export function CaseStudyPage() {
             {project.solutions.map((solution, index) => (
               <article key={solution.title} className="bg-paper-2 p-7 md:min-h-[240px] md:p-8">
                 <span className="font-mono text-[10px] tracking-[0.18em] text-mute">{String(index + 1).padStart(2, "0")}</span>
-                <h3 className="mt-10 font-display text-2xl font-semibold tracking-[-0.03em]">{solution.title}</h3>
+                <h3 className="mt-7 font-display text-xl font-semibold tracking-[-0.03em] md:text-2xl">{solution.title}</h3>
                 <p className="mt-4 text-[15px] leading-relaxed text-ink/65">{solution.text}</p>
               </article>
             ))}

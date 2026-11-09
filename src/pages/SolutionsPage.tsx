@@ -1,6 +1,6 @@
 import { FinalCTA } from "@/components/Contact";
 import { PageHero } from "@/components/PageHero";
-import { Engagement, Process } from "@/components/Engagement";
+import { Engagement } from "@/components/Engagement";
 import { FAQ } from "@/components/FAQ";
 import { Solutions } from "@/components/Solutions";
 import { useSEO } from "@/hooks/useSEO";
@@ -29,9 +29,8 @@ export function SolutionsPage() {
       />
       <Solutions indexes={["01", "02"]} />
       <Engagement index="03" />
-      <Process index="04" />
-      <FAQ index="05" tone="light" />
-      <FinalCTA index="06" />
+      <FAQ index="04" tone="light" />
+      <FinalCTA index="05" />
     </>
   );
 }

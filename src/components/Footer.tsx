@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { company, footer } from "@/data/site";
 import { SocialIcons } from "./Social";
-import { Logo, Mark } from "./ui";
+import { Logo } from "./ui";
 import { useEnquiry } from "./EnquiryContext";
 import { ArrowUpRight } from "lucide-react";
 
@@ -29,18 +29,12 @@ export function Footer() {
 
   return (
     <footer className="grain relative overflow-hidden bg-ink text-paper">
-      <div className="container-x relative pt-20 md:pt-28">
-        <div className="grid grid-cols-12 gap-x-4 gap-y-14 md:gap-x-8">
+      <div className="container-x relative pt-12 md:pt-16">
+        <div className="grid grid-cols-12 gap-x-4 gap-y-10 md:gap-x-8">
           <div className="col-span-12 lg:col-span-6">
             <Logo />
-            <p className="display mt-10 text-[clamp(2.75rem,7vw,7.5rem)] uppercase text-paper">
-              Build
-              <br />
-              what's
-              <br />
-              next.
-            </p>
-            <button type="button" onClick={openEnquiry} className="mt-8 inline-flex min-h-12 items-center gap-3 bg-signal px-6 text-[14px] font-medium text-white transition-colors hover:bg-[#d94d1c]">
+            <p className="mt-4 max-w-[32ch] text-base text-paper/65">Build what's next.</p>
+            <button type="button" onClick={openEnquiry} className="mt-5 inline-flex min-h-12 items-center gap-3 bg-signal px-6 text-[14px] font-medium text-white transition-colors hover:bg-[#d94d1c]">
               Start Your Project <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
@@ -106,7 +100,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-20 flex flex-col gap-4 border-t border-white/10 py-8 font-mono text-[10.5px] uppercase tracking-[0.18em] text-mute-2 md:mt-28 md:flex-row md:items-center md:justify-between">
+        <div className="mt-12 flex flex-col gap-4 border-t border-white/10 py-7 font-mono text-[10.5px] uppercase tracking-[0.18em] text-mute-2 md:mt-16 md:flex-row md:items-center md:justify-between">
           <span>
             © {year} {company.name}. All rights reserved.
           </span>
@@ -128,8 +122,6 @@ export function Footer() {
           </button>
         </div>
       </div>
-
-      <Mark className="pointer-events-none absolute -bottom-24 -right-16 h-[420px] w-auto text-paper/[0.03] md:-bottom-40 md:h-[640px]" />
     </footer>
   );
 }

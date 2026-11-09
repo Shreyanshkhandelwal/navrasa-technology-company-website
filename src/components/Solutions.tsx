@@ -69,7 +69,7 @@ export function Solutions({ indexes = ["06", "07"] }: { indexes?: [string, strin
             </div>
           </div>
 
-          <Reveal className="mt-20 md:mt-28">
+          <Reveal className="mt-14 md:mt-18">
             <div className="mb-8 flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.2em] text-mute-2">
               <span>The path</span>
               <span>Idea → Scale</span>
@@ -77,7 +77,7 @@ export function Solutions({ indexes = ["06", "07"] }: { indexes?: [string, strin
             <Pipeline />
           </Reveal>
 
-          <div className="mt-20 grid grid-cols-12 gap-x-4 md:gap-x-8 gap-y-12 md:mt-28">
+          <div className="mt-14 grid grid-cols-12 gap-x-4 md:gap-x-8 gap-y-10 md:mt-18">
             <Reveal className="col-span-12 lg:col-span-7">
               <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-mute-2">MVP, properly defined</p>
               <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
@@ -130,7 +130,7 @@ export function Solutions({ indexes = ["06", "07"] }: { indexes?: [string, strin
             </Reveal>
           </div>
 
-          <ol className="mt-16 grid grid-cols-1 border-t border-ink/10 md:mt-24 md:grid-cols-2 md:gap-x-16">
+          <ol className="mt-12 grid grid-cols-1 border-t border-ink/10 md:mt-16 md:grid-cols-2 md:gap-x-16">
             {businesses.items.map((it, i) => (
               <Reveal as="li" key={it.title} delay={(i % 2) * 0.05} className="group flex gap-5 border-b border-ink/10 py-7 md:py-8">
                 <span className="w-7 shrink-0 pt-2 font-mono text-[11px] tracking-[0.2em] text-mute">0{i + 1}</span>

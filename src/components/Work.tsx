@@ -1,7 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Pause, Play, ArrowUpRight } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
+import { useRef, useState } from "react";
 import { cn } from "@/utils/cn";
 import { work } from "@/data/site";
 import { Button, Eyebrow, Lines, Reveal } from "./ui";
@@ -138,40 +137,15 @@ export function Work({
 }) {
   const { openEnquiry } = useEnquiry();
   const projects = limit ? work.projects.slice(0, limit) : work.projects;
-  const carouselProjects = work.projects;
-  const sectionRef = useRef<HTMLElement>(null);
+  const carouselProjects = teaser ? projects : work.projects;
   const touchStart = useRef<number | null>(null);
   const reduceMotion = useReducedMotion();
   const [activeProject, setActiveProject] = useState(0);
-  const [inView, setInView] = useState(false);
-  const [hovered, setHovered] = useState(false);
-  const [progressKey, setProgressKey] = useState(0);
   const activeIndex = Math.min(activeProject, carouselProjects.length - 1);
   const current = carouselProjects[activeIndex];
-  const autoPlaying = inView && !hovered;
-
-  useEffect(() => {
-    if (!teaser || !sectionRef.current) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { threshold: 0.25 }
-    );
-    observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, [teaser]);
-
-  useEffect(() => {
-    if (!teaser || !autoPlaying || reduceMotion) return;
-    const timer = window.setInterval(() => {
-      setActiveProject((currentIndex) => (currentIndex + 1) % carouselProjects.length);
-      setProgressKey((key) => key + 1);
-    }, 5500);
-    return () => window.clearInterval(timer);
-  }, [teaser, autoPlaying, reduceMotion, carouselProjects.length]);
 
   const goToProject = (index: number) => {
     setActiveProject((index + carouselProjects.length) % carouselProjects.length);
-    setProgressKey((key) => key + 1);
   };
 
   const moveProject = (amount: number) => {
@@ -181,15 +155,12 @@ export function Work({
   return (
     <section
       id="work"
-      ref={sectionRef}
       tabIndex={teaser ? 0 : undefined}
       onKeyDown={(event) => {
         if (!teaser) return;
         if (event.key === "ArrowLeft") moveProject(-1);
         if (event.key === "ArrowRight") moveProject(1);
       }}
-      onMouseEnter={() => teaser && setHovered(true)}
-      onMouseLeave={() => teaser && setHovered(false)}
       className="relative bg-paper text-ink outline-none"
     >
       <div className="container-x section-y">
@@ -207,7 +178,7 @@ export function Work({
           </div>
         )}
 
-        <div className={cn("flex flex-col gap-20 md:gap-28", !headless && "mt-16 md:mt-24")}>
+        <div className={cn("flex flex-col gap-10 md:gap-14", !headless && "mt-10 md:mt-12")}>
           {teaser ? (
             current && (
               <div
@@ -238,19 +209,9 @@ export function Work({
                         <span className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-mute">{current.industry}</span>
                       </div>
                       <h3 className="mt-5 font-display text-4xl font-semibold tracking-[-0.04em] md:text-5xl">{current.name}</h3>
-                      <dl className="mt-8 border-t border-ink/10">
-                        <Row k="Problem" v={current.problem} />
-                        <Row k="Product" v={current.product} />
-                        <Row k="Technology" v={current.technology} />
-                      </dl>
-                      <figure className="mt-8">
-                        <blockquote className="border-l-2 pl-5 text-[17px] leading-snug tracking-[-0.01em] text-ink" style={{ borderColor: current.accent }}>
-                          {current.impact}
-                        </blockquote>
-                        <figcaption className="mt-3 pl-5 font-mono text-[10.5px] uppercase tracking-[0.18em] text-mute">
-                          — {current.attribution}
-                        </figcaption>
-                      </figure>
+                      <p className="mt-5 max-w-[48ch] border-t border-ink/10 pt-5 text-[15px] leading-relaxed text-ink/70">
+                        {current.product}
+                      </p>
                     </div>
                   </motion.article>
                 </AnimatePresence>
@@ -278,15 +239,11 @@ export function Work({
                     <button type="button" aria-label="Next project" onClick={() => moveProject(1)} className="flex h-10 w-10 items-center justify-center border border-ink/15 transition-colors hover:bg-ink hover:text-paper"><ChevronRight className="h-4 w-4" /></button>
                   </div>
                 </div>
-                <div className="mt-4 h-px overflow-hidden bg-ink/10">
-                  {autoPlaying && !reduceMotion && (
-                    <motion.div key={progressKey} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 5.5, ease: "linear" }} className="h-full origin-left bg-ink" />
-                  )}
-                </div>
               </div>
             )
           ) : (
           projects.map((p, i) => {
+            const flip = i % 2 === 1;
             return (
               <article key={p.id} className="group grid grid-cols-12 gap-x-4 gap-y-8 md:gap-x-8">
                 <Reveal className={cn("col-span-12 lg:col-span-7", flip && "lg:order-2")}>
@@ -352,7 +309,7 @@ export function Work({
           )}
         </div>
 
-        <div className="mt-16 flex justify-center md:mt-20">
+        <div className={cn("flex justify-center", teaser ? "mt-8" : "mt-12 md:mt-16")}>
           {teaser ? (
             <Button href="/work" tone="light">
               View all work

@@ -221,7 +221,7 @@ export function Reveal({
       initial={reduce ? false : { opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once, margin: "-8% 0px -8% 0px" }}
-      transition={{ duration: 0.9, ease: EASE, delay }}
+      transition={{ duration: 0.6, ease: EASE, delay }}
       className={className}
     >
       {children}
@@ -236,7 +236,8 @@ export function Lines({
   lineClassName,
   as: Tag = "h2",
   delay = 0,
-  stagger = 0.09,
+  stagger = 0.06,
+  reveal = true,
 }: {
   lines: string[];
   className?: string;
@@ -244,6 +245,7 @@ export function Lines({
   as?: ElementType;
   delay?: number;
   stagger?: number;
+  reveal?: boolean;
 }) {
   const reduce = useReducedMotion();
   const container: Variants = {
@@ -252,20 +254,20 @@ export function Lines({
   };
   const line: Variants = {
     hidden: reduce ? { y: 0 } : { y: "110%" },
-    show: { y: 0, transition: { duration: 1, ease: EASE } },
+    show: { y: 0, transition: { duration: 0.65, ease: EASE } },
   };
   return (
     <Tag className={className}>
       <motion.span
         className="block"
-        variants={container}
-        initial="hidden"
-        whileInView="show"
+        variants={reveal ? container : undefined}
+        initial={reveal && !reduce ? "hidden" : false}
+        whileInView={reveal ? "show" : undefined}
         viewport={{ once: true, margin: "-10% 0px" }}
       >
         {lines.map((l, i) => (
           <span key={i} className="block overflow-hidden pb-[0.08em] -mb-[0.08em]">
-            <motion.span variants={line} className={cn("block will-change-transform", lineClassName)}>
+            <motion.span variants={reveal ? line : undefined} className={cn("block will-change-transform", lineClassName)}>
               {l}
             </motion.span>
           </span>
@@ -279,11 +281,13 @@ export function Lines({
 export function Eyebrow({
   index,
   label,
+  children,
   tone = "dark",
   className,
 }: {
   index?: string;
-  label: string;
+  label?: string;
+  children?: ReactNode;
   tone?: "light" | "dark";
   className?: string;
 }) {
@@ -292,7 +296,7 @@ export function Eyebrow({
       <span className="h-1.5 w-1.5 bg-signal" aria-hidden="true" />
       {index && <span>{index}</span>}
       {index && <span className="opacity-40">/</span>}
-      <span>{label}</span>
+      <span>{label ?? children}</span>
     </div>
   );
 }

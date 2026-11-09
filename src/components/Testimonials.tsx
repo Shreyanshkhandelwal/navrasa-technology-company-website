@@ -10,19 +10,25 @@ function getVisibleCount() {
   return 3;
 }
 
-export function Testimonials({ index = "06", tone = "light" }: { index?: string; tone?: "light" | "dark" }) {
+export function Testimonials({
+  index = "06",
+  tone = "light",
+  limit,
+}: {
+  index?: string;
+  tone?: "light" | "dark";
+  limit?: number;
+}) {
   const dark = tone === "dark";
   const reduceMotion = useReducedMotion();
-  const sectionRef = useRef<HTMLElement>(null);
   const touchStart = useRef<number | null>(null);
+  const reviews = limit ? googleReviews.slice(0, limit) : googleReviews;
   const [activeReview, setActiveReview] = useState(0);
   const [visibleCount, setVisibleCount] = useState(3);
-  const [inView, setInView] = useState(false);
-  const [hovered, setHovered] = useState(false);
   const [fullReview, setFullReview] = useState<(typeof googleReviews)[number] | null>(null);
 
   const move = (amount: number) => {
-    setActiveReview((current) => (current + amount + googleReviews.length) % googleReviews.length);
+    setActiveReview((current) => (current + amount + reviews.length) % reviews.length);
   };
 
   useEffect(() => {
@@ -30,19 +36,6 @@ export function Testimonials({ index = "06", tone = "light" }: { index?: string;
     window.addEventListener("resize", updateVisibleCount);
     return () => window.removeEventListener("resize", updateVisibleCount);
   }, []);
-
-  useEffect(() => {
-    if (!sectionRef.current) return;
-    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.2 });
-    observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!inView || hovered || reduceMotion || fullReview) return;
-    const timer = window.setInterval(() => move(1), 6000);
-    return () => window.clearInterval(timer);
-  }, [inView, hovered, reduceMotion, fullReview]);
 
   useEffect(() => {
     if (!fullReview) return;
@@ -53,13 +46,12 @@ export function Testimonials({ index = "06", tone = "light" }: { index?: string;
     return () => document.removeEventListener("keydown", closeOnEscape);
   }, [fullReview]);
 
-  const visibleReviews = Array.from({ length: visibleCount }, (_, offset) =>
-    googleReviews[(activeReview + offset) % googleReviews.length]
+  const visibleReviews = Array.from({ length: Math.min(visibleCount, reviews.length) }, (_, offset) =>
+    reviews[(activeReview + offset) % reviews.length]
   );
 
   return (
     <section
-      ref={sectionRef}
       id="testimonials"
       tabIndex={0}
       onKeyDown={(event) => {
@@ -98,10 +90,6 @@ export function Testimonials({ index = "06", tone = "light" }: { index?: string;
 
         <div
           className="mt-12 md:mt-14"
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-          onFocus={() => setHovered(true)}
-          onBlur={() => setHovered(false)}
           onTouchStart={(event) => { touchStart.current = event.touches[0].clientX; }}
           onTouchEnd={(event) => {
             if (touchStart.current === null) return;
@@ -152,7 +140,7 @@ export function Testimonials({ index = "06", tone = "light" }: { index?: string;
 
         <div className="mt-6 flex items-center justify-between gap-4 border-t border-ink/10 pt-5">
           <div className="flex items-center gap-2" aria-label="Choose a review">
-            {googleReviews.map((review, reviewIndex) => (
+            {reviews.map((review, reviewIndex) => (
               <button
                 key={review.name}
                 type="button"

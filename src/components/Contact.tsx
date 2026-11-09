@@ -5,7 +5,15 @@ import { Ecosystem } from "./Ecosystem";
 import { EnquiryForm } from "./EnquiryForm";
 
 /* ------------------------------- FINAL CTA -------------------------------- */
-export function FinalCTA({ tone = "dark", index = "16" }: { tone?: "dark" | "light"; index?: string }) {
+export function FinalCTA({
+  tone = "dark",
+  index = "16",
+  compact = false,
+}: {
+  tone?: "dark" | "light";
+  index?: string;
+  compact?: boolean;
+}) {
   if (tone === "light") {
     return (
       <section id="cta" className="relative bg-paper text-ink">
@@ -16,7 +24,10 @@ export function FinalCTA({ tone = "dark", index = "16" }: { tone?: "dark" | "lig
         <div className="container-x section-y relative grid grid-cols-12 items-end gap-x-4 gap-y-10 md:gap-x-8">
           <div className="col-span-12 lg:col-span-7">
             <Eyebrow index={index} label="Let's Build" tone="light" />
-            <Lines lines={["Have a", "big idea?"]} className="display display-lg mt-10 uppercase text-ink" />
+            <Lines
+              lines={compact ? ["Have a big idea?"] : ["Have a", "big idea?"]}
+              className={`display ${compact ? "display-md" : "display-lg"} mt-8 uppercase text-ink`}
+            />
           </div>
           <Reveal delay={0.15} className="col-span-12 lg:col-span-5 lg:pl-8">
             <p className="font-display text-2xl font-semibold tracking-[-0.02em] md:text-4xl">{finalCta.text}</p>
@@ -24,9 +35,11 @@ export function FinalCTA({ tone = "dark", index = "16" }: { tone?: "dark" | "lig
               <Button href={finalCta.primary.href} tone="light" size="lg">
                 {finalCta.primary.label}
               </Button>
-              <Button href={finalCta.secondary.href} tone="light" variant="text">
-                {finalCta.secondary.label}
-              </Button>
+              {!compact && (
+                <Button href={finalCta.secondary.href} tone="light" variant="text">
+                  {finalCta.secondary.label}
+                </Button>
+              )}
             </div>
           </Reveal>
         </div>
@@ -40,7 +53,7 @@ export function FinalCTA({ tone = "dark", index = "16" }: { tone?: "dark" | "lig
         <Ecosystem dim className="mx-auto h-full w-full max-w-[1100px]" />
       </div>
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_50%_50%,transparent_30%,rgba(10,10,11,0.9)_75%)]" aria-hidden="true" />
-      <div className="container-x relative flex min-h-[90svh] flex-col items-center justify-center py-32 text-center">
+      <div className="container-x relative flex min-h-[72svh] flex-col items-center justify-center py-24 text-center">
         <Reveal>
           <Eyebrow index={index} label="Let's Build" className="justify-center" />
         </Reveal>

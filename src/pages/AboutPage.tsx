@@ -1,6 +1,6 @@
-import { AboutBody, Beliefs, Leadership } from "@/components/About";
+import { AboutBody, Leadership } from "@/components/About";
 import { FinalCTA } from "@/components/Contact";
-import { Credentials, Industries } from "@/components/Industries";
+import { Credentials } from "@/components/Industries";
 import { PageHero } from "@/components/PageHero";
 import { company } from "@/data/site";
 import { useSEO } from "@/hooks/useSEO";
@@ -30,10 +30,8 @@ export function AboutPage() {
       />
       <Credentials tone="dark" />
       <AboutBody headless />
-      <Beliefs index="02" />
-      <Leadership index="03" />
-      <Industries index="04" />
-      <FinalCTA index="05" />
+      <Leadership index="02" />
+      <FinalCTA index="03" />
     </>
   );
 }

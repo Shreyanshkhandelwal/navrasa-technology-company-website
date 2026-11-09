@@ -39,7 +39,7 @@ export function AboutBody({ headless = false, index = "13" }: { headless?: boole
           </Reveal>
 
           <div className="col-span-12 grid grid-cols-1 gap-px border border-ink/10 bg-ink/10 sm:grid-cols-2 lg:col-span-7 lg:col-start-6">
-            <Reveal className="flex min-h-[430px] flex-col bg-[#F5F3EE] p-7 text-[#111111] md:p-8">
+            <Reveal className="flex min-h-[360px] flex-col bg-[#F5F3EE] p-6 text-[#111111] md:p-8">
               <div className="flex items-start justify-between gap-4">
                 <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#F15A24]">Mission</span>
                 <Logo tone="dark" className="shrink-0 scale-[0.78] origin-top-right" />
@@ -53,7 +53,7 @@ export function AboutBody({ headless = false, index = "13" }: { headless?: boole
                 </p>
               </div>
             </Reveal>
-            <Reveal delay={0.08} className="flex min-h-[430px] flex-col bg-[#101010] p-7 text-white md:p-8">
+            <Reveal delay={0.08} className="flex min-h-[360px] flex-col bg-[#101010] p-6 text-white md:p-8">
               <div className="flex items-start justify-between gap-4">
                 <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#F15A24]">Vision</span>
                 <Logo tone="light" className="shrink-0 scale-[0.78] origin-top-right" />
@@ -100,7 +100,7 @@ export function Beliefs({ index = "02" }: { index?: string }) {
               as="li"
               key={p.title}
               delay={(i % 3) * 0.06}
-              className="group relative flex min-h-[240px] flex-col justify-between border-b border-r border-white/10 p-7 transition-colors duration-500 hover:bg-white/[0.03] md:min-h-[300px] md:p-9"
+              className="group relative flex min-h-[210px] flex-col justify-between border-b border-r border-white/10 p-6 transition-colors duration-300 hover:bg-white/[0.03] md:min-h-[250px] md:p-8"
             >
               <div className="flex items-start justify-between">
                 <span className="font-mono text-[11px] tracking-[0.2em] text-mute-2 transition-colors duration-500 group-hover:text-signal">

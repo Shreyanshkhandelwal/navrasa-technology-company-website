@@ -63,7 +63,7 @@ export function Capabilities({ headless = false, index = "08" }: { headless?: bo
                     />
                     <span
                       className={cn(
-                        "font-display text-lg font-semibold tracking-[-0.03em] transition-colors duration-500 lg:text-5xl xl:text-6xl",
+                        "font-display text-lg font-semibold tracking-[-0.03em] transition-colors duration-300 lg:text-4xl xl:text-5xl",
                         on ? "text-ink" : "text-ink/35 group-hover:text-ink/60"
                       )}
                     >
@@ -135,7 +135,7 @@ export function Capabilities({ headless = false, index = "08" }: { headless?: bo
 export function Technology({ index = "09" }: { index?: string }) {
   return (
     <section id="technology" className="grain relative overflow-hidden bg-ink-2 text-paper">
-      <div className="container-x pt-24 md:pt-32 lg:pt-40">
+      <div className="container-x pt-14 md:pt-18 lg:pt-20">
         <div className="grid grid-cols-12 gap-x-4 gap-y-8 md:gap-x-8">
           <div className="col-span-12 lg:col-span-8">
             <Eyebrow index={index} label="Technology" />
@@ -150,7 +150,7 @@ export function Technology({ index = "09" }: { index?: string }) {
         </div>
       </div>
 
-      <div className="mt-16 border-t border-white/10 md:mt-24">
+      <div className="mt-12 border-t border-white/10 md:mt-16">
         {technology.map((row, ri) => (
           <div key={row.layer} className="grid grid-cols-12 items-center border-b border-white/10">
             <div className="col-span-12 border-b border-white/10 px-5 py-3 font-mono text-[10.5px] uppercase tracking-[0.2em] text-mute-2 sm:col-span-3 sm:border-b-0 sm:border-r sm:py-6 lg:col-span-2 lg:px-12 xl:px-16">

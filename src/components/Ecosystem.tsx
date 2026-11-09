@@ -290,6 +290,10 @@ export function Ecosystem({ className, dim = false }: { className?: string; dim?
     };
 
     const frame = (now: number) => {
+      if (now - last < 1000 / 30) {
+        if (running) raf = requestAnimationFrame(frame);
+        return;
+      }
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       t += dt;

@@ -1,12 +1,8 @@
-import { AITeaser } from "@/components/AITeaser";
-import { Credentials } from "@/components/Industries";
 import { Testimonials } from "@/components/Testimonials";
 import { BuildIndex } from "@/components/BuildIndex";
 import { FinalCTA } from "@/components/Contact";
-import { Future, Why } from "@/components/Conviction";
+import { Why } from "@/components/Conviction";
 import { Hero } from "@/components/Hero";
-import { Journey } from "@/components/Journey";
-import { Manifesto } from "@/components/Manifesto";
 import { Work } from "@/components/Work";
 import { useSEO } from "@/hooks/useSEO";
 
@@ -21,16 +17,11 @@ export function Home() {
   return (
     <>
       <Hero />
-      <Credentials tone="light" />
-      <Manifesto index="01" />
-      <BuildIndex index="02" />
-      <Journey index="03" />
-      <AITeaser index="04" />
-      <Work index="05" limit={2} teaser />
-      <Testimonials index="06" tone="light" />
-      <Why index="07" />
-      <Future index="08" />
-      <FinalCTA index="09" />
+      <BuildIndex index="01" />
+      <Why index="02" />
+      <Work index="03" limit={2} teaser />
+      <Testimonials index="04" tone="light" limit={3} />
+      <FinalCTA index="05" tone="light" compact />
     </>
   );
 }

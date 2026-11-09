@@ -20,7 +20,7 @@ export function Engagement({ index = "01" }: { index?: string }) {
           </Reveal>
         </div>
 
-        <ul className="mt-16 grid grid-cols-1 gap-px border border-ink/12 bg-ink/12 md:mt-20 lg:grid-cols-3">
+        <ul className="mt-12 grid grid-cols-1 gap-px border border-ink/12 bg-ink/12 md:mt-16 lg:grid-cols-3">
           {engagements.map((e, i) => (
             <Reveal as="li" key={e.name} delay={i * 0.07} className="flex flex-col justify-between bg-paper p-7 md:p-9">
               <div>
@@ -44,7 +44,7 @@ export function Engagement({ index = "01" }: { index?: string }) {
         </ul>
 
         {/* assurances */}
-        <div className="mt-20 md:mt-28">
+        <div className="mt-14 md:mt-18">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <h3 className="font-display text-2xl font-semibold tracking-[-0.03em] md:text-3xl">
               What every engagement includes
@@ -88,7 +88,7 @@ export function Process({ index = "02" }: { index?: string }) {
           </Reveal>
         </div>
 
-        <ol className="mt-16 border-t border-white/10 md:mt-24">
+        <ol className="mt-12 border-t border-white/10 md:mt-16">
           {process.map((s) => (
             <Reveal as="li" key={s.n} className="group grid grid-cols-12 gap-x-4 border-b border-white/10 py-7 md:gap-x-8 md:py-9">
               <span className="col-span-2 font-mono text-[11px] tracking-[0.2em] text-mute-2 sm:col-span-1">{s.n}</span>

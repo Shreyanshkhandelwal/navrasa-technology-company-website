@@ -72,7 +72,7 @@ export function Industries({ index = "04" }: { index?: string }) {
                 as="li"
                 key={sector.name}
                 delay={(i % 3) * 0.05}
-                className="group relative flex min-h-[230px] flex-col overflow-hidden border border-ink/12 bg-paper p-7 transition-[border-color,transform,background-color] duration-500 ease-[var(--ease-expo)] hover:-translate-y-1 hover:border-signal/50 hover:bg-[#fffdfa] md:min-h-[260px] md:p-8 lg:min-h-[270px]"
+                className="group relative flex min-h-[210px] flex-col overflow-hidden border border-ink/12 bg-paper p-6 transition-[border-color,transform,background-color] duration-300 ease-[var(--ease-expo)] hover:-translate-y-1 hover:border-signal/50 hover:bg-[#fffdfa] md:min-h-[225px] md:p-7 lg:min-h-[240px]"
               >
                 <div className="flex items-start justify-between gap-4">
                   <span className="font-mono text-[10.5px] tracking-[0.2em] text-mute">

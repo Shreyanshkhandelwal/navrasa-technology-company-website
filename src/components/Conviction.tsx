@@ -21,12 +21,12 @@ export function Why({ index = "11" }: { index?: string }) {
         </div>
 
         <ol className="mt-16 grid grid-cols-1 border-t border-l border-ink/12 sm:grid-cols-2 lg:grid-cols-3 md:mt-24">
-          {why.principles.map((p, i) => (
+          {why.principles.slice(0, 3).map((p, i) => (
             <Reveal
               as="li"
               key={p.title}
               delay={(i % 3) * 0.06}
-              className="group relative flex min-h-[260px] flex-col justify-between border-b border-r border-ink/12 p-7 transition-colors duration-500 hover:bg-ink hover:text-paper md:min-h-[320px] md:p-9"
+              className="group relative flex min-h-[220px] flex-col justify-between border-b border-r border-ink/12 p-6 transition-colors duration-300 hover:bg-ink hover:text-paper md:min-h-[260px] md:p-8"
             >
               <div className="flex items-start justify-between">
                 <span className="font-display text-5xl font-semibold tracking-[-0.05em] text-ink/15 transition-colors duration-500 group-hover:text-paper/20 md:text-6xl">
@@ -84,7 +84,7 @@ export function Future({ index = "12" }: { index?: string }) {
         </div>
       </motion.div>
 
-      <div className="container-x relative flex min-h-[100svh] flex-col items-center justify-center py-32 text-center">
+      <div className="container-x relative flex min-h-[80svh] flex-col items-center justify-center py-24 text-center">
         <Reveal>
           <Eyebrow index={index} label="The Future" className="justify-center" />
         </Reveal>
