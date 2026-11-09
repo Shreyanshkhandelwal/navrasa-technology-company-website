@@ -56,6 +56,10 @@ export function Hero() {
               className="display page-hero-title text-paper"
             />
 
+            <p className="mt-3 font-display text-sm font-medium uppercase tracking-[0.08em] text-paper/75 sm:text-base">
+              {hero.brandTagline}
+            </p>
+
             <motion.p
               initial={reduce ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
