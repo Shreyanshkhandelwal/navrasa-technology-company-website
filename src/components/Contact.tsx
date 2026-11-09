@@ -95,7 +95,7 @@ export function Contact() {
               <div className="mt-10"><p className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-mute">Elsewhere</p><SocialList tone="light" className="mt-4" /></div>
             </Reveal>
           </div>
-          <div className="col-span-12 lg:col-span-7 lg:pl-8"><Reveal><EnquiryForm /></Reveal></div>
+          <div className="col-span-12 lg:col-span-7 lg:pl-8"><Reveal><EnquiryForm mode="contact" /></Reveal></div>
         </div>
       </div>
     </section>

@@ -80,9 +80,9 @@ export function EnquiryModal() {
           >
             <div className="sticky top-0 z-10 flex items-start justify-between border-b border-ink/10 bg-paper px-5 py-4 sm:px-7">
               <div>
-                <Eyebrow label="Project Inquiry" tone="light" />
+                <Eyebrow label="Start a Project" tone="light" />
                 <h2 id="enquiry-modal-title" className="display mt-2 max-w-[30ch] text-2xl font-semibold uppercase leading-none tracking-[-0.035em] text-[#111111] sm:text-3xl">LET'S BUILD SOMETHING GREAT.</h2>
-                <p className="mt-2 max-w-[48ch] text-[13px] leading-relaxed text-[#555555]">Tell us about your next digital product. Share your requirements and our team will help you take the next step.</p>
+                <p className="mt-2 max-w-[48ch] text-[13px] leading-relaxed text-[#555555]">A few details are enough to start the conversation.</p>
               </div>
               <button ref={closeButtonRef} type="button" onClick={closeEnquiry} aria-label="Close project enquiry" className="grid h-10 w-10 shrink-0 place-items-center border border-ink/15 transition-colors hover:border-signal hover:text-signal">
                 <X className="h-5 w-5" strokeWidth={1.5} />
