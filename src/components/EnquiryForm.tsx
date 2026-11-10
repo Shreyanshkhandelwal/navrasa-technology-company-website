@@ -1,5 +1,6 @@
 import { ArrowLeft, ArrowRight, Check, ChevronDown } from "lucide-react";
-import { useEffect, useId, useRef, useState, type FormEvent } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { useRef, useState, type FormEvent } from "react";
 import { cn } from "@/utils/cn";
 import { company, contactForm } from "@/data/site";
 import { trackEvent } from "@/utils/analytics";
@@ -32,6 +33,10 @@ type FieldProps = {
   error?: string;
   placeholder?: string;
 };
+
+const whatsappHref = `https://wa.me/917014686805?text=${encodeURIComponent(
+  "Hi NavRasa Team, I just submitted a project enquiry on your website and would like to discuss my requirements."
+)}`;
 
 const initial: FormState = {
   name: "",
@@ -176,22 +181,12 @@ function SelectField({
 
 export function EnquiryForm({ compact = false, mode = "project" }: EnquiryFormProps) {
   const isProject = mode === "project";
-  const iframeName = `navrasa-enquiry-${useId().replace(/:/g, "")}`;
-  const formRef = useRef<HTMLFormElement>(null);
+  const reduceMotion = useReducedMotion();
   const submissionPending = useRef(false);
-  const submissionTimer = useRef<number | undefined>(undefined);
-  const iframeLoadedOnce = useRef(false);
   const [form, setForm] = useState<FormState>(initial);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [step, setStep] = useState<1 | 2>(1);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-
-  useEffect(
-    () => () => {
-      if (submissionTimer.current) window.clearTimeout(submissionTimer.current);
-    },
-    []
-  );
 
   const set = (key: FormField, value: string) => {
     setForm((current) => ({ ...current, [key]: value }));
@@ -204,6 +199,10 @@ export function EnquiryForm({ compact = false, mode = "project" }: EnquiryFormPr
     if (!form.name.trim()) next.name = "Enter your name.";
     if (!form.email.trim()) next.email = "Enter your email address.";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = "Enter a valid email address.";
+    if (form.phone.trim()) {
+      const phoneDigits = form.phone.replace(/\D/g, "").length;
+      if (phoneDigits < 7 || phoneDigits > 15) next.phone = "Enter a valid phone number, or leave it blank.";
+    }
 
     if (target === "contact") {
       if (!form.message.trim()) next.message = "Enter a message.";
@@ -221,95 +220,79 @@ export function EnquiryForm({ compact = false, mode = "project" }: EnquiryFormPr
     setStep(2);
   };
 
-  const failSubmission = () => {
-    if (!submissionPending.current) return;
-    submissionPending.current = false;
-    setStatus("error");
-  };
-
-  const completeSubmission = () => {
-    if (!iframeLoadedOnce.current) {
-      iframeLoadedOnce.current = true;
-      return;
-    }
-    if (!submissionPending.current) return;
-    submissionPending.current = false;
-    if (submissionTimer.current) window.clearTimeout(submissionTimer.current);
-    setForm(initial);
-    setStep(1);
-    setStatus("sent");
-  };
-
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (submissionPending.current || !validate(isProject ? "project-info" : "contact")) return;
     setStatus("sending");
     submissionPending.current = true;
+
+    try {
+      const response = await fetch("/api/enquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, mode }),
+      });
+      const result = (await response.json().catch(() => null)) as { success?: boolean } | null;
+      if (!response.ok || result?.success !== true) throw new Error("The enquiry service did not confirm receipt.");
+    } catch (error) {
+      setStatus("error");
+      console.error("Unable to submit the enquiry form.", error);
+      return;
+    } finally {
+      submissionPending.current = false;
+    }
+
+    setStatus("sent");
     trackEvent("enquiry_form_submitted", {
       form_location: compact ? "popup" : mode === "contact" ? "contact_page" : "project_form",
     });
-
-    try {
-      if (!formRef.current) throw new Error("Form unavailable");
-      formRef.current.submit();
-      submissionTimer.current = window.setTimeout(failSubmission, 10000);
-    } catch (error) {
-      submissionPending.current = false;
-      setStatus("error");
-      console.error("Unable to submit the enquiry form.", error);
-    }
   };
 
   if (status === "sent") {
     return (
-      <div className={cn("border border-ink/10 bg-paper-2", compact ? "p-5 md:p-7" : "p-6 md:p-8")}>
-        <div className="flex items-center gap-3 text-ink">
-          <span className="flex h-10 w-10 items-center justify-center bg-ink text-paper">
-            <Check className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
-          </span>
-          <h3 className="text-lg font-semibold">Thanks — your message is on its way.</h3>
-        </div>
-        <p className="mt-4 text-sm leading-relaxed text-ink/65">
-          We’ll review your enquiry and get back to you within one business day.
+      <motion.section
+        aria-labelledby="enquiry-success-title"
+        aria-live="polite"
+        role="status"
+        initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        className={cn("border border-ink/10 bg-paper-2", compact ? "p-5 sm:p-7" : "p-6 sm:p-8 lg:p-10")}
+      >
+        <span className="flex h-12 w-12 items-center justify-center bg-ink text-paper">
+          <Check className="h-6 w-6" strokeWidth={1.75} aria-hidden="true" />
+        </span>
+        <p className="mt-6 font-mono text-[10.5px] uppercase tracking-[0.2em] text-mute">ENQUIRY RECEIVED</p>
+        <h2 id="enquiry-success-title" className="display mt-3 max-w-[18ch] text-3xl font-semibold uppercase leading-[0.98] tracking-[-0.04em] text-ink sm:text-4xl">
+          THANK YOU. LET&apos;S BUILD SOMETHING GREAT.
+        </h2>
+        <p className="mt-5 max-w-[54ch] text-sm leading-relaxed text-ink/70 sm:text-base">
+          Your project enquiry has been submitted successfully. Our team will review your requirements and get in touch with you shortly.
         </p>
-        <button
-          type="button"
-          onClick={() => {
-            setForm(initial);
-            setStep(1);
-            setStatus("idle");
-          }}
-          className="mt-5 text-sm font-medium underline decoration-signal/50 underline-offset-4 hover:text-signal"
-        >
-          Send another message
-        </button>
-      </div>
+
+        <div className="mt-8 border-t border-ink/10 pt-6">
+          <h3 className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-mute">IN A HURRY?</h3>
+          <p className="mt-2 text-base leading-relaxed text-ink/75">Let&apos;s discuss your project directly on WhatsApp.</p>
+          <a
+            href={whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 inline-flex min-h-12 w-full items-center justify-center bg-ink px-5 text-center text-[11px] font-medium tracking-[0.08em] text-paper transition-colors hover:bg-black sm:w-auto sm:text-xs"
+          >
+            CHAT WITH US ON WHATSAPP <span className="ml-2 text-base" aria-hidden="true">→</span>
+          </a>
+          <p className="mt-3 text-sm text-ink/55">+91 7014686805</p>
+        </div>
+      </motion.section>
     );
   }
 
-  const projectDescription = isProject ? form.building : form.message;
-
   return (
     <form
-      ref={formRef}
-      action="https://docs.google.com/forms/d/e/1FAIpQLSe5qKD93-EzKeq4igm73ii860k-IlyO_otAo21bjkcSx0eR7g/formResponse"
-      method="post"
-      encType="application/x-www-form-urlencoded"
-      target={iframeName}
       onSubmit={onSubmit}
       noValidate
       className="flex flex-col gap-5"
     >
-      <input type="hidden" name="entry.795717472" value={form.name} />
-      <input type="hidden" name="entry.153567538" value={form.company} />
-      <input type="hidden" name="entry.1946725407" value={form.email} />
-      <input type="hidden" name="entry.1931039491" value={form.phone} />
-      <input type="hidden" name="entry.589067015" value={projectDescription} />
-      <input type="hidden" name="entry.1041755658" value={isProject ? form.type : ""} />
-      <input type="hidden" name="entry.1996484321" value={isProject ? form.budget : ""} />
-      <input type="hidden" name="entry.1274528727" value={isProject ? form.timeline : ""} />
-      <input type="hidden" name="entry.1209479222" value={isProject ? form.message : ""} />
-
       {isProject && (
         <div aria-label={`Step ${step} of 2`} className="mb-1">
           <div className="flex items-center justify-between text-sm">
@@ -427,14 +410,13 @@ export function EnquiryForm({ compact = false, mode = "project" }: EnquiryFormPr
 
       {status === "error" && (
         <p className="text-sm text-signal" role="alert">
-          We couldn’t confirm your submission. Please try again or email us at{" "}
+          We couldn’t submit your enquiry. Your details are still here. Please try again or email us at{" "}
           <a className="underline underline-offset-2" href={`mailto:${company.email}`}>
             {company.email}
           </a>
           .
         </p>
       )}
-      <iframe title="NavRasa enquiry submission" name={iframeName} src="about:blank" className="hidden" onLoad={completeSubmission} />
     </form>
   );
 }

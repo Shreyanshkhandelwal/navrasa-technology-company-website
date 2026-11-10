@@ -14,8 +14,6 @@ export const company = {
   phones: ["+91 70146 86805"],
   location: "Mansarovar, Jaipur, Rajasthan, India",
   city: "Jaipur, India",
-  // Optional: paste a form endpoint (e.g. Formspree / your API). Empty = email fallback.
-  formEndpoint: "",
   hours: "Mon–Sat, 10:00–19:00 IST",
   responseTime: "Enquiries answered within one business day",
   /* Social profiles. `icon` maps to src/components/icons.tsx.
@@ -58,7 +56,7 @@ export const company = {
 /* Figures below are drawn from information published on navrasaitsolutions.com.
    EDIT the values as the business grows — keep every number defensible. */
 export const credentials = [
-  { value: "15+", label: "Products Delivered", note: "Digital solutions built to address real business needs." },
+  { value: "30+", label: "Products Delivered", note: "Digital solutions built to address real business needs." },
   { value: "6–10", label: "Weeks to Typical MVP", note: "Depends on project scope, complexity, and integrations." },
   { value: "2", label: "Founders Leading Delivery", note: "Direct communication with the people leading your project." },
   { value: "Jaipur", label: "Engineering & Delivery", note: "India-based team serving businesses across markets." },
@@ -247,7 +245,7 @@ export const nav = [
 
 export const hero = {
   eyebrow: "Mobile Applications & Custom Software Solutions",
-  lines: ["Mobile App & Software", "Development Company in Jaipur"],
+  lines: ["Mobile App & Software", "Development Company", "in Jaipur"],
   brandTagline: "ENGINEERED FOR BUSINESS. BUILT TO SCALE.",
   statement:
     "NavRasa IT Solutions builds mobile apps and custom software for Jaipur startups and businesses. We create Android, iOS, web and SaaS products, with practical AI where it helps.",

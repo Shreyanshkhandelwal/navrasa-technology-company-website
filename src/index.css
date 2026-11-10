@@ -112,6 +112,18 @@
     letter-spacing: -0.04em;
     text-wrap: balance;
   }
+  .home-hero-title {
+    font-size: clamp(2rem, 4.2vw, 3.85rem);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+  @media (min-width: 1024px) and (max-width: 1535px) {
+    .home-hero-title { font-size: clamp(2rem, 3.9vw, 3.6rem); }
+  }
+  @media (min-width: 1536px) {
+    .home-hero-title { font-size: clamp(2.5rem, 4.2vw, 4rem); }
+  }
   .display-lg {
     font-size: clamp(2.5rem, 7vw, 7rem);
   }

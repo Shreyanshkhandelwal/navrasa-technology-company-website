@@ -3,6 +3,7 @@ import { BuildIndex } from "@/components/BuildIndex";
 import { FinalCTA } from "@/components/Contact";
 import { Why } from "@/components/Conviction";
 import { Hero } from "@/components/Hero";
+import { Credentials } from "@/components/Industries";
 import { Work } from "@/components/Work";
 import { useSEO } from "@/hooks/useSEO";
 
@@ -17,6 +18,7 @@ export function Home() {
   return (
     <>
       <Hero />
+      <Credentials tone="dark" />
       <BuildIndex index="01" />
       <Why index="02" />
       <Work index="03" limit={2} teaser />

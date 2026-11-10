@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { company, hero } from "@/data/site";
-import { Button, EASE, Lines } from "./ui";
+import { Button, EASE } from "./ui";
 import { Ecosystem } from "./Ecosystem";
 
 export function Hero() {
@@ -9,63 +9,58 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="grain relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-ink text-paper"
+      className="grain relative isolate overflow-hidden bg-ink text-paper md:min-h-[min(82svh,760px)] lg:min-h-[min(92svh,900px)]"
     >
-      {/* visual — right half on desktop */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 lg:block" aria-hidden="true">
-        <Ecosystem className="pointer-events-auto absolute inset-0 h-full w-full" />
-      </div>
+      <div className="container-x relative z-10 grid w-full grid-cols-12 items-center gap-x-4 gap-y-8 pt-20 pb-8 md:min-h-[min(82svh,760px)] md:gap-x-8 md:pt-20 md:pb-24 lg:min-h-[min(92svh,900px)] lg:pt-20 lg:pb-36">
+        <div className="relative z-10 col-span-12 flex flex-col justify-center md:col-span-7 lg:col-span-6">
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: EASE, delay: 0.1 }}
+            className="eyebrow mb-4 flex flex-wrap items-center gap-x-2 gap-y-1.5 text-[10px] tracking-[0.15em] text-mute-2 sm:mb-5 sm:text-[10.5px] sm:tracking-[0.17em] 2xl:flex-nowrap 2xl:whitespace-nowrap"
+          >
+            <span className="h-1.5 w-1.5 shrink-0 bg-signal" aria-hidden="true" />
+            <span>{company.name}</span>
+            <span className="hidden opacity-40 2xl:inline" aria-hidden="true">/</span>
+            <span className="hidden max-w-full whitespace-nowrap 2xl:inline">{hero.eyebrow}</span>
+          </motion.div>
 
-      <div className="container-x relative flex flex-1 flex-col pt-20 pb-4 md:pt-24 md:pb-5 lg:min-h-0 lg:pt-[6.5rem] lg:pb-4">
-        <div className="grid min-h-0 flex-1 grid-cols-12 gap-x-4 md:gap-x-8">
-          <div className="col-span-12 flex flex-col justify-center lg:col-span-6">
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
-              className="eyebrow mb-5 flex flex-wrap items-center gap-x-2 gap-y-2 text-[10px] tracking-[0.16em] text-mute-2 md:text-[10.5px] md:tracking-[0.18em] xl:flex-nowrap xl:whitespace-nowrap lg:mb-6"
-            >
-              <span className="h-1.5 w-1.5 bg-signal" />
-              <span>{company.name}</span>
-              <span className="opacity-40">/</span>
-              <span className="max-w-full whitespace-normal sm:whitespace-nowrap">{hero.eyebrow}</span>
-            </motion.div>
+          <h1 className="display home-hero-title text-paper">
+            {hero.lines.map((line, index) => (
+              <span key={line} className="block">{index > 0 ? ` ${line}` : line}</span>
+            ))}
+          </h1>
 
-            <Lines
-              as="h1"
-              lines={hero.lines}
-              delay={0.2}
-              reveal={false}
-              className="display page-hero-title text-paper"
-            />
+          <p className="mt-3 font-display text-sm font-medium uppercase tracking-[0.08em] text-paper/75 sm:text-base">
+            {hero.brandTagline}
+          </p>
 
-            <p className="mt-3 font-display text-sm font-medium uppercase tracking-[0.08em] text-paper/75 sm:text-base">
-              {hero.brandTagline}
-            </p>
+          <motion.p
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: EASE, delay: 0.35 }}
+            className="mt-4 max-w-[42rem] text-[15.5px] leading-[1.65] text-paper/75 sm:text-base md:text-[17px]"
+          >
+            {hero.statement}
+          </motion.p>
 
-            <motion.p
-              initial={reduce ? false : { opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, ease: EASE, delay: 0.7 }}
-              className="mt-5 max-w-[34rem] text-base leading-relaxed text-paper/80 md:mt-6 md:text-[17px] lg:text-lg"
-            >
-              {hero.statement}
-            </motion.p>
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: EASE, delay: 0.5 }}
+            className="mt-6 flex flex-wrap items-center gap-x-7 gap-y-3 md:mt-7"
+          >
+            <Button href={hero.primaryCta.href} tone="dark" size="lg">
+              {hero.primaryCta.label}
+            </Button>
+            <Button href={hero.secondaryCta.href} tone="dark" variant="text">
+              {hero.secondaryCta.label}
+            </Button>
+          </motion.div>
+        </div>
 
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, ease: EASE, delay: 0.85 }}
-              className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-4 md:mt-7 lg:mt-8"
-            >
-              <Button href={hero.primaryCta.href} tone="dark" size="lg">
-                {hero.primaryCta.label}
-              </Button>
-              <Button href={hero.secondaryCta.href} tone="dark" variant="text">
-                {hero.secondaryCta.label}
-              </Button>
-            </motion.div>
-          </div>
+        <div className="relative col-span-12 -mx-5 min-h-0 sm:-mx-8 md:col-span-5 md:mx-0 md:min-h-[22rem] lg:absolute lg:inset-y-0 lg:right-0 lg:col-span-6 lg:min-h-0 lg:w-1/2">
+        <Ecosystem className="h-full w-full" />
         </div>
       </div>
     </section>
