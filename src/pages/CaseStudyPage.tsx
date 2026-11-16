@@ -41,7 +41,7 @@ export function CaseStudyPage() {
         </div>
       </section>
 
-      <section className="bg-paper section-y">
+      <section className="case-study-light bg-paper section-y">
         <div className="container-x grid gap-12 md:grid-cols-12">
           <Reveal className="md:col-span-3">
             <Eyebrow>Project overview</Eyebrow>
@@ -53,7 +53,7 @@ export function CaseStudyPage() {
         </div>
       </section>
 
-      <section className="bg-paper-2 section-y border-y border-ink/10">
+      <section className="case-study-light bg-paper-2 section-y border-y border-ink/10">
         <div className="container-x">
           <Reveal><Eyebrow>Scope & solution</Eyebrow><h2 className="mt-5 max-w-[15ch] font-display text-4xl font-semibold tracking-[-0.04em] md:text-6xl">What we built.</h2></Reveal>
           <div className="mt-12 grid gap-px overflow-hidden border border-ink/10 bg-ink/10 md:grid-cols-3">
@@ -72,7 +72,7 @@ export function CaseStudyPage() {
         </div>
       </section>
 
-      <section className="bg-paper section-y">
+      <section className="case-study-light bg-paper section-y">
         <div className="container-x grid gap-10 md:grid-cols-12">
           <div className="md:col-span-4"><Eyebrow>Core experience</Eyebrow></div>
           <div className="md:col-span-8">

@@ -3,8 +3,7 @@ import { Reveal } from "@/components/ui";
 import { company } from "@/data/site";
 import { useSEO } from "@/hooks/useSEO";
 
-/* Policy copy adapted from the statements published on navrasaitsolutions.com.
-   EDIT: have these reviewed by your legal adviser before launch. */
+/* Policy copy adapted from the statements published on navrasaitsolutions.com. */
 
 const LAST_UPDATED = "February 2026";
 
@@ -206,9 +205,6 @@ function Legal({ kind }: { kind: "privacy" | "terms" }) {
                     <dd className="text-ink/80">{company.location}</dd>
                   </div>
                 </dl>
-                <p className="mt-6 font-mono text-[10px] uppercase leading-relaxed tracking-[0.16em] text-mute">
-                  EDIT: have this page reviewed by your legal adviser before launch.
-                </p>
               </Reveal>
             </div>
           </div>

@@ -19,13 +19,11 @@ export function EnquiryProvider({ children }: { children: ReactNode }) {
       document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
-    sessionStorage.setItem("navrasa-enquiry-popup-seen", "true");
     trackEvent("enquiry_popup_open");
     setEnquiryOpen(true);
   }, [location.pathname]);
 
   const closeEnquiry = useCallback(() => {
-    sessionStorage.setItem("navrasa-enquiry-popup-seen", "true");
     setEnquiryOpen(false);
   }, []);
 

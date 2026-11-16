@@ -134,6 +134,7 @@
     font-size: clamp(1.875rem, 4vw, 3.75rem);
   }
   .text-balance { text-wrap: balance; }
+  .case-study-light { color: var(--color-ink); }
 
   /* Film grain for cinematic dark sections */
   .grain {

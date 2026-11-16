@@ -1,35 +1,22 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { X } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
 import { EnquiryForm } from "./EnquiryForm";
 import { useEnquiry } from "./EnquiryContext";
 import { Eyebrow } from "./ui";
 
-const AUTO_POPUP_KEY = "navrasa-enquiry-popup-seen";
-
 export function EnquiryModal() {
-  const { enquiryOpen, openEnquiry, closeEnquiry } = useEnquiry();
-  const location = useLocation();
+  const { enquiryOpen, closeEnquiry } = useEnquiry();
   const reduceMotion = useReducedMotion();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    if (location.pathname === "/contact" || sessionStorage.getItem(AUTO_POPUP_KEY)) return;
-    const timer = window.setTimeout(() => {
-      sessionStorage.setItem(AUTO_POPUP_KEY, "true");
-      openEnquiry();
-    }, 7000);
-    return () => window.clearTimeout(timer);
-  }, [location.pathname, openEnquiry]);
 
   useEffect(() => {
     if (!enquiryOpen) return;
     previousFocus.current = document.activeElement as HTMLElement;
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    window.setTimeout(() => closeButtonRef.current?.focus(), 0);
+    closeButtonRef.current?.focus();
     const handleKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") closeEnquiry();
       if (event.key !== "Tab") return;
