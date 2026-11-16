@@ -8,14 +8,21 @@ import { useEnquiry } from "./EnquiryContext";
 
 type Project = (typeof work.projects)[number];
 
-/* Abstract product frame — an honest stand-in until real screens are added. */
+/* Abstract UI concept — not a screenshot of the featured product. */
 function Mock({ p, kind }: { p: Project; kind: "mobile" | "web" }) {
   return (
-    <div className="relative aspect-[4/3] w-full overflow-hidden border border-ink/10 bg-paper-2 sm:aspect-[16/11]">
+    <div
+      role="img"
+      aria-label={`Illustrative interface concept for ${p.name}, not a product screenshot`}
+      className="relative aspect-[4/3] w-full overflow-hidden border border-ink/10 bg-paper-2 sm:aspect-[16/11]"
+    >
       <div className="dots-light absolute inset-0 opacity-60" aria-hidden="true" />
+      <span className="absolute left-3 top-3 z-10 border border-ink/15 bg-paper/95 px-2 py-1 font-mono text-[8px] uppercase tracking-[0.12em] text-ink/70">
+        Illustrative UI · Not a screenshot
+      </span>
       <div
         className="absolute -right-20 -top-20 h-72 w-72 rounded-full opacity-[0.16] blur-3xl transition-transform duration-1000 ease-[var(--ease-expo)] group-hover:translate-x-[-20px] group-hover:translate-y-[20px]"
-        style={{ background: p.accent }}
+        style={{ background: "var(--color-signal)" }}
         aria-hidden="true"
       />
       <span className="pointer-events-none absolute -bottom-10 -left-4 select-none font-display text-[16rem] font-semibold leading-none tracking-[-0.06em] text-ink/[0.05]">
@@ -46,9 +53,9 @@ function Mock({ p, kind }: { p: Project; kind: "mobile" | "web" }) {
                 <div className="mt-2 h-1.5 w-1/3 bg-ink/10" />
                 <div
                   className="mt-2 inline-block px-1.5 py-0.5 font-mono text-[6px] uppercase tracking-widest text-paper"
-                  style={{ background: p.accent }}
+                  style={{ background: "var(--color-signal)" }}
                 >
-                  live
+                  UI
                 </div>
               </div>
               {[0, 1, 2].map((i) => (
@@ -85,7 +92,7 @@ function Mock({ p, kind }: { p: Project; kind: "mobile" | "web" }) {
                   </div>
                   <div
                     className="px-2 py-1 font-mono text-[7px] uppercase tracking-widest text-paper"
-                    style={{ background: p.accent }}
+                    style={{ background: "var(--color-signal)" }}
                   >
                     action
                   </div>
@@ -117,9 +124,9 @@ function Mock({ p, kind }: { p: Project; kind: "mobile" | "web" }) {
 
 function Row({ k, v }: { k: string; v: string }) {
   return (
-    <div className="grid grid-cols-12 gap-4 border-b border-ink/10 py-4">
-      <dt className="col-span-4 font-mono text-[10.5px] uppercase tracking-[0.2em] text-mute xl:col-span-3">{k}</dt>
-      <dd className="col-span-8 text-[15px] leading-relaxed text-ink/80 xl:col-span-9">{v}</dd>
+    <div className="grid grid-cols-12 gap-4 border-b border-paper/10 py-4">
+      <dt className="col-span-4 font-mono text-[10.5px] uppercase tracking-[0.2em] text-paper/50 xl:col-span-3">{k}</dt>
+      <dd className="col-span-8 text-[15px] leading-relaxed text-paper/80 xl:col-span-9">{v}</dd>
     </div>
   );
 }
@@ -143,6 +150,8 @@ export function Work({
   const [activeProject, setActiveProject] = useState(0);
   const activeIndex = Math.min(activeProject, carouselProjects.length - 1);
   const current = carouselProjects[activeIndex];
+  const previewKind = (project: Project): "mobile" | "web" =>
+    project.platforms.some((platform) => /app/i.test(platform)) ? "mobile" : "web";
 
   const goToProject = (index: number) => {
     setActiveProject((index + carouselProjects.length) % carouselProjects.length);
@@ -161,18 +170,18 @@ export function Work({
         if (event.key === "ArrowLeft") moveProject(-1);
         if (event.key === "ArrowRight") moveProject(1);
       }}
-      className="relative bg-paper text-ink outline-none"
+      className="relative bg-ink text-paper outline-none"
     >
       <div className="container-x section-y">
         {!headless && (
           <div className="grid grid-cols-12 gap-x-4 gap-y-8 md:gap-x-8">
             <div className="col-span-12 lg:col-span-8">
-              <Eyebrow index={index} label="Selected Work" tone="light" />
-              <Lines lines={["Built to make", "an impact."]} className="display display-md mt-10 uppercase text-ink" />
+              <Eyebrow index={index} label="Featured Projects" tone="dark" />
+              <Lines lines={["Built to make", "an impact."]} className="display display-md mt-10 uppercase text-paper" />
             </div>
             <Reveal className="col-span-12 self-end lg:col-span-4">
-              <p className="max-w-[38ch] text-base leading-relaxed text-ink/65 md:text-lg">
-                A selection of products we've shipped with founders and businesses — in their words, not ours.
+              <p className="max-w-[38ch] text-base leading-relaxed text-paper/65 md:text-lg">
+                A selection of digital products and platforms across industries.
               </p>
             </Reveal>
           </div>
@@ -201,22 +210,45 @@ export function Work({
                     className={cn("group grid touch-pan-y grid-cols-12 gap-x-4 gap-y-8 md:gap-x-8", activeIndex % 2 === 1 && "md:items-stretch")}
                   >
                     <div className={cn("col-span-12 lg:col-span-7", activeIndex % 2 === 1 && "lg:order-2")}>
-                      <Mock p={current} kind={activeIndex === 0 ? "mobile" : "web"} />
+                      <Mock p={current} kind={previewKind(current)} />
                     </div>
                     <div className={cn("col-span-12 flex flex-col lg:col-span-5", activeIndex % 2 === 1 ? "lg:order-1 lg:pr-8" : "lg:pl-8")}>
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-[11px] tracking-[0.2em] text-mute">{String(activeIndex + 1).padStart(2, "0")}</span>
-                        <span className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-mute">{current.industry}</span>
+                      <div className="flex items-center justify-between gap-4">
+                        <span className="font-mono text-[11px] tracking-[0.2em] text-paper/45">{String(activeIndex + 1).padStart(2, "0")}</span>
+                        <span className="text-right font-mono text-[10.5px] uppercase tracking-[0.2em] text-paper/55">{current.sector}</span>
                       </div>
                       <h3 className="mt-5 font-display text-4xl font-semibold tracking-[-0.04em] md:text-5xl">{current.name}</h3>
-                      <p className="mt-5 max-w-[48ch] border-t border-ink/10 pt-5 text-[15px] leading-relaxed text-ink/70">
-                        {current.product}
+                      <p className="mt-5 max-w-[48ch] border-t border-paper/15 pt-5 text-[15px] leading-relaxed text-paper/70">
+                        {current.description}
                       </p>
+                      <ul className="mt-5 flex flex-wrap gap-2" aria-label={`${current.name} platforms`}>
+                        {current.platforms.map((platform) => (
+                          <li key={platform} className="border border-paper/20 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-paper/75">
+                            {platform}
+                          </li>
+                        ))}
+                      </ul>
+                      {current.storePackage && (
+                        <p className="mt-4 font-mono text-[10px] text-paper/50">
+                          Google Play package: {current.storePackage}
+                        </p>
+                      )}
+                      {current.liveProductUrl && (
+                        <a
+                          href={current.liveProductUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-5 inline-flex w-fit items-center gap-2 border-b border-paper/30 pb-1 text-sm font-medium text-paper hover:border-paper"
+                        >
+                          {current.liveProductLabel ?? "View Live Product"}
+                          <ArrowUpRight className="h-4 w-4" />
+                        </a>
+                      )}
                     </div>
                   </motion.article>
                 </AnimatePresence>
 
-                <div className="mt-10 flex flex-wrap items-center justify-between gap-5 border-t border-ink/10 pt-5">
+                <div className="mt-10 flex flex-wrap items-center justify-between gap-5 border-t border-paper/15 pt-5">
                   <div className="flex items-center gap-2">
                     {carouselProjects.map((project, index) => (
                       <button
@@ -227,16 +259,16 @@ export function Work({
                         onClick={() => goToProject(index)}
                         className="group relative flex h-8 items-center px-1"
                       >
-                        <span className={cn("block h-px w-7 transition-all duration-500", index === activeIndex ? "w-12 bg-ink" : "bg-ink/25 group-hover:bg-ink/60")} />
+                        <span className={cn("block h-px w-7 transition-all duration-500", index === activeIndex ? "w-12 bg-paper" : "bg-paper/25 group-hover:bg-paper/60")} />
                       </button>
                     ))}
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="min-w-12 font-mono text-[11px] tracking-[0.18em] text-mute">
+                    <span className="min-w-12 font-mono text-[11px] tracking-[0.18em] text-paper/50">
                       {String(activeIndex + 1).padStart(2, "0")} / {String(carouselProjects.length).padStart(2, "0")}
                     </span>
-                    <button type="button" aria-label="Previous project" onClick={() => moveProject(-1)} className="flex h-10 w-10 items-center justify-center border border-ink/15 transition-colors hover:bg-ink hover:text-paper"><ChevronLeft className="h-4 w-4" /></button>
-                    <button type="button" aria-label="Next project" onClick={() => moveProject(1)} className="flex h-10 w-10 items-center justify-center border border-ink/15 transition-colors hover:bg-ink hover:text-paper"><ChevronRight className="h-4 w-4" /></button>
+                    <button type="button" aria-label="Previous project" onClick={() => moveProject(-1)} className="flex h-10 w-10 items-center justify-center border border-paper/20 transition-colors hover:bg-paper hover:text-ink"><ChevronLeft className="h-4 w-4" /></button>
+                    <button type="button" aria-label="Next project" onClick={() => moveProject(1)} className="flex h-10 w-10 items-center justify-center border border-paper/20 transition-colors hover:bg-paper hover:text-ink"><ChevronRight className="h-4 w-4" /></button>
                   </div>
                 </div>
               </div>
@@ -247,33 +279,32 @@ export function Work({
             return (
               <article key={p.id} className="group grid grid-cols-12 gap-x-4 gap-y-8 md:gap-x-8">
                 <Reveal className={cn("col-span-12 lg:col-span-7", flip && "lg:order-2")}>
-                  <Mock p={p} kind={i === 0 ? "mobile" : "web"} />
+                  <Mock p={p} kind={previewKind(p)} />
                 </Reveal>
                 <Reveal
                   delay={0.08}
                   className={cn("col-span-12 flex flex-col lg:col-span-5", flip ? "lg:order-1 lg:pr-8" : "lg:pl-8")}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-[11px] tracking-[0.2em] text-mute">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-mute">{p.industry}</span>
+                    <span className="font-mono text-[11px] tracking-[0.2em] text-paper/45">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-paper/55">{p.sector}</span>
                   </div>
                   <h3 className="mt-5 font-display text-4xl font-semibold tracking-[-0.04em] md:text-5xl">{p.name}</h3>
-                  <dl className="mt-8 border-t border-ink/10">
-                    <Row k="Problem" v={p.problem} />
-                    <Row k="Product" v={p.product} />
-                    <Row k="Technology" v={p.technology} />
+                  <dl className="mt-8 border-t border-paper/10">
+                    <Row k="Overview" v={p.description} />
+                    <Row k="Platforms" v={p.platforms.join(" · ")} />
                   </dl>
-                  <figure className="mt-8">
-                    <blockquote
-                      className="border-l-2 pl-5 text-[17px] leading-snug tracking-[-0.01em] text-ink"
-                      style={{ borderColor: p.accent }}
+                  {p.liveProductUrl && (
+                    <a
+                      href={p.liveProductUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-8 inline-flex w-fit items-center gap-2 border-b border-paper/30 pb-1 text-sm font-medium hover:border-paper"
                     >
-                      {p.impact}
-                    </blockquote>
-                    <figcaption className="mt-3 pl-5 font-mono text-[10.5px] uppercase tracking-[0.18em] text-mute">
-                      — {p.attribution}
-                    </figcaption>
-                  </figure>
+                      {p.liveProductLabel ?? "View Live Product"}
+                      <ArrowUpRight className="h-4 w-4" />
+                    </a>
+                  )}
                 </Reveal>
               </article>
             );
@@ -284,14 +315,14 @@ export function Work({
               <button
                 type="button"
                 onClick={openEnquiry}
-                className="group grid w-full grid-cols-12 text-left items-center gap-x-4 gap-y-6 border border-dashed border-ink/25 p-8 transition-colors duration-500 hover:border-ink md:gap-x-8 md:p-12"
+                className="group grid w-full grid-cols-12 text-left items-center gap-x-4 gap-y-6 border border-dashed border-paper/25 p-8 transition-colors duration-500 hover:border-paper md:gap-x-8 md:p-12"
               >
                 <div className="col-span-12 md:col-span-8">
-                  <span className="font-mono text-[11px] tracking-[0.2em] text-mute">0{work.projects.length + 1}</span>
+                  <span className="font-mono text-[11px] tracking-[0.2em] text-paper/45">0{work.projects.length + 1}</span>
                   <h3 className="mt-4 font-display text-3xl font-semibold tracking-[-0.04em] md:text-5xl">
-                    Your product, <span className="text-ink/40">here.</span>
+                    Your product, <span className="text-paper/40">here.</span>
                   </h3>
-                  <p className="mt-4 max-w-[48ch] text-[15px] leading-relaxed text-ink/60">
+                  <p className="mt-4 max-w-[48ch] text-[15px] leading-relaxed text-paper/60">
                     The next case study on this page hasn't been built yet. Let's talk about what it could be.
                   </p>
                 </div>
@@ -311,11 +342,11 @@ export function Work({
 
         <div className={cn("flex justify-center", teaser ? "mt-8" : "mt-12 md:mt-16")}>
           {teaser ? (
-            <Button href="/work" tone="light">
+            <Button href="/work" tone="dark">
               View all work
             </Button>
           ) : (
-            <Button href="/contact" tone="light" variant="outline">
+            <Button href="/contact" tone="dark" variant="outline">
               Build the next one with us
             </Button>
           )}

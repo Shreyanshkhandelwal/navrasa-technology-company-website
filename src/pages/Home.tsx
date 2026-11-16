@@ -19,9 +19,9 @@ export function Home() {
     <>
       <Hero />
       <Credentials tone="dark" />
-      <BuildIndex index="01" />
-      <Why index="02" />
-      <Work index="03" limit={2} teaser />
+      <Work index="01" limit={6} teaser />
+      <BuildIndex index="02" />
+      <Why index="03" />
       <Testimonials index="04" tone="light" limit={3} />
       <FinalCTA index="05" tone="light" compact />
     </>

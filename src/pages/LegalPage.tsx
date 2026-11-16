@@ -3,8 +3,6 @@ import { Reveal } from "@/components/ui";
 import { company } from "@/data/site";
 import { useSEO } from "@/hooks/useSEO";
 
-/* Policy copy adapted from the statements published on navrasaitsolutions.com. */
-
 const LAST_UPDATED = "February 2026";
 
 type Clause = { h: string; p: string[] };

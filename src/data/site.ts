@@ -484,58 +484,72 @@ export const technology = [
   { layer: "AI / LLM", items: ["LLM APIs", "RAG pipelines", "Vector search", "AI agents", "ML models"] },
 ];
 
-/* Selected work — sourced from client feedback published on the existing site.
-   Figures are intentionally absent; EDIT fields when verified metrics are available. */
-export const work = {
+/* Homepage featured work. Product links are included only when provided. */
+export const work: {
+  headline: string;
+  projects: {
+    id: string;
+    name: string;
+    sector: string;
+    description: string;
+    platforms: string[];
+    liveProductUrl?: string;
+    liveProductLabel?: string;
+    storePackage?: string;
+  }[];
+} = {
   headline: "Built to make an impact.",
   projects: [
     {
-      id: "ezyfix",
-      name: "EzyFix",
-      industry: "Consumer · Local commerce",
-      problem: "A coupon-selling model needed a smooth consumer experience and a vendor side that could manage offers in real time.",
-      product: "Coupon-selling app with a vendor panel and real-time coupon tracking.",
-      technology: "Mobile application · Vendor panel · Real-time tracking",
-      impact:
-        "“Smooth interface, vendor panel, real-time coupon tracking — they built exactly what we needed.”",
-      attribution: "Keshavendra Singh Raghav, Founder, EzyFix",
-      accent: "#ff4d12",
+      id: "book-my-mechanik",
+      name: "Book My Mechanik",
+      sector: "Automotive · On-demand services",
+      description: "On-demand mechanic booking across customer and partner apps and the web.",
+      platforms: ["Customer app", "Partner app", "Web"],
+      liveProductUrl: "https://bookmymechanik.com",
+      liveProductLabel: "View Live Product",
     },
     {
-      id: "richony",
-      name: "Richony",
-      industry: "E-commerce · Fragrance",
-      problem: "A perfume brand needed elegance, speed and trust in a single storefront that performs on mobile.",
-      product: "E-commerce website for a premium perfume brand.",
-      technology: "E-commerce web platform · Mobile-first",
-      impact:
-        "“Our perfume brand needed elegance, speed, and trust — they delivered all three. Customers love it.”",
-      attribution: "Harsh, Founder, Richony",
-      accent: "#c9a96e",
+      id: "swachh-railways",
+      name: "Indian Railways / Swachh Railways",
+      sector: "Public transport · Rail operations",
+      description: "Internal management software and an Android app for railway cleaning management.",
+      platforms: ["Internal management software", "Android app"],
     },
     {
-      id: "suntech",
-      name: "Suntech Power Corporation",
-      industry: "Energy · Solar",
-      problem: "A solar business needed a web presence that generates enquiries — not just a brochure.",
-      product: "Lead-focused website with service booking, built SEO-ready.",
-      technology: "Web platform · Service booking · SEO foundations",
-      impact:
-        "“We finally have a website that brings us leads. Service booking, SEO-ready — it's driving results.”",
-      attribution: "Suresh Kumar Yadav, Suntech Power Corporation",
-      accent: "#f5b700",
+      id: "velvet-chat",
+      name: "Velvet Chat",
+      sector: "Communication · Messaging",
+      description: "Private messaging with end-to-end encrypted chat, audio/video calls and group chat.",
+      platforms: ["Android app", "Encrypted chat", "Audio/video calls", "Group chat"],
+      storePackage: "com.chat.velvet",
     },
     {
-      id: "crid",
-      name: "CRID Innovations",
-      industry: "Business · Innovation",
-      problem: "A clear, modern digital identity that speaks to the right audience — quickly.",
-      product: "Business website with a clean, modern brand presence.",
-      technology: "Web platform · Responsive design",
-      impact:
-        "“They understood our brand instantly and built a clean, modern website that speaks to our audience.”",
-      attribution: "CRID Innovations",
-      accent: "#4f8cff",
+      id: "swap-street",
+      name: "Swap Street",
+      sector: "Marketplace · UAE",
+      description: "A UAE marketplace application.",
+      platforms: ["Marketplace app"],
+      liveProductUrl: "https://swapstreet.ae",
+      liveProductLabel: "View Live Product",
+    },
+    {
+      id: "orange-air",
+      name: "Orange Air",
+      sector: "Aviation · Cargo",
+      description: "Cargo enquiry and booking platform.",
+      platforms: ["Web platform", "Cargo enquiry", "Booking"],
+      liveProductUrl: "https://orangeair.kz",
+      liveProductLabel: "View Live Product",
+    },
+    {
+      id: "mediforce",
+      name: "Mediforce",
+      sector: "Healthcare · Workforce",
+      description: "Healthcare workforce platform covering credentialing, scheduling, timesheets and pay.",
+      platforms: ["Web platform", "Credentialing", "Scheduling", "Timesheets", "Pay"],
+      liveProductUrl: "https://mediforcehealth.com",
+      liveProductLabel: "View Live Product",
     },
   ],
 };

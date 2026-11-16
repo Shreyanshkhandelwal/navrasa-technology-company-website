@@ -5,7 +5,7 @@ import { FinalCTA } from "@/components/Contact";
 import { PageHero } from "@/components/PageHero";
 import { Testimonials } from "@/components/Testimonials";
 import { Eyebrow, Reveal } from "@/components/ui";
-import { caseStudyProjects, type ProjectCategory } from "@/data/projects";
+import { caseStudyProjects, logoOnlyPortfolioProjects, type ProjectCategory } from "@/data/projects";
 import { useSEO } from "@/hooks/useSEO";
 import { useEnquiry } from "@/components/EnquiryContext";
 import { trackEvent } from "@/utils/analytics";
@@ -15,9 +15,10 @@ const filters: Array<"All" | ProjectCategory> = ["All", "Mobile Applications", "
 function PortfolioGrid() {
   const { openEnquiry } = useEnquiry();
   const [filter, setFilter] = useState<(typeof filters)[number]>("All");
+  const allProjects = [...caseStudyProjects, ...logoOnlyPortfolioProjects];
   const projects = filter === "All"
-    ? caseStudyProjects
-    : caseStudyProjects.filter((project) => project.categories.includes(filter));
+    ? allProjects
+    : allProjects.filter((project) => project.categories?.includes(filter));
 
   return (
     <section className="bg-paper section-y">
@@ -37,23 +38,83 @@ function PortfolioGrid() {
           </div>
         </div>
         <div className="mt-10 grid gap-x-6 gap-y-12 md:grid-cols-2">
-          {projects.map((project, index) => (
-            <Reveal key={project.id} delay={(index % 2) * 0.08}>
-              <Link to={`/work/${project.slug}`} onClick={() => trackEvent("portfolio_case_study_click", { project: project.id })} className="group block">
-                <div className="relative aspect-[16/10] overflow-hidden border border-ink/10 bg-paper-2" style={{ backgroundImage: "radial-gradient(circle at 75% 25%, rgba(0,0,0,.04), transparent 38%)" }}>
+          {projects.map((project, index) => {
+            const logoOnly = "logoOnly" in project;
+            const industry = "industry" in project ? project.industry : undefined;
+            const headline = "headline" in project ? project.headline : undefined;
+            const platforms = "platforms" in project ? project.platforms : undefined;
+            const playStorePackage = "playStorePackage" in project ? project.playStorePackage : undefined;
+            const cardContent = (
+              <>
+                <div className="relative aspect-[16/10] overflow-hidden border border-ink/10 bg-paper-2">
                   <div className="absolute inset-0 opacity-50 dots-light" />
-                  <div className="absolute inset-x-[12%] bottom-0 top-[18%] border border-ink/15 bg-paper transition-transform duration-700 ease-[var(--ease-expo)] group-hover:-translate-y-2">
-                    <div className="flex items-center gap-1.5 border-b border-ink/10 px-4 py-3"><span className="h-1.5 w-1.5 rounded-full bg-ink/20" /><span className="h-1.5 w-1.5 rounded-full bg-ink/20" /><span className="ml-4 h-1.5 w-24 bg-ink/10" /></div>
-                    <div className="grid h-full grid-cols-12 gap-4 p-5"><div className="col-span-4 border-r border-ink/10"><div className="h-2 w-2/3 bg-ink/20" />{[0, 1, 2, 3].map((i) => <div key={i} className="mt-4 h-1.5 w-4/5 bg-ink/10" />)}</div><div className="col-span-8"><div className="font-display text-xl font-semibold">{project.name}</div><div className="mt-4 h-16" style={{ background: `${project.accent}18` }} /><div className="mt-3 grid grid-cols-2 gap-2"><span className="h-12 border border-ink/10" /><span className="h-12 border border-ink/10" /></div></div></div>
+                  <div className="absolute inset-x-[12%] bottom-0 top-[18%] grid place-items-center border border-ink/15 bg-paper transition-transform duration-700 ease-[var(--ease-expo)] group-hover:-translate-y-2">
+                    {logoOnly ? (
+                      <span className="px-5 text-center font-display text-3xl font-semibold tracking-[-0.04em] text-[#171717] md:text-4xl">
+                        {project.name}
+                      </span>
+                    ) : (
+                      <span className="border border-ink/15 bg-paper px-3 py-2 font-mono text-[9px] uppercase tracking-[0.14em] text-ink/60">
+                        Project imagery not supplied
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="mt-6 flex items-start justify-between gap-5">
-                  <div><span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#777777]">{project.category}</span><h3 className="mt-3 font-display text-3xl font-semibold tracking-[-0.04em] text-[#171717]">{project.name}</h3><p className="mt-3 max-w-[42ch] text-[15px] leading-relaxed text-[#555555]">{project.headline}</p></div>
+                  <div>
+                    {(industry || project.category) && (
+                      <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#777777]">
+                        {industry ?? project.category}
+                      </span>
+                    )}
+                    <h3 className="mt-3 font-display text-3xl font-semibold tracking-[-0.04em] text-[#171717]">{project.name}</h3>
+                    {headline && <p className="mt-3 max-w-[42ch] text-[15px] leading-relaxed text-[#555555]">{headline}</p>}
+                    {logoOnly && (
+                      <span className="mt-4 inline-flex items-center gap-2 text-sm font-medium underline underline-offset-4">
+                        View Project <ArrowUpRight className="h-4 w-4" />
+                      </span>
+                    )}
+                  </div>
                   <span className="mt-1 flex h-11 w-11 shrink-0 items-center justify-center border border-ink/15 transition-colors group-hover:bg-ink group-hover:text-paper"><ArrowUpRight className="h-4 w-4" /></span>
                 </div>
-              </Link>
-            </Reveal>
-          ))}
+              </>
+            );
+
+            return (
+              <Reveal key={project.id} delay={(index % 2) * 0.08}>
+                <article className="group">
+                  {logoOnly ? (
+                    <a href={project.websiteUrl} target="_blank" rel="noopener noreferrer" className="block">
+                      {cardContent}
+                    </a>
+                  ) : (
+                    <Link to={`/work/${project.slug}`} onClick={() => trackEvent("portfolio_case_study_click", { project: project.id })} className="block">
+                      {cardContent}
+                    </Link>
+                  )}
+                  {(platforms?.length || (!logoOnly && (project.websiteUrl || playStorePackage))) && (
+                    <div className="mt-4 flex flex-wrap items-center gap-2">
+                      {platforms?.map((platform) => (
+                        <span key={platform} className="border border-ink/15 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-ink/70">
+                          {platform}
+                        </span>
+                      ))}
+                      {!logoOnly && project.websiteUrl && (
+                        <a href={project.websiteUrl} target="_blank" rel="noopener noreferrer" className="ml-auto inline-flex items-center gap-2 text-sm font-medium underline underline-offset-4">
+                          Visit website <ArrowUpRight className="h-4 w-4" />
+                        </a>
+                      )}
+                      {!logoOnly && playStorePackage && (
+                        <span className="ml-auto font-mono text-[10px] text-ink/65">
+                          Google Play package: {playStorePackage}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </article>
+              </Reveal>
+            );
+          })}
         </div>
         <div className="mt-14 flex flex-col gap-5 border-t border-ink/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
           <p className="font-display text-xl font-semibold text-[#171717] md:text-2xl">Building something with a similar ambition?</p>

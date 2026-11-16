@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useEnquiry } from "@/components/EnquiryContext";
 import { Eyebrow, Lines, Reveal } from "@/components/ui";
-import { work } from "@/data/site";
 import { useSEO } from "@/hooks/useSEO";
 
 type AppType = {
@@ -94,8 +93,6 @@ export function MobileAppDevelopmentPage() {
     return () => { faqSchema.remove(); };
   }, []);
 
-  const mobileProject = work.projects.find((project) => project.id === "ezyfix");
-
   return <>
     <section className="grain relative isolate overflow-hidden bg-ink text-paper">
       <div className="absolute inset-0 bg-[radial-gradient(45%_55%_at_78%_30%,rgba(255,77,18,0.09),transparent_70%)]" aria-hidden="true" />
@@ -120,7 +117,7 @@ export function MobileAppDevelopmentPage() {
 
     <section className="relative bg-paper text-ink"><div className="container-x section-y"><Eyebrow index="05" label="How We Build" tone="light"/><Lines lines={["From idea", "to app store."]} className="display display-md mt-10 uppercase"/><p className="mt-7 max-w-[58ch] text-lg leading-relaxed text-ink/65">A structured development process keeps product decisions clear, engineering focused and delivery practical.</p><ol className="mt-14 border-t border-ink/12">{process.map(([title, text, output], i) => <Reveal as="li" key={title} className="grid grid-cols-12 gap-x-4 gap-y-5 border-b border-ink/12 py-7 md:gap-x-8 md:py-9"><span className="col-span-12 font-mono text-[10px] tracking-[0.2em] text-signal sm:col-span-2">0{i+1}</span><h3 className="col-span-12 font-display text-2xl font-semibold tracking-[-0.03em] sm:col-span-3">{title}</h3><p className="col-span-12 text-[15px] leading-relaxed text-ink/65 sm:col-span-4">{text}</p><p className="col-span-12 font-mono text-[10px] uppercase leading-relaxed tracking-[0.12em] text-ink/50 sm:col-span-3">Output<br/><span className="mt-2 block text-ink/75">{output}</span></p></Reveal>)}</ol><button type="button" onClick={openEnquiry} className="mt-10 inline-flex items-center gap-3 bg-ink px-6 py-4 text-sm text-paper">Plan Your App Project <ArrowRight className="h-4 w-4"/></button></div></section>
 
-    <section className="relative bg-ink text-paper"><div className="container-x section-y"><Eyebrow index="05" label="Selected Work"/><Lines lines={["Products built", "for real problems."]} className="display display-md mt-10 uppercase"/><p className="mt-7 max-w-[55ch] text-lg leading-relaxed text-paper/60">Explore selected digital products and engineering work from NavRasa.</p>{mobileProject && <Reveal className="mt-10 grid grid-cols-12 border border-white/10 bg-white/[0.02]"><div className="col-span-12 flex min-h-[220px] items-center justify-center border-b border-white/10 bg-paper-2 p-8 text-ink lg:col-span-6 lg:border-b-0 lg:border-r"><div className="relative h-[220px] w-[105px] rounded-[22px] border-[5px] border-ink bg-[#111] p-2 shadow-2xl"><div className="h-full rounded-[14px] bg-paper p-3"><div className="h-1 w-8 rounded-full bg-ink/20 mx-auto"/><div className="mt-7 border-b border-ink/10 pb-3 text-center font-display text-sm font-semibold">EZYFIX</div><div className="mt-4 grid grid-cols-2 gap-2"><span className="h-12 bg-signal/10"/><span className="h-12 bg-signal/10"/><span className="col-span-2 h-14 bg-ink/5"/></div></div></div></div><div className="col-span-12 p-7 md:p-10 lg:col-span-6"><span className="font-mono text-[10px] uppercase tracking-[0.2em] text-signal">{mobileProject.industry}</span><h3 className="mt-5 font-display text-4xl font-semibold tracking-[-0.04em]">{mobileProject.name}</h3><p className="mt-6 text-base leading-relaxed text-paper/65"><strong className="text-paper">Product:</strong> {mobileProject.product}</p></div></Reveal>}<Link to="/work" className="mt-6 inline-flex items-center gap-3 border-b border-paper/30 pb-2 text-sm">Explore All Projects <ArrowRight className="h-4 w-4"/></Link></div></section>
+    <section className="relative bg-ink text-paper"><div className="container-x section-y"><Eyebrow index="05" label="Selected Work"/><Lines lines={["Products built", "for real problems."]} className="display display-md mt-10 uppercase"/><p className="mt-7 max-w-[55ch] text-lg leading-relaxed text-paper/60">Explore selected digital products and engineering work from NavRasa.</p><Link to="/work" className="mt-6 inline-flex items-center gap-3 border-b border-paper/30 pb-2 text-sm">Explore All Projects <ArrowRight className="h-4 w-4"/></Link></div></section>
 
     <section className="relative bg-paper text-ink"><div className="container-x section-y"><div className="grid grid-cols-12 gap-x-10 gap-y-8 md:gap-x-8"><div className="col-span-12 lg:col-span-4"><Eyebrow index="06" label="Frequently Asked Questions" tone="light"/><Lines lines={["What you should", "know before building."]} className="display display-sm mt-8 uppercase"/></div><div className="col-span-12 lg:col-span-7 lg:col-start-6"><FAQAccordion/></div></div></div></section>
 
