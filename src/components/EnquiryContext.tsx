@@ -3,22 +3,32 @@ import { useLocation } from "react-router-dom";
 import { trackEvent } from "@/utils/analytics";
 
 type EnquiryContextValue = {
-  openEnquiry: () => void;
+  openEnquiry: (prefill?: { selectedPackage?: string; source?: string }) => void;
   closeEnquiry: () => void;
   enquiryOpen: boolean;
+  selectedPackage: string;
+  source: string;
 };
 
 const EnquiryContext = createContext<EnquiryContextValue | null>(null);
 
 export function EnquiryProvider({ children }: { children: ReactNode }) {
   const [enquiryOpen, setEnquiryOpen] = useState(false);
+  const [prefill, setPrefill] = useState<{ selectedPackage: string; source: string }>({
+    selectedPackage: "",
+    source: "",
+  });
   const location = useLocation();
 
-  const openEnquiry = useCallback(() => {
+  const openEnquiry = useCallback((options?: { selectedPackage?: string; source?: string }) => {
     if (location.pathname === "/contact") {
       document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
+    setPrefill({
+      selectedPackage: options?.selectedPackage ?? "",
+      source: options?.source ?? location.pathname,
+    });
     trackEvent("enquiry_popup_open");
     setEnquiryOpen(true);
   }, [location.pathname]);
@@ -28,7 +38,15 @@ export function EnquiryProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <EnquiryContext.Provider value={{ enquiryOpen, openEnquiry, closeEnquiry }}>
+    <EnquiryContext.Provider
+      value={{
+        enquiryOpen,
+        openEnquiry,
+        closeEnquiry,
+        selectedPackage: prefill.selectedPackage,
+        source: prefill.source,
+      }}
+    >
       {children}
     </EnquiryContext.Provider>
   );

@@ -117,6 +117,7 @@ type ButtonProps = {
   className?: string;
   size?: "md" | "lg";
   onClick?: () => void;
+  navigate?: boolean;
 };
 
 export function Button({
@@ -128,6 +129,7 @@ export function Button({
   className,
   size = "md",
   onClick,
+  navigate = false,
 }: ButtonProps) {
   const { openEnquiry } = useEnquiry();
   const onDark = tone === "dark";
@@ -172,7 +174,7 @@ export function Button({
 
   return (
     <Magnetic strength={variant === "text" ? 0.15 : 0.3}>
-      {href === "/contact" ? (
+      {href === "/contact" && !navigate ? (
         <button type="button" onClick={() => { trackEvent("primary_cta_click", { cta: "enquiry" }); onClick?.(); openEnquiry(); }} className={classes}>
           {inner}
         </button>

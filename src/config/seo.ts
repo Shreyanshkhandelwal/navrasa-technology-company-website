@@ -1,6 +1,13 @@
+import { caseStudyProjects } from "../data/projects";
+
 export const SITE_URL = "https://www.navrasaitsolutions.com";
 export const DEFAULT_IMAGE = `${SITE_URL}/navrasa-social.jpg`;
-export type RouteSEO = { title: string; description: string; noindex?: boolean };
+export type RouteSEO = { title: string; description: string; noindex?: boolean; breadcrumb?: string };
+
+export const portfolioPrerenderRoutes = [
+  "/work",
+  ...caseStudyProjects.map((project) => `/work/${project.slug}`),
+];
 
 export const seoByPath: Record<string, RouteSEO> = {
   "/": { title: "Mobile App & Software Development Company in Jaipur | NavRasa", description: "NavRasa IT Solutions is a Jaipur-based mobile app and software development company building custom Android, iOS, web and AI solutions for startups and businesses. Transform your ideas into scalable digital products." },
@@ -16,19 +23,47 @@ export const seoByPath: Record<string, RouteSEO> = {
   "/web-application-development": { title: "Web Application Development Company in Jaipur | NavRasa", description: "NavRasa IT Solutions develops custom web applications in Jaipur, including business platforms, customer portals, admin dashboards, workflow systems and scalable web products." },
   "/ai-development": { title: "AI Development Company in Jaipur | NavRasa", description: "Build AI-powered applications with NavRasa IT Solutions in Jaipur. We develop AI integrations, intelligent business workflows, knowledge assistants and practical AI solutions." },
   "/ai-agent-development": { title: "AI Agent Development Company in Jaipur | NavRasa", description: "NavRasa IT Solutions develops AI agents for businesses in Jaipur, including workflow automation, AI assistants, API integrations and controlled intelligent business processes." },
-  "/solutions": { title: "Digital Product Solutions for Startups & Businesses | NavRasa", description: "Discover NavRasa digital product solutions for startups and businesses, from MVP planning and mobile applications to SaaS platforms, automation and AI-enabled software." },
+  "/solutions": { title: "Startup MVP Development Company | Build Your Product with NavRasa", description: "Turn your startup idea into a market-ready digital product. NavRasa builds MVPs, mobile apps, SaaS platforms and custom software with transparent startup packages.", breadcrumb: "For Startups" },
   "/capabilities": { title: "Software Engineering Capabilities in Jaipur | NavRasa", description: "Explore NavRasa's software engineering capabilities across product strategy, mobile and web development, backend systems, integrations, cloud infrastructure and AI." },
+  "/work": { title: "App & Software Development Portfolio | NavRasa", description: "Explore NavRasa's mobile apps, custom software, web platforms and digital products built for businesses and startups." },
   "/about": { title: "About NavRasa IT Solutions | Software Company in Jaipur", description: "Learn about NavRasa IT Solutions, a founder-led technology team in Jaipur building mobile applications, custom software, SaaS platforms and practical AI products." },
-  "/insights": { title: "Software Development Insights | NavRasa IT Solutions", description: "Read practical insights from NavRasa on mobile applications, custom software, SaaS product development, MVP planning, AI and digital product engineering." },
+  "/insights": { title: "Insights Unavailable | NavRasa IT Solutions", description: "There are currently no published Insights articles. Explore NavRasa's selected work and software engineering capabilities.", noindex: true },
   "/contact": { title: "Contact a Software Development Company in Jaipur | NavRasa", description: "Discuss your mobile app, SaaS, MVP or custom software project with NavRasa IT Solutions in Jaipur. Share requirements and start a project conversation with our team." },
-  "/careers": { title: "Careers at NavRasa IT Solutions | Opportunities Coming Soon", description: "Explore future career opportunities at NavRasa IT Solutions. We are building a team of passionate engineers, thinkers and innovators in Jaipur." },
   "/privacy": { title: "Privacy Policy | NavRasa IT Solutions", description: "Read how NavRasa IT Solutions collects, uses and protects personal and project information submitted through our website and enquiry channels.", noindex: true },
   "/terms": { title: "Terms & Conditions | NavRasa IT Solutions", description: "Review the terms governing use of the NavRasa IT Solutions website and the delivery of software development and technology services.", noindex: true },
 };
 
 export function normalizePath(pathname: string) { return pathname === "/" ? "/" : `/${pathname.replace(/^\/+|\/+$/g, "")}`; }
+
+function getCaseStudySEO(slug: string): RouteSEO | undefined {
+  const project = caseStudyProjects.find((item) => item.slug === slug);
+  if (!project) return undefined;
+
+  const platform = project.platforms[0];
+  const category = project.category ?? project.categories[0];
+  const titlePlatform = platform === "Website" ? " Website" : platform === "Android App" ? " Android App" : platform === "iOS App" ? " iOS App" : "";
+  const summary = project.portfolioDescription?.trim() || project.headline?.trim() || project.overview?.trim();
+  const platformLabel = platform === "Website" ? "website" : platform === "Android App" ? "Android app" : platform === "iOS App" ? "iOS app" : platform?.toLowerCase() ?? "digital product";
+  const descriptionSource = summary
+    ? summary.toLowerCase().includes(project.name.toLowerCase())
+      ? summary
+      : `${project.name}: ${summary}`
+    : `Explore ${project.name}, a ${platformLabel} project in NavRasa's ${(category ?? "digital products").toLowerCase()} portfolio.`;
+  const description =
+    descriptionSource.length > 160
+      ? `${descriptionSource.slice(0, 157).trimEnd()}…`
+      : descriptionSource;
+
+  return {
+    title: `${project.name}${titlePlatform} Case Study | NavRasa`,
+    description,
+  };
+}
+
 export function getSEO(pathname: string): RouteSEO & { path: string; canonical: string } {
   const path = normalizePath(pathname);
-  const seo = seoByPath[path] ?? { title: "NavRasa IT Solutions", description: "Mobile app and custom software development in Jaipur." };
+  const caseStudyPath = /^\/work\/([^/]+)$/.exec(path);
+  const caseStudySEO = caseStudyPath ? getCaseStudySEO(caseStudyPath[1]) : undefined;
+  const seo = seoByPath[path] ?? caseStudySEO ?? { title: "NavRasa IT Solutions", description: "Mobile app and custom software development in Jaipur." };
   return { ...seo, path, canonical: path === "/" ? `${SITE_URL}/` : `${SITE_URL}${path}` };
 }

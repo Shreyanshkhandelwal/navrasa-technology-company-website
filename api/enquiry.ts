@@ -1,4 +1,4 @@
-import { contactForm } from "../src/data/site";
+import { contactForm, startupPackages } from "../src/data/site";
 
 type EnquiryMode = "contact" | "project";
 type EnquiryFields = {
@@ -12,6 +12,8 @@ type EnquiryFields = {
   budget: string;
   timeline: string;
   message: string;
+  package: string;
+  source: string;
 };
 
 const googleFormResponseUrl =
@@ -27,6 +29,8 @@ const limits: Record<Exclude<keyof EnquiryFields, "mode">, number> = {
   budget: 80,
   timeline: 80,
   message: 4000,
+  package: 80,
+  source: 160,
 };
 
 function jsonResponse(body: Record<string, unknown>, status = 200) {
@@ -61,6 +65,8 @@ function parseEnquiry(value: unknown): EnquiryFields | null {
     budget: readString(value.budget),
     timeline: readString(value.timeline),
     message: readString(value.message),
+    package: readString(value.package),
+    source: readString(value.source),
   };
 
   if (!fields.name || !fields.email || !emailPattern.test(fields.email)) return null;
@@ -70,6 +76,7 @@ function parseEnquiry(value: unknown): EnquiryFields | null {
   }
   if (fields.mode === "project" && (!fields.building || !contactForm.projectTypes.includes(fields.type))) return null;
   if (fields.mode === "contact" && !fields.message) return null;
+  if (fields.package && !startupPackages.some((startupPackage) => startupPackage.enquiryLabel === fields.package)) return null;
   if (fields.budget && !contactForm.budgets.includes(fields.budget)) return null;
   if (fields.timeline && !contactForm.timelines.includes(fields.timeline)) return null;
   if (Object.entries(fields).some(([key, field]) => key !== "mode" && field.length > limits[key as keyof typeof limits])) {
@@ -96,6 +103,12 @@ export async function handleEnquiryRequest(request: Request, fetcher: typeof fet
   if (!enquiry) return jsonResponse({ success: false, message: "Check the required enquiry details and try again." }, 400);
 
   const projectDescription = enquiry.mode === "project" ? enquiry.building : enquiry.message;
+  const enquiryContext = [
+    enquiry.package ? `Selected startup package: ${enquiry.package}` : "",
+    enquiry.source ? `Enquiry source: ${enquiry.source}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
   const googleFormBody = new URLSearchParams({
     "entry.795717472": enquiry.name,
     "entry.153567538": enquiry.company,
@@ -105,7 +118,12 @@ export async function handleEnquiryRequest(request: Request, fetcher: typeof fet
     "entry.1041755658": enquiry.mode === "project" ? enquiry.type : "",
     "entry.1996484321": enquiry.mode === "project" ? enquiry.budget : "",
     "entry.1274528727": enquiry.mode === "project" ? enquiry.timeline : "",
-    "entry.1209479222": enquiry.mode === "project" ? enquiry.message : "",
+    "entry.1209479222": [
+      enquiry.mode === "project" ? enquiry.message : "",
+      enquiryContext,
+    ]
+      .filter(Boolean)
+      .join("\n\n"),
   });
 
   try {

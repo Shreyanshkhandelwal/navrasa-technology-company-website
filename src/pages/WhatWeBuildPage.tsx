@@ -17,7 +17,7 @@ export function WhatWeBuildPage() {
   return (
     <>
       <PageHero
-  label="NAVRASA / WHAT WE BUILD"
+  label="WHAT WE BUILD"
   lines={["Digital Products.", "Built for Business."]}
   intro="From high-performance mobile applications and custom business software to SaaS platforms and AI-powered solutions, we engineer digital products that solve real problems and support long-term growth."
   meta={

@@ -22,7 +22,6 @@ function FooterLink({ href, children }: { href: string; children: ReactNode }) {
 }
 
 export function Footer() {
-  const year = new Date().getFullYear();
   const reduce = useReducedMotion();
   const { openEnquiry } = useEnquiry();
   const toTop = () => window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
@@ -51,7 +50,7 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <h4 className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-mute-2">Solutions</h4>
+              <h4 className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-mute-2">For Startups</h4>
               <ul className="mt-5 flex flex-col gap-3">
                 {footer.solutions.map((l) => (
                   <li key={l.label}>
@@ -101,9 +100,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col gap-4 border-t border-white/10 py-7 font-mono text-[10.5px] uppercase tracking-[0.18em] text-mute-2 md:mt-16 md:flex-row md:items-center md:justify-between">
-          <span>
-            © {year} {company.name}. All rights reserved.
-          </span>
+          <span>© 2026 NAVRASA IT SOLUTIONS</span>
           <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">
             {footer.legal.map((l) => (
               <li key={l.label}>

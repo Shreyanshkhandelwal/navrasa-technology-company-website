@@ -99,7 +99,6 @@ export function MobileAppDevelopmentPage() {
       <div className="container-x relative grid min-h-[65svh] grid-cols-12 items-end gap-x-4 gap-y-8 pb-12 pt-28 md:gap-x-8 md:pb-16 md:pt-36">
         <div className="col-span-12 lg:col-span-7">
           <nav aria-label="Breadcrumb" className="eyebrow mb-8 flex items-center gap-3 text-mute-2"><span className="h-1.5 w-1.5 bg-signal"/><Link to="/">NavRasa</Link><span>/</span><span className="text-paper" aria-current="page">Mobile App Development</span></nav>
-          <Eyebrow label="NAVRASA / MOBILE APP DEVELOPMENT" />
           <Lines as="h1" lines={["Mobile applications.", "Built for what's next."]} reveal={false} className="display display-lg mt-8 uppercase text-paper" />
         </div>
         <Reveal className="col-span-12 lg:col-span-5 lg:pl-8">

@@ -6,7 +6,7 @@ import { useEnquiry } from "./EnquiryContext";
 import { Eyebrow } from "./ui";
 
 export function EnquiryModal() {
-  const { enquiryOpen, closeEnquiry } = useEnquiry();
+  const { enquiryOpen, closeEnquiry, selectedPackage, source } = useEnquiry();
   const reduceMotion = useReducedMotion();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
@@ -75,7 +75,13 @@ export function EnquiryModal() {
                 <X className="h-5 w-5" strokeWidth={1.5} />
               </button>
             </div>
-            <div className="p-5 sm:px-7 sm:py-5"><EnquiryForm compact /></div>
+            <div className="p-5 sm:px-7 sm:py-5">
+              <EnquiryForm
+                compact
+                initialPackage={selectedPackage}
+                source={source}
+              />
+            </div>
           </motion.div>
         </motion.div>
       )}

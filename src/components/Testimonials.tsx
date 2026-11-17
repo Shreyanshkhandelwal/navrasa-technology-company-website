@@ -1,7 +1,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { GOOGLE_REVIEWS_URL, googleReviews, googleReviewsSummary } from "@/data/site";
+import { googleReviews, googleReviewsSummary } from "@/data/site";
 import { Eyebrow, Reveal } from "./ui";
 
 function getVisibleCount() {
@@ -81,9 +81,6 @@ export function Testimonials({
                 <span className={`text-sm ${dark ? "text-paper/75" : "text-[#555555]"}`}>{googleReviewsSummary.totalReviews} Google Reviews</span>
               </div>
               <p className={`mt-2 text-xs ${dark ? "text-paper/65" : "text-[#777777]"}`}>Based on Google reviews</p>
-              <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-2 text-sm font-medium underline decoration-current/25 underline-offset-4 hover:text-signal">
-                Read All Reviews on Google <span aria-hidden="true">↗</span>
-              </a>
             </div>
           </Reveal>
         </div>
@@ -161,11 +158,8 @@ export function Testimonials({
           </div>
         </div>
 
-        <div className={`mt-7 flex flex-col gap-3 border-t pt-5 sm:flex-row sm:items-center sm:justify-between ${dark ? "border-white/10" : "border-ink/10"}`}>
+        <div className={`mt-7 border-t pt-5 ${dark ? "border-white/10" : "border-ink/10"}`}>
           <p className={`text-sm ${dark ? "text-paper/70" : "text-ink/70"}`}>See what clients say about working with NavRasa.</p>
-          <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold underline decoration-current/30 underline-offset-4 hover:text-signal">
-            Read All Reviews on Google ↗
-          </a>
         </div>
       </div>
 

@@ -4,7 +4,10 @@ import { company, insights } from "@/data/site";
 import { Eyebrow, Lines, Reveal } from "./ui";
 
 export function Insights({ headless = false, index = "15" }: { headless?: boolean; index?: string }) {
-  const [featured, ...rest] = insights.articles;
+  const articles = insights.articles.filter((article) => article.published && article.href);
+  const [featured, ...rest] = articles;
+  if (!featured) return null;
+
   return (
     <section id="insights" className="relative bg-paper-2 text-ink">
       <div className="container-x section-y">
@@ -41,18 +44,14 @@ export function Insights({ headless = false, index = "15" }: { headless?: boolea
               <div className="relative flex items-center justify-between font-mono text-[10.5px] uppercase tracking-[0.2em] text-mute-2">
                 <span>Featured · {featured.topic}</span>
                 <span className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 bg-signal" /> {featured.published ? "Published" : "In progress"}
+                  <span className="h-1.5 w-1.5 bg-signal" /> Published
                 </span>
               </div>
               <div className="relative">
                 <h3 className="max-w-[16ch] font-display text-3xl font-semibold leading-[1.02] tracking-[-0.03em] md:text-5xl">
                   {featured.title}
                 </h3>
-                <p className="mt-6 max-w-[44ch] text-[15px] text-paper/60">
-                  {featured.published
-                    ? "Read the full article."
-                    : "This piece is being written. Follow NavRasa to read it first."}
-                </p>
+                <p className="mt-6 max-w-[44ch] text-[15px] text-paper/60">Read the full article.</p>
               </div>
             </article>
           </Reveal>
@@ -60,11 +59,10 @@ export function Insights({ headless = false, index = "15" }: { headless?: boolea
           {/* index */}
           <div className="col-span-12 flex flex-col bg-paper lg:col-span-6">
             {rest.map((a, i) => {
-              const Comp = a.published && a.href ? "a" : "div";
               return (
                 <Reveal key={a.title} delay={i * 0.05} className={cn("flex-1", i < rest.length - 1 && "border-b border-ink/10")}>
-                  <Comp
-                    href={a.published && a.href ? a.href : undefined}
+                  <a
+                    href={a.href}
                     className="group flex h-full items-start justify-between gap-6 p-6 transition-colors duration-500 hover:bg-paper-2 md:p-8"
                   >
                     <div>
@@ -79,14 +77,14 @@ export function Insights({ headless = false, index = "15" }: { headless?: boolea
                     </div>
                     <div className="flex shrink-0 flex-col items-end gap-2">
                       <ArrowUpRight
-                        className={cn("h-5 w-5 transition-all duration-500 ease-[var(--ease-expo)]", a.published ? "text-ink group-hover:-translate-y-1 group-hover:translate-x-1" : "text-ink/25")}
+                        className="h-5 w-5 text-ink transition-all duration-500 ease-[var(--ease-expo)] group-hover:-translate-y-1 group-hover:translate-x-1"
                         strokeWidth={1.5}
                       />
                       <span className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-mute">
-                        {a.published ? "Read" : "Coming soon"}
+                        Read
                       </span>
                     </div>
-                  </Comp>
+                  </a>
                 </Reveal>
               );
             })}

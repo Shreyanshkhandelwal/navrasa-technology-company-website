@@ -78,6 +78,29 @@ export function CaseStudyPage() {
         </section>
       )}
 
+      {(project.challenge || project.approach) && (
+        <section className="case-study-light bg-paper-2 section-y border-y border-ink/10">
+          <div className="container-x grid gap-8 md:grid-cols-2 md:gap-12">
+            {project.challenge && (
+              <Reveal>
+                <Eyebrow tone="light">Business challenge</Eyebrow>
+                <p className="mt-5 max-w-[36rem] font-display text-2xl leading-[1.12] tracking-[-0.03em] text-ink md:text-3xl">
+                  {project.challenge}
+                </p>
+              </Reveal>
+            )}
+            {project.approach && (
+              <Reveal delay={0.08}>
+                <Eyebrow tone="light">Our approach</Eyebrow>
+                <p className="mt-5 max-w-[36rem] text-base leading-relaxed text-ink/70">
+                  {project.approach}
+                </p>
+              </Reveal>
+            )}
+          </div>
+        </section>
+      )}
+
       {project.solutions && project.solutions.length > 0 && (
         <section className="case-study-light bg-paper-2 section-y border-y border-ink/10">
           <div className="container-x">
@@ -111,6 +134,38 @@ export function CaseStudyPage() {
                   <p className="col-span-10 col-start-3 text-[15px] leading-relaxed text-ink/65 md:col-span-6 md:col-start-auto">{feature.text}</p>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {(project.technicalImplementation || project.businessValue) && (
+        <section className="case-study-light bg-paper section-y border-t border-ink/10">
+          <div className="container-x grid gap-10 md:grid-cols-12">
+            <div className="md:col-span-4">
+              <Eyebrow tone="light">Delivery perspective</Eyebrow>
+            </div>
+            <div className="space-y-8 md:col-span-8">
+              {project.technicalImplementation && (
+                <div>
+                  <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] text-ink">
+                    Technical implementation
+                  </h2>
+                  <p className="mt-3 max-w-[48rem] text-base leading-relaxed text-ink/70">
+                    {project.technicalImplementation}
+                  </p>
+                </div>
+              )}
+              {project.businessValue && (
+                <div className="border-t border-ink/10 pt-7">
+                  <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] text-ink">
+                    Business value
+                  </h2>
+                  <p className="mt-3 max-w-[48rem] text-base leading-relaxed text-ink/70">
+                    {project.businessValue}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </section>

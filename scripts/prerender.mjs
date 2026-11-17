@@ -2,8 +2,9 @@ import fs from "node:fs/promises";
 import path from "node:path";
 const distDir = path.resolve("dist");
 const baseHtml = await fs.readFile(path.join(distDir, "index.html"), "utf8");
-const { render } = await import(path.resolve("dist-ssr/entry-server.js"));
-const routes = ["/", "/what-we-build", "/mobile-app-development", "/android-app-development", "/ios-app-development", "/flutter-app-development", "/react-native-development", "/custom-software-development", "/saas-development", "/mvp-development", "/web-application-development", "/ai-development", "/ai-agent-development", "/solutions", "/capabilities", "/about", "/insights", "/contact", "/careers", "/privacy", "/terms"];
+const { render, portfolioPrerenderRoutes } = await import(path.resolve("dist-ssr/entry-server.js"));
+const staticRoutes = ["/", "/what-we-build", "/mobile-app-development", "/android-app-development", "/ios-app-development", "/flutter-app-development", "/react-native-development", "/custom-software-development", "/saas-development", "/mvp-development", "/web-application-development", "/ai-development", "/ai-agent-development", "/solutions", "/capabilities", "/about", "/insights", "/contact", "/privacy", "/terms"];
+const routes = [...staticRoutes, ...portfolioPrerenderRoutes];
 
 function removeHeadTags(html) {
   html = html.replace(/\s*<title>[^<]*<\/title>/i, "");

@@ -5,6 +5,12 @@
    awaiting verified information — nothing here is invented.
 ------------------------------------------------------------------- */
 
+import {
+  caseStudyProjects,
+  homepageFeaturedProjectIds,
+  type ProjectCategory,
+} from "./projects";
+
 export const company = {
   name: "NavRasa IT Solutions",
   short: "NavRasa",
@@ -26,7 +32,6 @@ export const company = {
       icon: "linkedin",
       show: true,
     },
-    { label: "X", handle: "@NavrasaIT", href: "https://x.com/NavrasaIT", icon: "x", show: true },
     {
       label: "WhatsApp",
       handle: "+91 70146 86805",
@@ -142,15 +147,13 @@ export const process = [
 
 /* Verbatim client feedback published on navrasaitsolutions.com. Do not edit the
    wording — these are quotes. Add new entries only with written client consent. */
-export const GOOGLE_REVIEWS_URL = "https://www.google.com/search?q=NavRasa+IT+Solutions";
-
 export const googleReviews = [
   {
     name: "Sanjay Kalyani",
     rating: 5,
     date: "7 days ago",
     quote:
-      "Very excellent team.They do exactly what you ask them to do.I had very pleasant experience with my app. With this company.If I had option of 10 stars i would have given all 10.",
+      "Very excellent team. They do exactly what you ask them to do. I had very pleasant experience with my app with this company. If I had option of 10 stars, I would have given all 10.",
   },
   {
     name: "Mani Kandan",
@@ -236,11 +239,10 @@ export const faqs = [
 
 export const nav = [
   { label: "What We Build", href: "/what-we-build" },
-  { label: "Solutions", href: "/solutions" },
+  { label: "For Startups", href: "/solutions" },
   { label: "Capabilities", href: "/capabilities" },
   { label: "Work", href: "/work" },
   { label: "About", href: "/about" },
-  { label: "Insights", href: "/insights" },
 ];
 
 export const hero = {
@@ -417,6 +419,104 @@ export const engineering = {
   ],
 };
 
+export const startupPackages = [
+  {
+    id: "launch",
+    label: "LAUNCH",
+    audience: "FOR EARLY-STAGE FOUNDERS",
+    price: "₹1,50,000",
+    headline: "Turn Your Idea Into a Working MVP.",
+    description:
+      "Everything you need to take your idea beyond a concept and launch a functional first version of your product. Validate your core idea, demonstrate the product and start collecting real user feedback.",
+    deliverables: [
+      "Product discovery and requirement definition.",
+      "Core feature planning and MVP scope.",
+      "UI/UX design for the agreed product scope.",
+      "Responsive web MVP OR one mobile application platform.",
+      "Frontend development.",
+      "Backend and database setup.",
+      "User registration and authentication.",
+      "Up to 8–10 primary screens, depending on complexity.",
+      "One basic admin panel.",
+      "One standard third-party API integration.",
+      "Basic testing and deployment.",
+      "Source code handover.",
+      "30-day post-launch bug-fix support.",
+    ],
+    idealFor:
+      "First-time founders, pre-seed startups, entrepreneurs validating an idea and businesses building their first digital product.",
+    timeline: "4–6 weeks",
+    cta: "START WITH LAUNCH",
+    enquiryLabel: "Launch — ₹1,50,000",
+  },
+  {
+    id: "growth",
+    label: "GROWTH",
+    audience: "FOR STARTUPS READY TO BUILD",
+    badge: "MOST POPULAR",
+    price: "₹3,50,000",
+    headline: "Build a Complete Product. Not Just an MVP.",
+    description:
+      "Move beyond the first version with a more complete product experience. Build connected user journeys, stronger backend capabilities and the integrations needed to bring your product closer to market readiness.",
+    deliverables: [
+      "Detailed product discovery and technical planning.",
+      "Product architecture and database design.",
+      "Complete UI/UX design system for the agreed scope.",
+      "Web application plus cross-platform mobile application, OR an equivalent agreed multi-module product scope.",
+      "Frontend and backend development.",
+      "Authentication and role-based access.",
+      "Custom admin dashboard.",
+      "Payment gateway integration, where applicable.",
+      "Up to 3 standard third-party integrations.",
+      "Notifications and communication workflows, where applicable.",
+      "API development and integration.",
+      "Analytics and basic product tracking.",
+      "Testing and deployment.",
+      "Documentation and source code handover.",
+      "60-day post-launch bug-fix support.",
+    ],
+    idealFor:
+      "Seed-stage startups, founders with validated concepts, businesses preparing for launch and companies expanding an existing MVP.",
+    timeline: "8–10 weeks",
+    cta: "BUILD WITH GROWTH",
+    enquiryLabel: "Growth — ₹3,50,000",
+  },
+  {
+    id: "scale",
+    label: "SCALE",
+    audience: "FOR AMBITIOUS PRODUCT TEAMS",
+    price: "₹6,00,000",
+    headline: "Engineer a Product Built for What's Next.",
+    description:
+      "For founders building more ambitious digital products. Get deeper product engineering, advanced workflows, stronger system architecture and a complete product development engagement designed around your growth roadmap.",
+    deliverables: [
+      "Advanced product discovery and technical consultation.",
+      "Detailed system architecture.",
+      "Product roadmap and feature prioritisation.",
+      "Comprehensive UI/UX and design system.",
+      "Multi-module web and mobile product within the agreed scope.",
+      "Advanced backend and database engineering.",
+      "Role-based access and permission management.",
+      "Advanced admin and operational dashboards.",
+      "Up to 4 standard third-party integrations.",
+      "Payment and subscription workflows, where applicable.",
+      "Real-time functionality, where included in the agreed scope.",
+      "AI feature integration, if specifically scoped.",
+      "API development and documentation.",
+      "Automated and manual testing appropriate to the project.",
+      "Deployment and production configuration.",
+      "Performance and security review.",
+      "Technical documentation and source code handover.",
+      "90-day post-launch bug-fix support.",
+    ],
+    idealFor:
+      "Funded startups, growing SaaS businesses, ambitious founders and businesses building multi-module digital platforms.",
+    timeline: "10–14 weeks",
+    cta: "BUILD TO SCALE",
+    enquiryLabel: "Scale — ₹6,00,000",
+  },
+];
+
 export const startups = {
   headline: "Have an idea?",
   statement: "Let's turn it into something people can use.",
@@ -425,7 +525,7 @@ export const startups = {
   pipeline: ["Idea", "Product Strategy", "Prototype", "MVP", "Launch", "Growth", "Scale"],
   // Sourced from the existing site's MVP FAQ.
   facts: [
-    { k: "Typical MVP build", v: "4–8 weeks, depending on scope" },
+    { k: "Typical MVP build", v: "6–10 weeks, depending on scope" },
     { k: "Approach", v: "Validate → Prototype → Build → Iterate → Scale" },
     { k: "After launch", v: "Feature expansion and infrastructure that grows without a rebuild" },
   ],
@@ -492,6 +592,7 @@ export const work: {
     name: string;
     sector: string;
     description: string;
+    categories: ProjectCategory[];
     platforms: string[];
     liveProductUrl?: string;
     liveProductLabel?: string;
@@ -499,59 +600,21 @@ export const work: {
   }[];
 } = {
   headline: "Built to make an impact.",
-  projects: [
-    {
-      id: "book-my-mechanik",
-      name: "Book My Mechanik",
-      sector: "Automotive · On-demand services",
-      description: "On-demand mechanic booking across customer and partner apps and the web.",
-      platforms: ["Customer app", "Partner app", "Web"],
-      liveProductUrl: "https://bookmymechanik.com",
-      liveProductLabel: "View Live Product",
-    },
-    {
-      id: "swachh-railways",
-      name: "Indian Railways / Swachh Railways",
-      sector: "Public transport · Rail operations",
-      description: "Internal management software and an Android app for railway cleaning management.",
-      platforms: ["Internal management software", "Android app"],
-    },
-    {
-      id: "velvet-chat",
-      name: "Velvet Chat",
-      sector: "Communication · Messaging",
-      description: "Private messaging with end-to-end encrypted chat, audio/video calls and group chat.",
-      platforms: ["Android app", "Encrypted chat", "Audio/video calls", "Group chat"],
-      storePackage: "com.chat.velvet",
-    },
-    {
-      id: "swap-street",
-      name: "Swap Street",
-      sector: "Marketplace · UAE",
-      description: "A UAE marketplace application.",
-      platforms: ["Marketplace app"],
-      liveProductUrl: "https://swapstreet.ae",
-      liveProductLabel: "View Live Product",
-    },
-    {
-      id: "orange-air",
-      name: "Orange Air",
-      sector: "Aviation · Cargo",
-      description: "Cargo enquiry and booking platform.",
-      platforms: ["Web platform", "Cargo enquiry", "Booking"],
-      liveProductUrl: "https://orangeair.kz",
-      liveProductLabel: "View Live Product",
-    },
-    {
-      id: "mediforce",
-      name: "Mediforce",
-      sector: "Healthcare · Workforce",
-      description: "Healthcare workforce platform covering credentialing, scheduling, timesheets and pay.",
-      platforms: ["Web platform", "Credentialing", "Scheduling", "Timesheets", "Pay"],
-      liveProductUrl: "https://mediforcehealth.com",
-      liveProductLabel: "View Live Product",
-    },
-  ],
+  projects: homepageFeaturedProjectIds.map((id) => {
+    const project = caseStudyProjects.find((item) => item.id === id);
+    if (!project) throw new Error(`Homepage project "${id}" is missing from portfolio data.`);
+    return {
+      id: project.id,
+      name: project.name,
+      sector: project.industry ?? project.category ?? "Digital product",
+      description: project.portfolioDescription ?? project.headline ?? project.overview ?? "",
+      categories: project.categories,
+      platforms: project.platforms,
+      liveProductUrl: project.websiteUrl,
+      liveProductLabel: project.websiteUrl ? "View Live Product" : undefined,
+      storePackage: project.playStorePackage,
+    };
+  }),
 };
 
 export const why = {
@@ -666,8 +729,6 @@ export const footer = {
     { label: "About", href: "/about" },
     { label: "Work", href: "/work" },
     { label: "Capabilities", href: "/capabilities" },
-    { label: "Insights", href: "/insights" },
-    { label: "Careers", href: "/careers" },
     { label: "Contact", href: "/contact" },
   ],
   legal: [
@@ -676,10 +737,10 @@ export const footer = {
   ],
   solutions: [
     { label: "AI", href: "/what-we-build#ai" },
-    { label: "SaaS", href: "/what-we-build#build-saas" },
-    { label: "MVP", href: "/solutions#startups" },
-    { label: "Web", href: "/what-we-build#build-web" },
-    { label: "Mobile", href: "/what-we-build#build-mobile" },
-    { label: "Enterprise", href: "/solutions#businesses" },
+    { label: "SaaS", href: "/saas-development" },
+    { label: "MVP Packages", href: "/solutions#packages" },
+    { label: "Web Apps", href: "/web-application-development" },
+    { label: "Mobile Apps", href: "/mobile-app-development" },
+    { label: "Custom Software", href: "/custom-software-development" },
   ],
 };

@@ -1,32 +1,40 @@
+import { ArrowUpRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { FinalCTA } from "@/components/Contact";
-import { Insights } from "@/components/Insights";
 import { PageHero } from "@/components/PageHero";
-import { insights } from "@/data/site";
 import { useSEO } from "@/hooks/useSEO";
 
 export function InsightsPage() {
   useSEO({
-    title: "Insights — Ideas for the Next Era of Technology | NavRasa",
-    description:
-      "Notes from building products: AI, startups, MVP development, SaaS, engineering, automation and digital transformation — written by the people who build.",
+    title: "Insights Unavailable | NavRasa IT Solutions",
+    description: "There are currently no published Insights articles. Explore NavRasa's selected work and software engineering capabilities.",
     path: "/insights",
+    noindex: true,
   });
 
   return (
     <>
       <PageHero
         label="Insights"
-        lines={["Ideas for the next", "era of technology."]}
-        intro="Notes from building products — on AI, startups, engineering and the decisions that compound."
+        lines={["No published articles", "at this time."]}
+        intro="There are currently no published articles to read here. Explore our work or software engineering capabilities instead."
         meta={
           <>
-            <span>0{insights.topics.length} topics</span>
-            <span className="hidden sm:inline">Published as written — no filler</span>
-            <span>{insights.articles.length} in progress</span>
+            <span className="text-paper/75">NO PUBLISHED ARTICLES</span>
+            <span className="hidden text-paper/75 sm:inline">INSIGHTS ARE UNAVAILABLE</span>
           </>
         }
       />
-      <Insights headless />
+      <section className="bg-paper section-y">
+        <div className="container-x flex flex-wrap gap-4">
+          <Link to="/work" className="inline-flex min-h-12 items-center gap-3 bg-ink px-6 text-sm font-medium text-paper transition-colors hover:bg-black">
+            Explore our work <ArrowUpRight className="h-4 w-4" />
+          </Link>
+          <Link to="/capabilities" className="inline-flex min-h-12 items-center gap-3 border border-ink/20 px-6 text-sm font-medium text-ink transition-colors hover:border-ink">
+            View capabilities <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </section>
       <FinalCTA index="02" />
     </>
   );

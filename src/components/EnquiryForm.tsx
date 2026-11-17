@@ -2,11 +2,16 @@ import { ArrowLeft, ArrowRight, Check, ChevronDown } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useRef, useState, type FormEvent } from "react";
 import { cn } from "@/utils/cn";
-import { company, contactForm } from "@/data/site";
+import { company, contactForm, startupPackages } from "@/data/site";
 import { trackEvent } from "@/utils/analytics";
 
 type FormMode = "contact" | "project";
-export type EnquiryFormProps = { compact?: boolean; mode?: FormMode };
+export type EnquiryFormProps = {
+  compact?: boolean;
+  mode?: FormMode;
+  initialPackage?: string;
+  source?: string;
+};
 type FormState = {
   name: string;
   company: string;
@@ -17,6 +22,7 @@ type FormState = {
   budget: string;
   timeline: string;
   message: string;
+  package: string;
 };
 type FormField = keyof FormState;
 type FieldErrors = Partial<Record<FormField, string>>;
@@ -48,6 +54,7 @@ const initial: FormState = {
   budget: "",
   timeline: "",
   message: "",
+  package: "",
 };
 
 function Field({
@@ -122,8 +129,10 @@ function SelectField({
   required = false,
   optional = false,
   error,
+  name = "type",
 }: {
   compact: boolean;
+  name?: FormField;
   label: string;
   placeholder: string;
   options: string[];
@@ -133,7 +142,7 @@ function SelectField({
   optional?: boolean;
   error?: string;
 }) {
-  const errorId = "service-error";
+  const errorId = `${name}-error`;
 
   return (
     <label className="block min-w-0">
@@ -144,7 +153,7 @@ function SelectField({
       </span>
       <span className="relative block">
         <select
-          name="type"
+          name={name}
           value={value}
           onChange={(event) => onChange(event.target.value)}
           required={required}
@@ -179,11 +188,19 @@ function SelectField({
   );
 }
 
-export function EnquiryForm({ compact = false, mode = "project" }: EnquiryFormProps) {
+export function EnquiryForm({
+  compact = false,
+  mode = "project",
+  initialPackage = "",
+  source = "",
+}: EnquiryFormProps) {
   const isProject = mode === "project";
   const reduceMotion = useReducedMotion();
   const submissionPending = useRef(false);
-  const [form, setForm] = useState<FormState>(initial);
+  const [form, setForm] = useState<FormState>(() => ({
+    ...initial,
+    package: initialPackage,
+  }));
   const [errors, setErrors] = useState<FieldErrors>({});
   const [step, setStep] = useState<1 | 2>(1);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -209,6 +226,7 @@ export function EnquiryForm({ compact = false, mode = "project" }: EnquiryFormPr
     } else if (target === "project-info") {
       if (!form.type) next.type = "Choose a service.";
       if (!form.building.trim()) next.building = "Add a short project description.";
+      if (initialPackage && !form.package) next.package = "Choose a startup package.";
     }
 
     setErrors(next);
@@ -230,7 +248,7 @@ export function EnquiryForm({ compact = false, mode = "project" }: EnquiryFormPr
       const response = await fetch("/api/enquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, mode }),
+        body: JSON.stringify({ ...form, mode, source }),
       });
       const result = (await response.json().catch(() => null)) as { success?: boolean } | null;
       if (!response.ok || result?.success !== true) throw new Error("The enquiry service did not confirm receipt.");
@@ -309,15 +327,39 @@ export function EnquiryForm({ compact = false, mode = "project" }: EnquiryFormPr
       {(!isProject || step === 1) && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field compact={compact} label="Name" name="name" value={form.name} onChange={set} required error={errors.name} placeholder="Your name" />
-          <Field compact={compact} label="Email" name="email" type="email" value={form.email} onChange={set} required error={errors.email} placeholder="you@example.com" />
+          <Field compact={compact} label={isProject ? "Work email" : "Email"} name="email" type="email" value={form.email} onChange={set} required error={errors.email} placeholder="you@example.com" />
           <Field compact={compact} label="Phone" name="phone" type="tel" value={form.phone} onChange={set} optional placeholder="+91" />
+          {isProject && (
+            <Field
+              compact={compact}
+              label="Startup or company name"
+              name="company"
+              value={form.company}
+              onChange={set}
+              optional
+              placeholder="Your startup or company"
+            />
+          )}
         </div>
       )}
 
       {isProject && step === 2 ? (
         <>
+          {initialPackage && (
+            <SelectField
+              compact={compact}
+              name="package"
+              label="Selected startup package"
+              placeholder="Choose a package"
+              options={startupPackages.map((startupPackage) => startupPackage.enquiryLabel)}
+              value={form.package}
+              onChange={(value) => set("package", value)}
+              error={errors.package}
+            />
+          )}
           <SelectField
             compact={compact}
+            name="type"
             label="Service required"
             placeholder="Choose a service"
             options={contactForm.projectTypes}
@@ -340,6 +382,7 @@ export function EnquiryForm({ compact = false, mode = "project" }: EnquiryFormPr
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <SelectField
               compact={compact}
+              name="budget"
               label="Budget"
               placeholder="Select a range"
               options={contactForm.budgets}
@@ -349,6 +392,7 @@ export function EnquiryForm({ compact = false, mode = "project" }: EnquiryFormPr
             />
             <SelectField
               compact={compact}
+              name="timeline"
               label="Expected timeline"
               placeholder="Select a timeline"
               options={contactForm.timelines}

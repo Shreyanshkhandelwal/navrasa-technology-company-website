@@ -36,7 +36,7 @@ export function FinalCTA({
                 {finalCta.primary.label}
               </Button>
               {!compact && (
-                <Button href={finalCta.secondary.href} tone="light" variant="text">
+                <Button href={finalCta.secondary.href} tone="light" variant="text" navigate>
                   {finalCta.secondary.label}
                 </Button>
               )}
@@ -65,7 +65,7 @@ export function FinalCTA({
           <Button href={finalCta.primary.href} tone="dark" size="lg">
             {finalCta.primary.label}
           </Button>
-          <Button href={finalCta.secondary.href} tone="dark" variant="text">
+          <Button href={finalCta.secondary.href} tone="dark" variant="text" navigate>
             {finalCta.secondary.label}
           </Button>
         </Reveal>

@@ -17,7 +17,7 @@ export function ContactPage() {
   return (
     <>
       <PageHero
-        label="Start Your Project"
+        label="CONTACT"
         lines={["Have a", "big idea?"]}
         intro={`${finalCta.text} Tell us where you are — we'll reply with honest thoughts on scope, approach and fit.`}
         meta={
