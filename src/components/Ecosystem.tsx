@@ -72,6 +72,7 @@ export function Ecosystem({ className, dim = false }: { className?: string; dim?
     const mark = createMark();
 
     const rings: Ring[] = [
+      { r: 0.19, tiltX: 0.42, tiltZ: 0.18, speed: -0.035, labels: [], offset: 0 },
       { r: 0.25, tiltX: 1.12, tiltZ: -0.28, speed: 0.11, labels: ORBIT_LABELS.slice(0, 4), offset: 0.6 },
       { r: 0.4, tiltX: 1.18, tiltZ: 0.34, speed: -0.075, labels: ORBIT_LABELS.slice(4, 8), offset: 0.1 },
       { r: 0.53, tiltX: 1.05, tiltZ: -0.9, speed: 0.05, labels: ORBIT_LABELS.slice(8), offset: 0.35 },
@@ -141,8 +142,8 @@ export function Ecosystem({ className, dim = false }: { className?: string; dim?
       ctx.clearRect(0, 0, W, H);
       const cx = W / 2, cy = H / 2;
       const base = dim ? 0.6 : 1;
-      const maxLabelWidth = Math.min(180, W * 0.28);
-      const orbitBudget = Math.max(0, W / 2 - maxLabelWidth - 20);
+      const maxLabelWidth = Math.min(132, W * 0.22);
+      const orbitBudget = Math.max(0, W / 2 - maxLabelWidth - 14);
       const maxOrbitRadius = Math.max(...rings.map((ring) => ring.r)) * S;
       orbitScale = Math.min(1, orbitBudget / (maxOrbitRadius * 1.08));
       const segments = window.innerWidth < 1280 ? 64 : 96;
@@ -173,7 +174,7 @@ export function Ecosystem({ className, dim = false }: { className?: string; dim?
         const p = project(ringPoint(ring, a));
         const dx = p.x - cx, dy = p.y - cy;
         const radius = Math.hypot(dx, dy);
-        const coreClearance = S * 0.09;
+        const coreClearance = S * 0.13;
         if (radius < coreClearance) {
           const angle = radius > 1 ? Math.atan2(dy, dx) : a;
           p.x = cx + Math.cos(angle) * coreClearance;
@@ -195,7 +196,7 @@ export function Ecosystem({ className, dim = false }: { className?: string; dim?
       }
 
       const labelLayouts = new Map<number, LabelLayout>();
-      const labelFontSize = Math.max(10, Math.min(12, S * 0.024, W * 0.02));
+      const labelFontSize = Math.max(10.5, Math.min(13, S * 0.026, W * 0.021));
       const labelLineHeight = labelFontSize * 1.35;
       ctx.font = `500 ${labelFontSize}px "JetBrains Mono", ui-monospace, Menlo, monospace`;
       const letterSpacing = labelFontSize * 0.12;
@@ -308,10 +309,10 @@ export function Ecosystem({ className, dim = false }: { className?: string; dim?
       drawNodes(back);
 
       /* ---- core ---- */
-      const glowR = S * 0.2;
+      const glowR = S * 0.24;
       const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowR);
-      g.addColorStop(0, `rgba(245,244,240,${0.12 * base})`);
-      g.addColorStop(0.5, `rgba(245,244,240,${0.03 * base})`);
+      g.addColorStop(0, `rgba(245,244,240,${0.15 * base})`);
+      g.addColorStop(0.48, `rgba(245,244,240,${0.045 * base})`);
       g.addColorStop(1, "rgba(245,244,240,0)");
       ctx.fillStyle = g;
       ctx.beginPath();
@@ -326,26 +327,37 @@ export function Ecosystem({ className, dim = false }: { className?: string; dim?
       ctx.arc(cx, cy, S * 0.11, 0, Math.PI * 2);
       ctx.fill();
 
-      // rotating dashed halo
+      // Fine concentric rings add depth around the central brand mark.
+      ctx.strokeStyle = `rgba(245,244,240,${0.12 * base})`;
+      ctx.lineWidth = 0.7;
+      ctx.beginPath();
+      ctx.arc(cx, cy, S * 0.155, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.strokeStyle = `rgba(255,77,18,${0.25 * base})`;
+      ctx.beginPath();
+      ctx.arc(cx, cy, S * 0.18, -0.55, Math.PI * 0.6);
+      ctx.stroke();
+
+      // Rotating dashed halo.
       ctx.save();
       ctx.translate(cx, cy);
       ctx.rotate(t * 0.12);
       ctx.setLineDash([1.5, 7]);
-      ctx.strokeStyle = `rgba(245,244,240,${0.28 * base})`;
+      ctx.strokeStyle = `rgba(245,244,240,${0.34 * base})`;
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.arc(0, 0, S * 0.14, 0, Math.PI * 2);
+      ctx.arc(0, 0, S * 0.205, 0, Math.PI * 2);
       ctx.stroke();
       ctx.setLineDash([]);
       ctx.rotate(-t * 0.2);
-      ctx.strokeStyle = `rgba(245,244,240,${0.1 * base})`;
+      ctx.strokeStyle = `rgba(245,244,240,${0.14 * base})`;
       ctx.beginPath();
-      ctx.arc(0, 0, S * 0.105, 0.2, Math.PI * 1.35);
+      ctx.arc(0, 0, S * 0.17, 0.2, Math.PI * 1.35);
       ctx.stroke();
       ctx.restore();
 
       // the mark
-      const mh = S * 0.105;
+      const mh = S * 0.14;
       const mw = mh * (838 / 1019);
       const breathe = 0.9 + 0.1 * Math.sin(time * 0.0016);
       ctx.save();
@@ -450,14 +462,26 @@ export function Ecosystem({ className, dim = false }: { className?: string; dim?
         </ul>
       )}
       {!dim && (
-        <div className="mx-auto max-w-xl px-4 py-5 lg:hidden" aria-hidden="true">
-          <div className="mb-5 flex items-center justify-center gap-3">
-            <svg className="h-10 w-9 text-paper" viewBox="0 0 838 1019" aria-hidden="true">
-              <path d={MARK_PATH} fill="currentColor" />
+        <div className="mx-auto max-w-xl px-4 py-7 lg:hidden" aria-hidden="true">
+          <div className="relative mx-auto mb-7 flex h-40 w-full max-w-[19rem] items-center justify-center overflow-hidden rounded-full border border-white/[0.08] bg-[radial-gradient(ellipse_at_center,rgba(255,77,18,0.10),rgba(245,244,240,0.025)_42%,transparent_72%)]">
+            <svg className="absolute inset-0 h-full w-full text-paper/20" viewBox="0 0 320 160" fill="none">
+              <ellipse cx="160" cy="80" rx="136" ry="48" stroke="currentColor" strokeOpacity=".55" />
+              <ellipse cx="160" cy="80" rx="103" ry="64" stroke="currentColor" strokeOpacity=".38" transform="rotate(-25 160 80)" />
+              <ellipse cx="160" cy="80" rx="72" ry="68" stroke="currentColor" strokeOpacity=".28" transform="rotate(32 160 80)" />
+              <path d="M24 80h47m178 0h47M160 12v30m0 76v30" stroke="#ff4d12" strokeOpacity=".32" />
+              <circle cx="48" cy="51" r="3" fill="#ff4d12" className="animate-pulse-soft" />
+              <circle cx="266" cy="111" r="2.5" fill="#f5f4f0" className="animate-pulse-soft" />
+              <circle cx="190" cy="20" r="2" fill="#ff4d12" className="animate-pulse-soft" />
+              <circle cx="111" cy="137" r="2.5" fill="#f5f4f0" className="animate-pulse-soft" />
             </svg>
-            <span className="font-display text-sm font-semibold uppercase tracking-[0.2em] text-paper">
-              NavRasa
-            </span>
+            <div className="relative flex items-center gap-3 rounded-full border border-white/10 bg-ink/70 px-5 py-3 shadow-[0_0_34px_rgba(255,77,18,0.11)] backdrop-blur-sm">
+              <svg className="h-8 w-7 text-paper" viewBox="0 0 838 1019" aria-hidden="true">
+                <path d={MARK_PATH} fill="currentColor" />
+              </svg>
+              <span className="font-display text-xs font-semibold uppercase tracking-[0.22em] text-paper">
+                NavRasa
+              </span>
+            </div>
           </div>
           <ul className="grid grid-cols-2 gap-x-4 gap-y-2.5">
             {ORBIT_LABELS.map((label) => (

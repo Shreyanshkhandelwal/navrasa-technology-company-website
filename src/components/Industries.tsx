@@ -9,31 +9,32 @@ export function Credentials({ tone = "dark" }: { tone?: "light" | "dark" }) {
   const dark = tone === "dark";
   return (
     <section
-      className={dark ? "relative border-y border-white/10 bg-ink text-paper" : "relative border-y border-ink/12 bg-paper text-ink"}
+      className={dark ? "relative border-y border-white/[0.08] bg-[linear-gradient(180deg,rgba(255,255,255,0.018),transparent)] text-paper" : "relative border-y border-ink/12 bg-paper text-ink"}
     >
       <div className="container-x">
-        <dl className={`grid auto-rows-fr grid-cols-2 border-l lg:grid-cols-4 ${dark ? "border-white/10" : "border-ink/12"}`}>
+        <dl className={`grid auto-rows-fr grid-cols-2 border-l lg:grid-cols-4 ${dark ? "border-white/[0.08]" : "border-ink/12"}`}>
           {credentials.map((c, i) => (
             <Reveal
               key={c.label}
               delay={i * 0.06}
-              className={`h-full border-b border-r p-7 md:p-8 lg:border-b-0 ${
+              className={`h-full border-b border-r px-5 py-7 md:px-7 md:py-8 lg:min-h-[220px] lg:border-b-0 ${
                 i >= 2 ? "border-b-0" : ""
-              } ${dark ? "border-white/10" : "border-ink/12"}`}
+              } ${dark ? "border-white/[0.08]" : "border-ink/12"}`}
             >
               <dt className="sr-only">{c.label}</dt>
               <dd className="flex h-full flex-col">
+                <span className="mb-5 h-px w-8 bg-signal/75" aria-hidden="true" />
                 <span
-                  className="flex min-h-12 items-start whitespace-nowrap text-4xl font-display font-semibold leading-none tracking-[-0.04em] md:min-h-[4.5rem] md:text-6xl"
+                  className="flex min-h-12 items-start whitespace-nowrap text-4xl font-display font-semibold leading-none tracking-[-0.045em] md:min-h-[4.5rem] md:text-6xl"
                 >
                   {c.value}
                 </span>
-                <span className={`mt-2.5 block text-[14px] font-medium ${dark ? "text-paper/85" : "text-ink/85"}`}>
+                <span className={`mt-2.5 block text-[14px] font-medium ${dark ? "text-paper/90" : "text-ink/85"}`}>
                   {c.label}
                 </span>
                 <span
                   className={`mt-1.5 block max-w-[24ch] text-[12.5px] leading-relaxed ${
-                    dark ? "text-paper/45" : "text-ink/50"
+                    dark ? "text-paper/55" : "text-ink/50"
                   }`}
                 >
                   {c.note}
