@@ -18,12 +18,12 @@ export function Home() {
   return (
     <>
       <Hero />
-      <Credentials tone="dark" />
+      <Credentials tone="light" />
       <Work index="01" limit={6} teaser />
       <BuildIndex index="02" />
       <Why index="03" />
       <Testimonials index="04" tone="light" limit={3} />
-      <FinalCTA index="05" tone="light" compact />
+      <FinalCTA index="05" tone="dark" compact />
     </>
   );
 }

@@ -5,37 +5,36 @@ import { Button, Eyebrow, Lines, Reveal } from "./ui";
 
 export function Why({ index = "11" }: { index?: string }) {
   return (
-    <section id="why" className="relative bg-paper-2 text-ink">
-      <div className="lines-light absolute inset-0 opacity-60 [mask-image:linear-gradient(180deg,transparent,#000_40%,#000_60%,transparent)]" aria-hidden="true" />
+    <section id="why" className="grain relative bg-ink text-paper">
       <div className="container-x section-y relative">
         <div className="grid grid-cols-12 gap-x-4 md:gap-x-8 gap-y-8">
           <div className="col-span-12 lg:col-span-6">
-            <Eyebrow index={index} label="WHY NAVRASA" tone="light" />
-            <Lines lines={["A partner in", "building products."]} className="display display-md mt-6 uppercase text-ink" />
+            <Eyebrow index={index} label="WHY NAVRASA" />
+            <Lines lines={["A partner in", "building products."]} className="display display-md mt-6 uppercase text-paper" />
           </div>
           <Reveal className="col-span-12 self-end lg:col-span-5 lg:col-start-8">
-            <p className="text-lg leading-relaxed tracking-[-0.01em] md:text-xl">
+            <p className="text-lg leading-relaxed tracking-[-0.01em] text-paper/75 md:text-xl">
               Product thinking, strong engineering and a focus on the outcome.
             </p>
           </Reveal>
         </div>
 
-        <ol className="mt-10 grid grid-cols-1 border-t border-l border-ink/12 sm:grid-cols-2 lg:grid-cols-3 md:mt-12">
+        <ol className="mt-10 grid grid-cols-1 border-l border-t border-white/12 sm:grid-cols-2 lg:grid-cols-3 md:mt-12">
           {why.principles.slice(0, 3).map((p, i) => (
             <Reveal
               as="li"
               key={p.title}
               delay={(i % 3) * 0.06}
-              className="group relative flex min-h-[170px] flex-col justify-between border-b border-r border-ink/12 p-5 transition-colors duration-300 hover:bg-ink hover:text-paper md:min-h-[190px] md:p-6"
+              className="group relative flex min-h-[170px] flex-col justify-between border-b border-r border-white/12 p-5 transition-colors duration-300 hover:bg-paper hover:text-ink md:min-h-[190px] md:p-6"
             >
               <div className="flex items-start justify-between">
-                <span className="font-mono text-[10px] tracking-[0.18em] text-mute transition-colors duration-500 group-hover:text-signal">
+                <span className="font-mono text-[10px] tracking-[0.18em] text-paper/50 transition-colors duration-500 group-hover:text-signal">
                   0{i + 1}
                 </span>
               </div>
               <div>
                 <h3 className="font-display text-xl font-semibold tracking-[-0.02em] md:text-2xl">{p.title}</h3>
-                <p className="mt-2 max-w-[32ch] text-sm leading-relaxed text-ink/60 transition-colors duration-500 group-hover:text-paper/70">
+                <p className="mt-2 max-w-[32ch] text-sm leading-relaxed text-paper/65 transition-colors duration-500 group-hover:text-ink/65">
                   {p.text}
                 </p>
               </div>

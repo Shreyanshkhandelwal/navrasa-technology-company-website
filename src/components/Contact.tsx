@@ -49,15 +49,23 @@ export function FinalCTA({
 
   return (
     <section id="cta" className="grain relative isolate overflow-hidden bg-ink text-paper">
-      <div className="absolute inset-0 -z-10 opacity-70" aria-hidden="true">
-        <Ecosystem dim className="mx-auto h-full w-full max-w-[1100px]" />
-      </div>
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_50%_50%,transparent_30%,rgba(10,10,11,0.9)_75%)]" aria-hidden="true" />
-      <div className="container-x relative flex min-h-[72svh] flex-col items-center justify-center py-24 text-center">
+      {!compact && (
+        <>
+          <div className="absolute inset-0 -z-10 opacity-70" aria-hidden="true">
+            <Ecosystem dim className="mx-auto h-full w-full max-w-[1100px]" />
+          </div>
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_50%_50%,transparent_30%,rgba(10,10,11,0.9)_75%)]" aria-hidden="true" />
+        </>
+      )}
+      <div className={`container-x relative flex ${compact ? "min-h-[min(58svh,560px)]" : "min-h-[72svh]"} flex-col items-center justify-center py-24 text-center`}>
         <Reveal>
           <Eyebrow index={index} label="Let's Build" className="justify-center" />
         </Reveal>
-        <Lines lines={["Have a", "big idea?"]} className="display display-lg mt-10 uppercase text-paper" lineClassName="text-center" />
+        <Lines
+          lines={compact ? ["Have a big idea?"] : ["Have a", "big idea?"]}
+          className={`display ${compact ? "display-md" : "display-lg"} mt-10 uppercase text-paper`}
+          lineClassName="text-center"
+        />
         <Reveal delay={0.15} className="mt-10">
           <p className="font-display text-2xl font-semibold tracking-[-0.02em] text-paper/90 md:text-4xl">{finalCta.text}</p>
         </Reveal>
@@ -65,9 +73,11 @@ export function FinalCTA({
           <Button href={finalCta.primary.href} tone="dark" size="lg">
             {finalCta.primary.label}
           </Button>
-          <Button href={finalCta.secondary.href} tone="dark" variant="text" navigate>
-            {finalCta.secondary.label}
-          </Button>
+          {!compact && (
+            <Button href={finalCta.secondary.href} tone="dark" variant="text" navigate>
+              {finalCta.secondary.label}
+            </Button>
+          )}
         </Reveal>
       </div>
     </section>

@@ -1,501 +1,469 @@
-import { useEffect, useRef } from "react";
+import { type PointerEvent as ReactPointerEvent, useId, useRef, useState } from "react";
 
-/* --------------------------------------------------------------------------
-   ECOSYSTEM — an orbital system of connected capabilities around an
-   intelligent core (the NavRasa mark). Pure Canvas 2D, DPR-aware,
-   depth-sorted pseudo-3D, pauses offscreen, respects reduced motion.
---------------------------------------------------------------------------- */
-
-type Vec = { x: number; y: number; z: number };
-type Ring = { r: number; tiltX: number; tiltZ: number; speed: number; labels: string[]; offset: number };
-type Node = {
-  label: string;
-  ring: number;
-  side: "left" | "right";
-  a0: number;
-  pulse: number; // 0..1 phase
-  pulseSpeed: number;
-  inward: boolean;
-  accent: boolean;
+type Orbit = {
+  rx: number;
+  ry: number;
+  rotation: number;
+  duration: string;
+  animation: "animate-orbit-slow" | "animate-orbit-reverse";
+  opacity: number;
 };
-type LabelLayout = { x: number; y: number; align: CanvasTextAlign; lines: string[]; lineHeight: number };
+type Label = { label: string; side: "left" | "right" };
+type NodeLayout = { ring: number; angle: number };
+type Point = { x: number; y: number };
 
+const VIEW_WIDTH = 720;
+const VIEW_HEIGHT = 560;
+const CENTER_X = VIEW_WIDTH / 2;
+const CENTER_Y = VIEW_HEIGHT / 2;
 const MARK_PATH = "M0 896V240L419 0l419 240v656l-212 123V361L419 240 214 361v658Z";
-const ORBIT_LABELS = [
-  "MVP DEVELOPMENT",
-  "SAAS PLATFORMS",
-  "AI SOLUTIONS",
-  "BUSINESS AUTOMATION",
-  "CUSTOM SOFTWARE",
-  "MOBILE APPS",
+
+const LEFT_LABELS = [
   "WEB PLATFORMS",
-  "ERP & CRM",
-  "MARKETPLACES",
-  "API INTEGRATIONS",
+  "AI SOLUTIONS",
+  "SAAS PLATFORMS",
+  "MOBILE APPS",
   "PRODUCT SCALING",
+  "API INTEGRATIONS",
+];
+const RIGHT_LABELS = [
   "RAPID PROTOTYPING",
+  "MARKETPLACES",
+  "ERP & CRM",
+  "BUSINESS AUTOMATION",
+  "MVP DEVELOPMENT",
+  "CUSTOM SOFTWARE",
+];
+const LABELS: Label[] = [
+  ...LEFT_LABELS.map((label) => ({ label, side: "left" as const })),
+  ...RIGHT_LABELS.map((label) => ({ label, side: "right" as const })),
+];
+const ORBITS: Orbit[] = [
+  { rx: 270, ry: 230, rotation: -8, duration: "140s", animation: "animate-orbit-slow", opacity: 0.22 },
+  { rx: 225, ry: 110, rotation: 38, duration: "110s", animation: "animate-orbit-reverse", opacity: 0.2 },
+  { rx: 155, ry: 145, rotation: -38, duration: "90s", animation: "animate-orbit-slow", opacity: 0.18 },
+];
+const RING_LINKS: Array<Array<[number, number]>> = [
+  [[0, 6], [3, 9]],
+  [[1, 10]],
+  [[2, 11]],
+];
+const HIGHLIGHTED_NODE_IDS = new Set([2, 6, 9]);
+const NODE_LAYOUTS: NodeLayout[] = [
+  { ring: 0, angle: 4.1 },
+  { ring: 1, angle: 3.88 },
+  { ring: 2, angle: 2.92 },
+  { ring: 0, angle: 2.1 },
+  { ring: 1, angle: 2.26 },
+  { ring: 2, angle: 3.42 },
+  { ring: 0, angle: 5.4 },
+  { ring: 1, angle: 5.68 },
+  { ring: 2, angle: 0.18 },
+  { ring: 0, angle: 1 },
+  { ring: 1, angle: 0.82 },
+  { ring: 2, angle: 5.8 },
+];
+const MOBILE_NODE_IDS = Array.from({ length: LABELS.length }, (_, nodeId) => nodeId);
+const MOBILE_NODE_POINTS: Array<{ id: number; x: number; y: number }> = [
+  { id: 0, x: 35, y: 49 },
+  { id: 6, x: 285, y: 49 },
+  { id: 1, x: 72, y: 108 },
+  { id: 7, x: 248, y: 108 },
+  { id: 2, x: 112, y: 39 },
+  { id: 8, x: 208, y: 39 },
+  { id: 3, x: 35, y: 111 },
+  { id: 9, x: 285, y: 111 },
+  { id: 4, x: 94, y: 36 },
+  { id: 10, x: 226, y: 36 },
+  { id: 5, x: 112, y: 122 },
+  { id: 11, x: 208, y: 122 },
 ];
 
-const createMark = () =>
-  typeof Path2D !== "undefined" ? new Path2D(MARK_PATH) : null;
+const pointOnOrbit = (orbit: Orbit, angle: number): Point => ({
+  x: CENTER_X + Math.cos(angle) * orbit.rx,
+  y: CENTER_Y + Math.sin(angle) * orbit.ry,
+});
 
-const rotX = (p: Vec, t: number): Vec => {
-  const c = Math.cos(t), s = Math.sin(t);
-  return { x: p.x, y: p.y * c - p.z * s, z: p.y * s + p.z * c };
+const rotateVector = (vector: Point, angle: number): Point => {
+  const radians = (angle * Math.PI) / 180;
+
+  return {
+    x: vector.x * Math.cos(radians) - vector.y * Math.sin(radians),
+    y: vector.x * Math.sin(radians) + vector.y * Math.cos(radians),
+  };
 };
-const rotY = (p: Vec, t: number): Vec => {
-  const c = Math.cos(t), s = Math.sin(t);
-  return { x: p.x * c + p.z * s, y: p.y, z: -p.x * s + p.z * c };
+
+const orbitArc = (orbit: Orbit, angle: number) => {
+  const start = pointOnOrbit(orbit, angle - 0.18);
+  const end = pointOnOrbit(orbit, angle + 0.18);
+  return `M${start.x} ${start.y} A${orbit.rx} ${orbit.ry} 0 0 1 ${end.x} ${end.y}`;
 };
-const rotZ = (p: Vec, t: number): Vec => {
-  const c = Math.cos(t), s = Math.sin(t);
-  return { x: p.x * c - p.y * s, y: p.x * s + p.y * c, z: p.z };
+
+const splitLabel = (label: string) => {
+  if (label.length <= 12) return [label];
+  return label.split(" ");
 };
 
 export function Ecosystem({ className, dim = false }: { className?: string; dim?: boolean }) {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [activeNode, setActiveNode] = useState<number | null>(null);
+  const orbitRefs = useRef<Array<SVGGElement | null>>([]);
+  const id = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+  const activeOrbit = activeNode === null ? -1 : NODE_LAYOUTS[activeNode].ring;
 
-  useEffect(() => {
-    const wrap = wrapRef.current;
-    const canvas = canvasRef.current;
-    if (!wrap || !canvas) return;
-    const ctx = canvas.getContext("2d", { alpha: true }) as
-      | (CanvasRenderingContext2D & { letterSpacing?: string })
-      | null;
-    if (!ctx) return;
+  const toggleNode = (nodeId: number) => {
+    setActiveNode((current) => current === nodeId ? null : nodeId);
+  };
+  const clearNode = (nodeId: number) => {
+    setActiveNode((current) => current === nodeId ? null : current);
+  };
 
-    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let reduce = motionPreference.matches;
-    const finePointer = window.matchMedia("(pointer: fine)").matches;
-    const compactLayout = window.matchMedia(dim ? "(max-width: 767px)" : "(max-width: 1023px)");
-    const mark = createMark();
+  const handlePointerMove = (event: ReactPointerEvent<SVGSVGElement>) => {
+    if (event.pointerType === "touch" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / bounds.width) * 2 - 1));
+    const y = Math.max(-1, Math.min(1, ((event.clientY - bounds.top) / bounds.height) * 2 - 1));
+    const depth = [0.35, 0.68, 1];
 
-    const rings: Ring[] = [
-      { r: 0.19, tiltX: 0.42, tiltZ: 0.18, speed: -0.035, labels: [], offset: 0 },
-      { r: 0.25, tiltX: 1.12, tiltZ: -0.28, speed: 0.11, labels: ORBIT_LABELS.slice(0, 4), offset: 0.6 },
-      { r: 0.4, tiltX: 1.18, tiltZ: 0.34, speed: -0.075, labels: ORBIT_LABELS.slice(4, 8), offset: 0.1 },
-      { r: 0.53, tiltX: 1.05, tiltZ: -0.9, speed: 0.05, labels: ORBIT_LABELS.slice(8), offset: 0.35 },
-    ];
-    const nodes: Node[] = [];
-    rings.forEach((ring, ri) =>
-      ring.labels.forEach((label, i) =>
-        nodes.push({
-          label,
-          ring: ri,
-          side: i === 0 || i === 3 ? "right" : "left",
-          a0: ring.offset + (i / ring.labels.length) * Math.PI * 2,
-          pulse: Math.random(),
-          pulseSpeed: 0.16 + Math.random() * 0.12,
-          inward: i % 2 === 0,
-          accent: (i + ri) % 3 === 0,
-        })
-      )
-    );
+    orbitRefs.current.forEach((element, index) => {
+      if (!element) return;
+      const factor = depth[index];
+      element.style.transform =
+        `translate(${x * 4 * factor}px, ${y * 3 * factor}px) rotate(${(x - y) * factor}deg)`;
+    });
+  };
 
-    let W = 0, H = 0, S = 0, dpr = 1, orbitScale = 1;
-    let raf = 0;
-    let running = false;
-    let inView = false;
-    let last = performance.now();
-    let t = 0;
-    const mouse = { x: 0, y: 0, tx: 0, ty: 0, px: -1e4, py: -1e4 };
-    let hovered = -1;
+  const handlePointerLeave = () => {
+    orbitRefs.current.forEach((element) => {
+      if (element) element.style.transform = "";
+    });
+  };
 
-    const resize = () => {
-      const r = wrap.getBoundingClientRect();
-      W = Math.max(1, r.width);
-      H = Math.max(1, r.height);
-      S = Math.min(W, H);
-      dpr = Math.min(window.devicePixelRatio || 1, 1.75);
-      canvas.width = compactLayout.matches ? 1 : Math.round(W * dpr);
-      canvas.height = compactLayout.matches ? 1 : Math.round(H * dpr);
-      canvas.style.width = `${W}px`;
-      canvas.style.height = `${H}px`;
-      if (compactLayout.matches) stop();
-      else if (reduce) draw(0);
-      else start();
-    };
-
-    const project = (p: Vec) => {
-      const f = 2.4 * S;
-      const k = f / (f - p.z);
-      return { x: W / 2 + p.x * k, y: H / 2 + p.y * k, k, z: p.z };
-    };
-
-    const transform = (p: Vec, ring: Ring) => {
-      let q = rotX(p, ring.tiltX);
-      q = rotZ(q, ring.tiltZ);
-      q = rotY(q, mouse.x * 0.35);
-      q = rotX(q, -mouse.y * 0.22);
-      return q;
-    };
-
-    const ringPoint = (ring: Ring, a: number): Vec => {
-      const R = ring.r * S * orbitScale;
-      return transform({ x: Math.cos(a) * R, y: Math.sin(a) * R, z: 0 }, ring);
-    };
-
-    const draw = (time: number) => {
-      if (compactLayout.matches) return;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, W, H);
-      const cx = W / 2, cy = H / 2;
-      const base = dim ? 0.6 : 1;
-      const maxLabelWidth = Math.min(132, W * 0.22);
-      const orbitBudget = Math.max(0, W / 2 - maxLabelWidth - 14);
-      const maxOrbitRadius = Math.max(...rings.map((ring) => ring.r)) * S;
-      orbitScale = Math.min(1, orbitBudget / (maxOrbitRadius * 1.08));
-      const segments = window.innerWidth < 1280 ? 64 : 96;
-
-      /* ---- rings ---- */
-      rings.forEach((ring, ri) => {
-        const isDeco = ring.labels.length === 0;
-        let prev = project(ringPoint(ring, 0));
-        for (let i = 1; i <= segments; i++) {
-          const a = (i / segments) * Math.PI * 2;
-          const cur = project(ringPoint(ring, a));
-          const depth = (cur.z / (ring.r * S) + 1) / 2; // 0 back .. 1 front
-          const alpha = (isDeco ? 0.035 : 0.06) + depth * (isDeco ? 0.05 : 0.11);
-          ctx.strokeStyle = `rgba(245,244,240,${alpha * base})`;
-          ctx.lineWidth = ri === 2 ? 0.6 : 0.8;
-          ctx.beginPath();
-          ctx.moveTo(prev.x, prev.y);
-          ctx.lineTo(cur.x, cur.y);
-          ctx.stroke();
-          prev = cur;
-        }
-      });
-
-      /* ---- compute nodes ---- */
-      const projected = nodes.map((n, i) => {
-        const ring = rings[n.ring];
-        const a = n.a0 + t * ring.speed;
-        const p = project(ringPoint(ring, a));
-        const dx = p.x - cx, dy = p.y - cy;
-        const radius = Math.hypot(dx, dy);
-        const coreClearance = S * 0.13;
-        if (radius < coreClearance) {
-          const angle = radius > 1 ? Math.atan2(dy, dx) : a;
-          p.x = cx + Math.cos(angle) * coreClearance;
-          p.y = cy + Math.sin(angle) * coreClearance;
-        }
-        const depth = (p.z / (ring.r * S) + 1) / 2;
-        return { ...p, depth, n, i };
-      });
-
-      // hover detection
-      hovered = -1;
-      if (finePointer) {
-        let best = 26;
-        projected.forEach((p) => {
-          const d = Math.hypot(p.x - mouse.px, p.y - mouse.py);
-          if (d < best) { best = d; hovered = p.i; }
-        });
-        canvas.style.cursor = hovered >= 0 ? "crosshair" : "default";
-      }
-
-      const labelLayouts = new Map<number, LabelLayout>();
-      const labelFontSize = Math.max(10.5, Math.min(13, S * 0.026, W * 0.021));
-      const labelLineHeight = labelFontSize * 1.35;
-      ctx.font = `500 ${labelFontSize}px "JetBrains Mono", ui-monospace, Menlo, monospace`;
-      const letterSpacing = labelFontSize * 0.12;
-      if ("letterSpacing" in ctx) ctx.letterSpacing = "0.12em";
-      const labels = projected.map((p) => {
-        const words = p.n.label.split(" ");
-        const lines: string[] = [];
-        let line = "";
-        words.forEach((word) => {
-          const next = line ? `${line} ${word}` : word;
-          const measuredWidth = ctx.measureText(next).width + Math.max(0, next.length - 1) * letterSpacing;
-          if (line && measuredWidth > maxLabelWidth) {
-            lines.push(line);
-            line = word;
-          } else {
-            line = next;
-          }
-        });
-        if (line) lines.push(line);
-
-        return { ...p, lines, height: lines.length * labelLineHeight };
-      });
-      const labelSpan = Math.max(0, Math.min(H / 2 - labelLineHeight - 6, maxOrbitRadius * orbitScale * 1.5));
-      (["left", "right"] as const).forEach((side) => {
-        const column = labels.filter((p) => p.n.side === side).sort((a, b) => a.y - b.y);
-        const slotHeight = (labelSpan * 2) / column.length;
-        column.forEach((p, index) => {
-          const align: CanvasTextAlign = side === "left" ? "right" : "left";
-          const x = side === "left" ? maxLabelWidth + 8 : W - maxLabelWidth - 8;
-          const y = cy - labelSpan + slotHeight * (index + 0.5);
-          labelLayouts.set(p.i, { x, y, align, lines: p.lines, lineHeight: labelLineHeight });
-        });
-      });
-
-      const back = projected.filter((p) => p.z < 0).sort((a, b) => a.z - b.z);
-      const front = projected.filter((p) => p.z >= 0).sort((a, b) => a.z - b.z);
-
-      const drawLinks = (list: typeof projected) => {
-        list.forEach((p) => {
-          const hot = p.i === hovered;
-          const alpha = (0.07 + p.depth * 0.14) * base * (hot ? 2.2 : 1);
-          ctx.strokeStyle = hot ? `rgba(255,77,18,${Math.min(0.9, alpha)})` : `rgba(245,244,240,${alpha})`;
-          ctx.lineWidth = hot ? 1 : 0.7;
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(cx, cy);
-          ctx.stroke();
-
-          // travelling pulse
-          const ph = p.n.pulse;
-          const u = p.n.inward ? ph : 1 - ph;
-          const px = p.x + (cx - p.x) * u;
-          const py = p.y + (cy - p.y) * u;
-          const fade = Math.sin(ph * Math.PI);
-          const isAccent = p.n.accent || hot;
-          ctx.fillStyle = isAccent
-            ? `rgba(255,77,18,${0.9 * fade * base})`
-            : `rgba(245,244,240,${0.8 * fade * base})`;
-          ctx.beginPath();
-          ctx.arc(px, py, 1.6 + 0.8 * fade, 0, Math.PI * 2);
-          ctx.fill();
-          if (isAccent) {
-            ctx.fillStyle = `rgba(255,77,18,${0.18 * fade * base})`;
-            ctx.beginPath();
-            ctx.arc(px, py, 6 * fade + 1, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        });
-      };
-
-      const drawNodes = (list: typeof projected) => {
-        list.forEach((p) => {
-          const hot = p.i === hovered;
-          const a = (0.4 + p.depth * 0.6) * base * (hot ? 1.15 : 1);
-          const r = (2.4 + p.depth * 1.8) * (hot ? 1.4 : 1);
-
-          // outer ring
-          ctx.strokeStyle = hot ? `rgba(255,77,18,${Math.min(1, a)})` : `rgba(245,244,240,${a * 0.5})`;
-          ctx.lineWidth = 0.8;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, r + 5 + (hot ? 3 : 0), 0, Math.PI * 2);
-          ctx.stroke();
-
-          // dark backing + dot
-          ctx.fillStyle = "rgba(10,10,11,0.95)";
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, r + 2.5, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = hot ? `rgba(255,77,18,1)` : `rgba(245,244,240,${Math.min(1, a)})`;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-          ctx.fill();
-
-          const label = labelLayouts.get(p.i);
-          if (!label) return;
-          const fs = labelFontSize * (hot ? 1.06 : 1);
-          ctx.font = `500 ${fs}px "JetBrains Mono", ui-monospace, Menlo, monospace`;
-          if ("letterSpacing" in ctx) ctx.letterSpacing = "0.12em";
-          ctx.textBaseline = "middle";
-          ctx.textAlign = label.align;
-          ctx.fillStyle = hot ? "rgba(245,244,240,1)" : `rgba(245,244,240,${(0.35 + p.depth * 0.6) * base})`;
-          label.lines.forEach((text, lineIndex) => {
-            const lineOffset = (lineIndex - (label.lines.length - 1) / 2) * label.lineHeight;
-            ctx.fillText(text, label.x, label.y + lineOffset);
-          });
-        });
-      };
-
-      drawLinks(back);
-      drawNodes(back);
-
-      /* ---- core ---- */
-      const glowR = S * 0.24;
-      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowR);
-      g.addColorStop(0, `rgba(245,244,240,${0.15 * base})`);
-      g.addColorStop(0.48, `rgba(245,244,240,${0.045 * base})`);
-      g.addColorStop(1, "rgba(245,244,240,0)");
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(cx, cy, glowR, 0, Math.PI * 2);
-      ctx.fill();
-
-      const g2 = ctx.createRadialGradient(cx, cy, 0, cx, cy, S * 0.11);
-      g2.addColorStop(0, `rgba(255,77,18,${0.16 * base})`);
-      g2.addColorStop(1, "rgba(255,77,18,0)");
-      ctx.fillStyle = g2;
-      ctx.beginPath();
-      ctx.arc(cx, cy, S * 0.11, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Fine concentric rings add depth around the central brand mark.
-      ctx.strokeStyle = `rgba(245,244,240,${0.12 * base})`;
-      ctx.lineWidth = 0.7;
-      ctx.beginPath();
-      ctx.arc(cx, cy, S * 0.155, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.strokeStyle = `rgba(255,77,18,${0.25 * base})`;
-      ctx.beginPath();
-      ctx.arc(cx, cy, S * 0.18, -0.55, Math.PI * 0.6);
-      ctx.stroke();
-
-      // Rotating dashed halo.
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(t * 0.12);
-      ctx.setLineDash([1.5, 7]);
-      ctx.strokeStyle = `rgba(245,244,240,${0.34 * base})`;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(0, 0, S * 0.205, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.rotate(-t * 0.2);
-      ctx.strokeStyle = `rgba(245,244,240,${0.14 * base})`;
-      ctx.beginPath();
-      ctx.arc(0, 0, S * 0.17, 0.2, Math.PI * 1.35);
-      ctx.stroke();
-      ctx.restore();
-
-      // the mark
-      const mh = S * 0.14;
-      const mw = mh * (838 / 1019);
-      const breathe = 0.9 + 0.1 * Math.sin(time * 0.0016);
-      ctx.save();
-      ctx.translate(cx - mw / 2, cy - mh / 2);
-      ctx.scale(mw / 838, mh / 1019);
-      ctx.fillStyle = `rgba(245,244,240,${breathe * base})`;
-      if (mark) ctx.fill(mark);
-      ctx.restore();
-
-      drawLinks(front);
-      drawNodes(front);
-    };
-
-    const frame = (now: number) => {
-      const frameInterval = window.innerWidth < 1280 ? 1000 / 24 : 1000 / 30;
-      if (now - last < frameInterval) {
-        if (running) raf = requestAnimationFrame(frame);
-        return;
-      }
-      const dt = Math.min(0.05, (now - last) / 1000);
-      last = now;
-      t += dt;
-      const pointerResponsive = finePointer && window.innerWidth >= 1280;
-      mouse.x += (mouse.tx - mouse.x) * 0.06;
-      mouse.y += (mouse.ty - mouse.y) * 0.06;
-      if (!pointerResponsive) {
-        mouse.tx = Math.sin(t * 0.25) * 0.5;
-        mouse.ty = Math.cos(t * 0.18) * 0.35;
-      }
-      nodes.forEach((n) => {
-        n.pulse += dt * n.pulseSpeed;
-        if (n.pulse > 1) {
-          n.pulse -= 1;
-          n.accent = Math.random() < 0.3;
-        }
-      });
-      draw(now);
-      if (running) raf = requestAnimationFrame(frame);
-    };
-
-    const start = () => {
-      if (running || reduce || compactLayout.matches || document.hidden || !inView) return;
-      running = true;
-      last = performance.now();
-      raf = requestAnimationFrame(frame);
-    };
-    const stop = () => {
-      running = false;
-      cancelAnimationFrame(raf);
-    };
-
-    const onMove = (e: PointerEvent) => {
-      const r = canvas.getBoundingClientRect();
-      mouse.px = e.clientX - r.left;
-      mouse.py = e.clientY - r.top;
-      mouse.tx = ((e.clientX - (r.left + r.width / 2)) / r.width) * 2;
-      mouse.ty = ((e.clientY - (r.top + r.height / 2)) / r.height) * 2;
-    };
-
-    const ro = new ResizeObserver(resize);
-    ro.observe(wrap);
-    compactLayout.addEventListener("change", resize);
-    resize();
-
-    const io = new IntersectionObserver(([entry]) => {
-      inView = entry.isIntersecting;
-      if (inView && !document.hidden) start();
-      else stop();
-    }, { threshold: 0.05 });
-    io.observe(wrap);
-    const onVis = () => (document.hidden || !inView ? stop() : start());
-    const onMotionPreferenceChange = () => {
-      reduce = motionPreference.matches;
-      if (reduce) {
-        stop();
-        draw(0);
-      } else if (inView && !document.hidden) {
-        start();
-      }
-    };
-    document.addEventListener("visibilitychange", onVis);
-    motionPreference.addEventListener("change", onMotionPreferenceChange);
-    if (finePointer) window.addEventListener("pointermove", onMove, { passive: true });
-
-    return () => {
-      stop();
-      ro.disconnect();
-      compactLayout.removeEventListener("change", resize);
-      io.disconnect();
-      document.removeEventListener("visibilitychange", onVis);
-      motionPreference.removeEventListener("change", onMotionPreferenceChange);
-      window.removeEventListener("pointermove", onMove);
-    };
-  }, [dim]);
+  const activateFromKeyboard = (event: React.KeyboardEvent<SVGGElement>, nodeId: number) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      toggleNode(nodeId);
+    }
+  };
 
   return (
-    <div ref={wrapRef} className={className}>
-      <canvas ref={canvasRef} className={dim ? "hidden h-full w-full md:block" : "hidden h-full w-full lg:block"} aria-hidden="true" />
-      {!dim && (
+    <div className={`relative md:min-h-[30rem] ${className ?? ""}`}>
+      <div
+        className="pointer-events-none absolute inset-0 hidden opacity-40 md:block"
+        style={{
+          backgroundImage: "radial-gradient(rgba(245,244,240,0.12) 0.6px, transparent 0.6px)",
+          backgroundSize: "28px 28px",
+        }}
+        aria-hidden="true"
+      />
+
+      <svg
+        className="relative hidden min-h-[30rem] w-full md:block lg:min-h-[min(72vh,720px)]"
+        viewBox={`0 0 ${VIEW_WIDTH} ${VIEW_HEIGHT}`}
+        role="group"
+        aria-label="Interactive NavRasa technology ecosystem"
+        onPointerMove={handlePointerMove}
+        onPointerLeave={handlePointerLeave}
+      >
+        <defs>
+          <radialGradient id={`${id}-core-glow`}>
+            <stop offset="0" stopColor="#ff4d12" stopOpacity="0.18" />
+            <stop offset="0.55" stopColor="#ff4d12" stopOpacity="0.07" />
+            <stop offset="1" stopColor="#ff4d12" stopOpacity="0" />
+          </radialGradient>
+          <radialGradient id={`${id}-node-glow`}>
+            <stop offset="0" stopColor="#ff4d12" stopOpacity="0.48" />
+            <stop offset="1" stopColor="#ff4d12" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+
+        {ORBITS.map((orbit, ringIndex) => {
+          const ringNodeIds = NODE_LAYOUTS.flatMap((layout, nodeId) =>
+            layout.ring === ringIndex ? [nodeId] : []
+          );
+          const selectedNode = activeOrbit === ringIndex && activeNode !== null
+            ? NODE_LAYOUTS[activeNode]
+            : null;
+          const selectedPoint = selectedNode ? pointOnOrbit(orbit, selectedNode.angle) : null;
+
+          return (
+            <g
+              key={`orbit-layer-${ringIndex}`}
+              ref={(element) => { orbitRefs.current[ringIndex] = element; }}
+              className="orbit-svg-group transition-transform duration-300 ease-out"
+            >
+              <g transform={`rotate(${orbit.rotation} ${CENTER_X} ${CENTER_Y})`}>
+                <g
+                  className={`orbit-svg-group ${orbit.animation}`}
+                  style={{ animationDuration: orbit.duration }}
+                >
+                  <ellipse
+                    cx={CENTER_X}
+                    cy={CENTER_Y}
+                    rx={orbit.rx}
+                    ry={orbit.ry}
+                    fill="none"
+                    stroke="#e5e3de"
+                    strokeOpacity={orbit.opacity * (dim ? 0.78 : 1)}
+                    strokeWidth="1.15"
+                    vectorEffect="non-scaling-stroke"
+                  />
+
+                  {RING_LINKS[ringIndex].map(([startId, endId]) => {
+                    const start = pointOnOrbit(orbit, NODE_LAYOUTS[startId].angle);
+                    const end = pointOnOrbit(orbit, NODE_LAYOUTS[endId].angle);
+
+                    return (
+                      <line
+                        key={`link-${startId}-${endId}`}
+                        x1={start.x}
+                        y1={start.y}
+                        x2={end.x}
+                        y2={end.y}
+                        stroke="#d8d6d1"
+                        strokeOpacity="0.11"
+                        strokeWidth="0.75"
+                        vectorEffect="non-scaling-stroke"
+                      />
+                    );
+                  })}
+
+                  {selectedNode && selectedPoint && (
+                    <>
+                      <path
+                        d={orbitArc(orbit, selectedNode.angle)}
+                        fill="none"
+                        stroke="#ff4d12"
+                        strokeOpacity="0.84"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        vectorEffect="non-scaling-stroke"
+                      />
+                      <path
+                        d={`M${CENTER_X} ${CENTER_Y} L${selectedPoint.x} ${selectedPoint.y}`}
+                        fill="none"
+                        stroke="#ff4d12"
+                        strokeOpacity="0.72"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                        vectorEffect="non-scaling-stroke"
+                      />
+                    </>
+                  )}
+
+                  {ringNodeIds.map((nodeId) => {
+                    const point = pointOnOrbit(orbit, NODE_LAYOUTS[nodeId].angle);
+                    const label = LABELS[nodeId];
+                    const labelX = label.side === "left" ? -14 : 14;
+                    const labelOffset = rotateVector({ x: labelX, y: 0 }, -orbit.rotation);
+                    const labelAnchor = label.side === "left" ? "end" : "start";
+                    const lines = splitLabel(label.label);
+                    const counterAnimation = orbit.animation === "animate-orbit-slow"
+                      ? "animate-orbit-reverse"
+                      : "animate-orbit-slow";
+                    const isActive = activeNode === nodeId;
+                    const isHighlighted = HIGHLIGHTED_NODE_IDS.has(nodeId);
+
+                    return (
+                      <g
+                        key={`node-${nodeId}`}
+                        transform={`translate(${point.x} ${point.y})`}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={label.label}
+                        aria-pressed={isActive}
+                        onPointerEnter={() => setActiveNode(nodeId)}
+                        onPointerLeave={() => clearNode(nodeId)}
+                        onFocus={() => setActiveNode(nodeId)}
+                        onBlur={() => clearNode(nodeId)}
+                        onClick={() => toggleNode(nodeId)}
+                        onKeyDown={(event) => activateFromKeyboard(event, nodeId)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        {(isActive || isHighlighted) && (
+                          <circle
+                            className={!isActive ? "animate-pulse-soft" : undefined}
+                            r={isActive ? 16 : 12}
+                            fill={`url(#${id}-node-glow)`}
+                            opacity={isActive ? 1 : 0.65}
+                            style={!isActive ? { animationDuration: "4.5s" } : undefined}
+                          />
+                        )}
+                        <circle
+                          r={isActive ? 7 : 5.2}
+                          fill={isActive || isHighlighted ? "#ff4d12" : "#0a0a0b"}
+                          stroke={isActive || isHighlighted ? "#ff6d3d" : "#e5e3de"}
+                          strokeOpacity={isActive || isHighlighted ? 1 : 0.82}
+                          strokeWidth={isActive ? 1.4 : 1}
+                          vectorEffect="non-scaling-stroke"
+                        />
+                        <circle r={isActive ? 2.6 : 2.1} fill="#f5f4f0" />
+
+                        <g transform={`translate(${labelOffset.x} ${labelOffset.y})`}>
+                          <g
+                            style={{
+                              transform: `rotate(${-orbit.rotation}deg)`,
+                              transformBox: "fill-box",
+                              transformOrigin: "center",
+                            }}
+                          >
+                            <g
+                              className={`orbit-svg-group ${counterAnimation}`}
+                              style={{
+                                animationDuration: orbit.duration,
+                                transformBox: "fill-box",
+                                transformOrigin: "center",
+                              }}
+                            >
+                              <text
+                                x="0"
+                                y="0"
+                                textAnchor={labelAnchor}
+                                dominantBaseline="middle"
+                                fill={isActive ? "#ff805c" : "#e5e3de"}
+                                fillOpacity={isActive ? 1 : 0.84}
+                                fontFamily='"JetBrains Mono", ui-monospace, Menlo, monospace'
+                                fontSize="11.5"
+                                fontWeight={isActive ? "600" : "500"}
+                                letterSpacing="0.55"
+                                aria-hidden="true"
+                              >
+                                {lines.map((line, lineIndex) => (
+                                  <tspan
+                                    key={line}
+                                    x="0"
+                                    y={(lineIndex - (lines.length - 1) / 2) * 15}
+                                  >
+                                    {line}
+                                  </tspan>
+                                ))}
+                              </text>
+                            </g>
+                          </g>
+                        </g>
+                      </g>
+                    );
+                  })}
+                </g>
+              </g>
+            </g>
+          );
+        })}
+
+        <circle
+          cx={CENTER_X}
+          cy={CENTER_Y}
+          r="88"
+          fill={`url(#${id}-core-glow)`}
+          opacity={dim ? 0.72 : 1}
+          aria-hidden="true"
+        />
+        <circle
+          cx={CENTER_X}
+          cy={CENTER_Y}
+          r="74"
+          fill="none"
+          stroke="#d8d6d1"
+          strokeOpacity="0.32"
+          strokeWidth="1"
+          strokeDasharray="1 6"
+          vectorEffect="non-scaling-stroke"
+          aria-hidden="true"
+        />
+        <circle
+          cx={CENTER_X}
+          cy={CENTER_Y}
+          r="82"
+          fill="none"
+          stroke="#ff4d12"
+          strokeOpacity="0.2"
+          strokeWidth="1"
+          strokeDasharray="1 11"
+          vectorEffect="non-scaling-stroke"
+          aria-hidden="true"
+        />
+
+        <g
+          transform={`translate(${CENTER_X - 41} ${CENTER_Y - 49}) scale(${82 / 1019})`}
+          aria-hidden="true"
+        >
+          <path d={MARK_PATH} fill="#f5f4f0" />
+        </g>
+
         <ul className="sr-only" aria-label="NavRasa ecosystem capabilities">
-          {ORBIT_LABELS.map((label) => <li key={`assistive-${label}`}>{label}</li>)}
+          {LABELS.map(({ label }) => <li key={`assistive-${label}`}>{label}</li>)}
         </ul>
-      )}
-      {!dim && (
-        <div className="mx-auto max-w-xl px-4 py-7 lg:hidden" aria-hidden="true">
-          <div className="relative mx-auto mb-7 flex h-40 w-full max-w-[19rem] items-center justify-center overflow-hidden rounded-full border border-white/[0.08] bg-[radial-gradient(ellipse_at_center,rgba(255,77,18,0.10),rgba(245,244,240,0.025)_42%,transparent_72%)]">
-            <svg className="absolute inset-0 h-full w-full text-paper/20" viewBox="0 0 320 160" fill="none">
-              <ellipse cx="160" cy="80" rx="136" ry="48" stroke="currentColor" strokeOpacity=".55" />
-              <ellipse cx="160" cy="80" rx="103" ry="64" stroke="currentColor" strokeOpacity=".38" transform="rotate(-25 160 80)" />
-              <ellipse cx="160" cy="80" rx="72" ry="68" stroke="currentColor" strokeOpacity=".28" transform="rotate(32 160 80)" />
-              <path d="M24 80h47m178 0h47M160 12v30m0 76v30" stroke="#ff4d12" strokeOpacity=".32" />
-              <circle cx="48" cy="51" r="3" fill="#ff4d12" className="animate-pulse-soft" />
-              <circle cx="266" cy="111" r="2.5" fill="#f5f4f0" className="animate-pulse-soft" />
-              <circle cx="190" cy="20" r="2" fill="#ff4d12" className="animate-pulse-soft" />
-              <circle cx="111" cy="137" r="2.5" fill="#f5f4f0" className="animate-pulse-soft" />
-            </svg>
-            <div className="relative flex items-center gap-3 rounded-full border border-white/10 bg-ink/70 px-5 py-3 shadow-[0_0_34px_rgba(255,77,18,0.11)] backdrop-blur-sm">
-              <svg className="h-8 w-7 text-paper" viewBox="0 0 838 1019" aria-hidden="true">
-                <path d={MARK_PATH} fill="currentColor" />
-              </svg>
-              <span className="font-display text-xs font-semibold uppercase tracking-[0.22em] text-paper">
-                NavRasa
-              </span>
-            </div>
-          </div>
-          <ul className="grid grid-cols-2 gap-x-4 gap-y-2.5">
-            {ORBIT_LABELS.map((label) => (
-              <li
-                key={label}
-                className="flex min-h-9 min-w-0 items-center gap-2 border-b border-paper/10 py-1.5 font-mono text-[clamp(0.625rem,1.2vw,0.75rem)] font-medium uppercase leading-[1.25] tracking-[0.08em] text-paper/80"
+      </svg>
+
+      <div className="mx-auto max-w-xl px-4 py-7 md:hidden">
+        <div className="relative mx-auto mb-7 flex h-40 w-full max-w-[19rem] items-center justify-center overflow-hidden rounded-full border border-white/[0.08] bg-[radial-gradient(ellipse_at_center,rgba(255,77,18,0.10),rgba(245,244,240,0.025)_42%,transparent_72%)]">
+          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 320 160" fill="none" aria-hidden="true">
+            <g className="orbit-svg-group animate-orbit-slow">
+              <ellipse cx="160" cy="80" rx="140" ry="47" stroke="#e5e3de" strokeOpacity=".36" transform="rotate(-12 160 80)" />
+              <path d="M37 49 C75 64 104 91 137 108M191 38 C221 51 245 77 273 106" stroke="#e5e3de" strokeOpacity=".18" />
+            </g>
+            <g className="orbit-svg-group animate-orbit-reverse">
+              <ellipse cx="160" cy="80" rx="105" ry="62" stroke="#e5e3de" strokeOpacity=".28" transform="rotate(36 160 80)" />
+              <path d="M75 41 C102 57 131 92 156 112 C187 106 217 70 245 48" stroke="#ff4d12" strokeOpacity=".14" />
+            </g>
+            {activeNode !== null && MOBILE_NODE_IDS.includes(activeNode) && (
+              <path
+                d={`M160 80 L${MOBILE_NODE_POINTS.find((point) => point.id === activeNode)?.x ?? 160} ${MOBILE_NODE_POINTS.find((point) => point.id === activeNode)?.y ?? 80}`}
+                stroke="#ff4d12"
+                strokeOpacity=".7"
+                strokeWidth="1.2"
+              />
+            )}
+            <circle cx="160" cy="80" r="36" stroke="#e5e3de" strokeOpacity=".3" strokeDasharray="1 5" />
+            {MOBILE_NODE_POINTS.map(({ id: nodeId, x, y }) => (
+              <g
+                key={`mobile-node-${nodeId}`}
+                onPointerEnter={() => setActiveNode(nodeId)}
+                onPointerLeave={() => clearNode(nodeId)}
+                onClick={() => toggleNode(nodeId)}
+                style={{ cursor: "pointer" }}
               >
-                <span className="h-1 w-1 shrink-0 rounded-full bg-signal" aria-hidden="true" />
-                <span>{label}</span>
-              </li>
+                <circle
+                  cx={x}
+                  cy={y}
+                  r={activeNode === nodeId ? 5 : 3}
+                  fill={activeNode === nodeId ? "#ff4d12" : "#f5f4f0"}
+                />
+              </g>
             ))}
-          </ul>
+          </svg>
+          <div className="relative flex items-center gap-3 rounded-full border border-white/10 bg-ink/70 px-5 py-3 shadow-[0_0_34px_rgba(255,77,18,0.11)] backdrop-blur-sm">
+            <svg className="h-8 w-7 text-paper" viewBox="0 0 838 1019" aria-hidden="true">
+              <path d={MARK_PATH} fill="currentColor" />
+            </svg>
+            <span className="font-display text-xs font-semibold uppercase tracking-[0.22em] text-paper">
+              NavRasa
+            </span>
+          </div>
         </div>
-      )}
+        <ul className="grid grid-cols-2 gap-x-4 gap-y-2.5" aria-label="Interactive ecosystem capabilities">
+          {MOBILE_NODE_IDS.map((nodeId) => {
+            const isActive = activeNode === nodeId;
+            return (
+              <li key={`mobile-label-${nodeId}`}>
+                <button
+                  type="button"
+                  className={`flex min-h-9 w-full min-w-0 items-center gap-2 border-b py-1.5 text-left font-mono text-[0.6875rem] font-medium uppercase leading-[1.25] tracking-[0.04em] transition-colors ${
+                    isActive ? "border-signal/50 text-signal" : "border-paper/10 text-paper/80"
+                  }`}
+                  aria-pressed={isActive}
+                  onClick={() => toggleNode(nodeId)}
+                >
+                  <span
+                    className={`h-1 w-1 shrink-0 rounded-full ${isActive ? "bg-signal" : "bg-paper/70"}`}
+                    aria-hidden="true"
+                  />
+                  <span>{LABELS[nodeId].label}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }

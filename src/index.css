@@ -26,6 +26,8 @@
   --animate-pulse-soft: pulse-soft 3.2s ease-in-out infinite;
   --animate-flow: flow 2.4s linear infinite;
   --animate-sweep: sweep 9s ease-in-out infinite;
+  --animate-orbit-slow: orbit-slow 84s linear infinite;
+  --animate-orbit-reverse: orbit-reverse 108s linear infinite;
 
   @keyframes marquee {
     to { transform: translateX(-50%); }
@@ -49,6 +51,12 @@
     30% { opacity: 1; }
     70% { opacity: 1; }
     100% { transform: translateX(160%) skewX(-12deg); opacity: 0; }
+  }
+  @keyframes orbit-slow {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes orbit-reverse {
+    to { transform: rotate(-360deg); }
   }
 }
 
@@ -113,16 +121,16 @@
     text-wrap: balance;
   }
   .home-hero-title {
-    font-size: clamp(2rem, 4.2vw, 3.85rem);
+    font-size: clamp(2rem, 4.35vw, 4.15rem);
     line-height: 0.98;
     letter-spacing: -0.045em;
     text-wrap: balance;
   }
   @media (min-width: 1024px) and (max-width: 1535px) {
-    .home-hero-title { font-size: clamp(2rem, 3.9vw, 3.6rem); }
+    .home-hero-title { font-size: clamp(2rem, 4.1vw, 4rem); }
   }
   @media (min-width: 1536px) {
-    .home-hero-title { font-size: clamp(2.5rem, 4.2vw, 4rem); }
+    .home-hero-title { font-size: clamp(2.5rem, 4.4vw, 4.4rem); }
   }
   .display-lg {
     font-size: clamp(2.5rem, 7vw, 7rem);
@@ -135,6 +143,10 @@
   }
   .text-balance { text-wrap: balance; }
   .case-study-light { color: var(--color-ink); }
+  .orbit-svg-group {
+    transform-box: view-box;
+    transform-origin: center;
+  }
 
   /* Film grain for cinematic dark sections */
   .grain {

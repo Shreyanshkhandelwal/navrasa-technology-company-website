@@ -246,7 +246,7 @@ export const nav = [
 ];
 
 export const hero = {
-  eyebrow: "Mobile Applications & Custom Software Solutions",
+  eyebrow: "Technology & Product Engineering",
   lines: ["Mobile App & Software", "Development Company", "in Jaipur"],
   brandTagline: "ENGINEERED FOR BUSINESS. BUILT TO SCALE.",
   statement:

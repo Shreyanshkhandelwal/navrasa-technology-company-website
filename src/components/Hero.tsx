@@ -17,12 +17,12 @@ export function Hero() {
             initial={reduce ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: EASE, delay: 0.1 }}
-            className="eyebrow mb-5 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[10px] tracking-[0.17em] text-paper/60 sm:mb-6 sm:text-[10.5px] sm:tracking-[0.2em] 2xl:flex-nowrap 2xl:whitespace-nowrap"
+            className="eyebrow mb-5 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[10px] tracking-[0.17em] text-paper/60 sm:mb-6 sm:text-[10.5px] sm:tracking-[0.2em]"
           >
             <span className="h-1.5 w-1.5 shrink-0 bg-signal shadow-[0_0_12px_rgba(255,77,18,0.65)]" aria-hidden="true" />
             <span>{company.name}</span>
-            <span className="hidden text-signal/70 2xl:inline" aria-hidden="true">/</span>
-            <span className="hidden max-w-full whitespace-nowrap 2xl:inline">{hero.eyebrow}</span>
+            <span className="text-signal/70" aria-hidden="true">/</span>
+            <span>{hero.eyebrow}</span>
           </motion.div>
 
           <h1 className="display home-hero-title text-paper">
@@ -54,7 +54,7 @@ export function Hero() {
               href={hero.primaryCta.href}
               tone="dark"
               size="lg"
-              className="bg-signal px-6 text-white shadow-[0_8px_28px_rgba(255,77,18,0.18)] transition-[background-color,box-shadow,transform] hover:-translate-y-0.5 hover:bg-[#e6430e] hover:shadow-[0_12px_34px_rgba(255,77,18,0.28)] sm:px-7"
+              className="bg-paper px-6 text-ink shadow-none transition-[background-color,color,transform] hover:-translate-y-0.5 hover:bg-signal hover:text-white sm:px-7"
             >
               {hero.primaryCta.label}
             </Button>
